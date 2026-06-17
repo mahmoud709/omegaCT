@@ -370,7 +370,7 @@ textarea {
 .stat-card strong {
   display: block;
   font-family: var(--font-playfair), Georgia, serif;
-  font-size: clamp(4.4rem, 6.4vw, 6.6rem);
+  font-size: clamp(3rem, 4.5vw, 4.5rem);
   line-height: 1;
   color: var(--gold);
 }

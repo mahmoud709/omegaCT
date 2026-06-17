@@ -7,6 +7,7 @@ import type { Project } from "../data/site";
 
 export function ProjectFilter({ projects }: { projects: Project[] }) {
   const t = useTranslations("ProjectsPage");
+  const tNames = useTranslations("ProjectNames");
   const [active, setActive] = useState("All");
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
@@ -67,7 +68,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
                 onClick={() => setSelectedProject(project.slug)}
                 className={selectedProject === project.slug ? "is-active" : ""}
               >
-                {project.name}
+                {tNames(project.slug as any)}
               </button>
             ))}
           </div>
@@ -78,7 +79,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
         <section className="selected-project-gallery animate-scale-in">
           <div>
             <p className="section-label">{t("galleryLabel")}</p>
-            <h3>{selected.name}</h3>
+            <h3>{tNames(selected.slug as any)}</h3>
             <span>{selected.location}</span>
           </div>
           <div className="selected-gallery-grid">
@@ -86,7 +87,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
               <div
                 key={`${selected.slug}-${image}-${index}`}
                 style={{ backgroundImage: `url(${image})` }}
-                aria-label={`${selected.name} image ${index + 1}`}
+                aria-label={`${tNames(selected.slug as any)} image ${index + 1}`}
               />
             ))}
           </div>
@@ -106,7 +107,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
                 {project.location}
               </div>
               <h3 className="font-serif text-2xl font-semibold text-[var(--dark-text)]">
-                {project.name}
+                {tNames(project.slug as any)}
               </h3>
               <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{project.details}</p>
               <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold)]">

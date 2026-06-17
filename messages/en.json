@@ -90,6 +90,21 @@
     "industrialTitle": "Investments & Industrial Expansion",
     "industrialBody": "Beyond contracting, Omega has expanded into strategic investments in Egypt's industrial sector through land acquisition in the Badr Industrial Zone, developing modern factories that support long-term vertical integration."
   },
+  "ProjectNames": {
+    "obsidier-towers": "Obsidier Towers",
+    "four-seasons-beach-cabanas-alex": "Four Seasons Beach Cabanas - Alex",
+    "hilton-corniche-alex": "Hilton Corniche - Alex",
+    "four-seasons-nile-plaza-cairo": "Four Seasons Nile Plaza - Cairo",
+    "four-seasons-sharm-el-sheikh": "Four Seasons Hotel & Resort - Sharm El-Sheikh",
+    "four-seasons-hotel-resort-alex": "Four Seasons Hotel & Resort - Alex",
+    "four-seasons-villas-alex": "Four Seasons Villas - Alex",
+    "kempinski-hotel-cairo": "Kempinski Hotel",
+    "careem-hq-alex": "Careem HQ",
+    "allianz-misr-hq-alex": "Allianz Misr HQ",
+    "san-stefano-complex-alex": "San Stefano Complex",
+    "cairo-university-media-studio": "Cairo University Faculty of Media Studio",
+    "mak-paradise-villas": "MAK Paradise Villas"
+  },
   "ProjectsPage": {
     "eyebrow": "Home / Projects",
     "title": "Our Portfolio of Excellence",

@@ -15,7 +15,7 @@ export function HeroCarousel({ slides }: { slides: string[] }) {
 
     const interval = window.setInterval(() => {
       setActive((current) => (current + 1) % total);
-    }, 5500);
+    }, 5000);
 
     return () => window.clearInterval(interval);
   }, [total]);

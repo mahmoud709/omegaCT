@@ -23,7 +23,7 @@ export default function Home() {
     <>
       <HeroCarousel slides={heroSlides} />
 
-      <section className="border-y border-[var(--gold)] bg-white px-5 py-10 lg:px-8">
+      <section className="border-y border-[var(--line)] bg-white px-5 py-10 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <div key={stat.label} className="stat-card">
@@ -36,9 +36,29 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section bg-[var(--off-white)]">
-        <div className="mx-auto max-w-7xl">
-          <ImagePanel image={images.about}>
+      <section className="section bg-(--off-white)">
+        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+            
+            <div className="grid grid-cols-2 gap-4 h-[400px] sm:h-[500px]">
+              <div className="flex flex-col gap-4 h-full">
+                <div 
+                  className="h-3/5 w-full rounded-sm bg-cover bg-center shadow-[0_12px_40px_rgba(10,36,99,0.1)]"
+                  style={{ backgroundImage: `url(${images.blueprint})` }}
+                />
+                <div 
+                  className="h-2/5 w-full rounded-sm bg-cover bg-center shadow-[0_12px_40px_rgba(10,36,99,0.1)]"
+                  style={{ backgroundImage: `url(${images.interior})` }}
+                />
+              </div>
+              <div className="h-full pt-12 pb-4">
+                <div 
+                  className="h-full w-full rounded-sm bg-cover bg-center shadow-[0_12px_40px_rgba(10,36,99,0.15)] transform transition hover:scale-[1.02] duration-500"
+                  style={{ backgroundImage: `url(${images.about})` }}
+                />
+              </div>
+            </div>
+
             <Reveal>
               <p className="section-label">{t("whoLabel")}</p>
               <h2 className="section-title">
@@ -65,7 +85,7 @@ export default function Home() {
                 {t("discover")} <ArrowRight size={17} />
               </Link>
             </Reveal>
-          </ImagePanel>
+          </div>
         </div>
       </section>
 

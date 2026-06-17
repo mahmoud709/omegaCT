@@ -90,6 +90,21 @@
     "industrialTitle": "الاستثمارات والتوسع الصناعي",
     "industrialBody": "فضلاً عن أعمال المقاولات، توسعت أوميجا في استثمارات استراتيجية في القطاع الصناعي المصري من خلال اقتناء أراضٍ في منطقة بدر الصناعية وتطوير مصانع حديثة لدعم التكامل الرأسي على المدى البعيد."
   },
+  "ProjectNames": {
+    "obsidier-towers": "أبراج أوبسيديير",
+    "four-seasons-beach-cabanas-alex": "كابانات شاطئ فورسيزونز - الإسكندرية",
+    "hilton-corniche-alex": "هيلتون الكورنيش - الإسكندرية",
+    "four-seasons-nile-plaza-cairo": "فورسيزونز نايل بلازا - القاهرة",
+    "four-seasons-sharm-el-sheikh": "فندق ومنتجع فورسيزونز - شرم الشيخ",
+    "four-seasons-hotel-resort-alex": "فندق ومنتجع فورسيزونز - الإسكندرية",
+    "four-seasons-villas-alex": "فيلات فورسيزونز - الإسكندرية",
+    "kempinski-hotel-cairo": "فندق كمبينسكي",
+    "careem-hq-alex": "المقر الرئيسي لشركة كريم",
+    "allianz-misr-hq-alex": "المقر الرئيسي لشركة أليانز مصر",
+    "san-stefano-complex-alex": "مجمع سان ستيفانو",
+    "cairo-university-media-studio": "استوديو كلية الإعلام جامعة القاهرة",
+    "mak-paradise-villas": "فيلات ماك بارادايس"
+  },
   "ProjectsPage": {
     "eyebrow": "الرئيسية / المشروعات",
     "title": "محفظة مشروعاتنا المتميزة",

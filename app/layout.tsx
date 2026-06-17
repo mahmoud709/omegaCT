@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
+import { WhatsAppButton } from "./components/WhatsAppButton";
 import { seoDescription } from "./data/site";
 import { getDirection, isLocale } from "../i18n/request";
 import "./globals.css";
@@ -75,6 +76,7 @@ export default async function RootLayout({
           <Header />
           <main>{children}</main>
           <Footer />
+          <WhatsAppButton />
         </NextIntlClientProvider>
       </body>
     </html>
