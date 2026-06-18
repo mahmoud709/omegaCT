@@ -443,7 +443,11 @@ textarea {
 .spotlight-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  mask-image: linear-gradient(90deg, black 40%, transparent 90%);
+  -webkit-mask-image: linear-gradient(90deg, black 40%, transparent 90%);
 }
 
 .gold-pill,
@@ -1012,7 +1016,9 @@ textarea {
 }
 
 [dir="rtl"] .spotlight-overlay {
-  background: linear-gradient(270deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.12));
+  background: rgba(255, 255, 255, 0.55);
+  mask-image: linear-gradient(270deg, black 40%, transparent 90%);
+  -webkit-mask-image: linear-gradient(270deg, black 40%, transparent 90%);
 }
 
 [dir="rtl"] .nav-link,

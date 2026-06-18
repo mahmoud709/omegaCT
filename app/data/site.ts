@@ -97,7 +97,7 @@ export const images = {
   about:
     "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=85",
   skyline:
-    "https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=2200&q=85",
+    "/images/obsidier/hero1.jpg",
   towers:
     "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=2200&q=85",
   team:
@@ -115,14 +115,13 @@ export const images = {
 };
 
 export const heroSlides = [
-  images.hero,
-  "/images/obsidier/towers.jpg",
-  images.skyline,
+  "/images/hero/hero1.jpg",
+  "/images/hero/hero2.jpg",
 ];
 
 export const stats = [
   { value: 20, suffix: "+", label: "Years of Excellence" },
-  { value: 500, suffix: "+", label: "Projects Completed" },
+  { value: 15, suffix: "+", label: "Projects Completed" },
   { value: 50, suffix: "+", label: "Luxury Clients" },
   { value: 100, suffix: "%", label: "Quality Commitment" },
 ];
@@ -319,8 +318,12 @@ export const projects: Project[] = [
     status: "In Progress",
     details: "110m height, 25 floors, mixed-use, 13,500m2 land area.",
     role: "Main Contractor",
-    image: images.hero,
-    galleryImages: [images.hero, "/images/obsidier/towers.jpg"],
+    image: "/images/obsidier/hero1.jpg",
+    galleryImages: [
+      "/images/obsidier/hero/hero1.jpg",
+      "/images/obsidier/hero/hero2.jpg",
+      "/images/obsidier/towers.jpg"
+    ],
   },
   {
     slug: "four-seasons-beach-cabanas-alex",

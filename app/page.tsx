@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { ClientMarquee } from "./components/ClientMarquee";
 import { Counter } from "./components/Counter";
-import { CtaBand, ImagePanel, SectionIntro } from "./components/Section";
+import { CtaBand, SectionIntro } from "./components/Section";
 import { HeroCarousel } from "./components/HeroCarousel";
 import { Reveal } from "./components/Reveal";
 import { heroSlides, images, services, stats } from "./data/site";
@@ -23,7 +23,7 @@ export default function Home() {
     <>
       <HeroCarousel slides={heroSlides} />
 
-      <section className="border-y border-[var(--line)] bg-white px-5 py-10 lg:px-8">
+      <section className="border-y border-(--line) bg-white px-5 py-10 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <div key={stat.label} className="stat-card">
@@ -162,12 +162,12 @@ export default function Home() {
 
       <section className="section bg-white">
         <Reveal className="mx-auto max-w-4xl text-center">
-          <div className="font-serif text-8xl leading-none text-[var(--gold)]">&quot;</div>
+          <div className="font-serif text-8xl leading-none text-(--gold)">&quot;</div>
           <blockquote className="font-serif text-3xl leading-snug text-[var(--dark-text)] md:text-5xl">
             {t("quote")}
           </blockquote>
-          <p className="mt-8 font-semibold text-[var(--dark-text)]">{t("chairman")}</p>
-          <p className="text-sm uppercase tracking-[0.2em] text-[var(--gold)]">
+          <p className="mt-8 font-semibold text-(--dark-text)">{t("chairman")}</p>
+          <p className="text-sm uppercase tracking-[0.2em] text-(--gold)">
             {t("chairmanTitle")}
           </p>
         </Reveal>

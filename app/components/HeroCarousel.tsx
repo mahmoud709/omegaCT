@@ -27,6 +27,7 @@ export function HeroCarousel({ slides }: { slides: string[] }) {
   return (
     <section className="home-hero">
       <div className="hero-carousel" aria-label="Omega featured images">
+        
         {slides.map((slide, index) => (
           <div
             key={slide}
@@ -38,11 +39,11 @@ export function HeroCarousel({ slides }: { slides: string[] }) {
       <div className="hero-scrim hero-scrim-light" />
 
       <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-5 pt-20 lg:px-8">
-        <div className="max-w-5xl border-l border-[var(--gold)] pl-6 animate-fade-up">
-          <span className="inline-flex border border-[var(--gold)] bg-white/16 px-4 py-2 font-label text-xs uppercase tracking-[0.3em] text-[var(--gold-light)] backdrop-blur">
+        <div className="max-w-5xl border-l border-(--gold) pl-6 animate-fade-up">
+          <span className="inline-flex border border-(--gold) bg-white/16 px-4 py-2 font-label text-xs uppercase tracking-[0.3em] text-(--gold-light) backdrop-blur">
             {t("badge")}
           </span>
-          <p className="mt-8 font-label text-sm uppercase tracking-[0.34em] text-[var(--gold-light)]">
+          <p className="mt-8 font-label text-sm uppercase tracking-[0.34em] text-(--gold-light)">
             {t("tag")}
           </p>
           <h1 className="mt-4 font-serif text-[clamp(4.25rem,8vw,9.5rem)] font-semibold leading-[0.98] text-white">
