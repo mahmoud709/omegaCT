@@ -1,5 +1,6 @@
 import { ArrowRight, BadgeCheck, Handshake, ShieldCheck } from "lucide-react";
-import { useTranslations } from "next-intl";
+import * as Icons from "lucide-react";
+import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 import { ClientMarquee } from "./components/ClientMarquee";
 import { Counter } from "./components/Counter";
@@ -7,11 +8,14 @@ import { CtaBand, SectionIntro } from "./components/Section";
 import { HeroCarousel } from "./components/HeroCarousel";
 import { Reveal } from "./components/Reveal";
 import { heroSlides, images, services, stats } from "./data/site";
+import { getHeroSlides } from "./actions/hero";
+import { getServices } from "./actions/services";
 
-export default function Home() {
-  const t = useTranslations("Home");
-  const servicesT = useTranslations("Services");
-  const statsT = useTranslations("Stats");
+export default async function Home() {
+  const t = await getTranslations("Home");
+  const servicesT = await getTranslations("Services");
+  const statsT = await getTranslations("Stats");
+  const tSettings = await getTranslations("Settings");
   const statLabels = [
     statsT("years"),
     statsT("projects"),
@@ -19,20 +23,49 @@ export default function Home() {
     statsT("quality"),
   ];
 
+  const locale = await getLocale();
+
+  const dbHeroSlides = await getHeroSlides();
+  const activeHeroSlides = dbHeroSlides.length > 0 ? dbHeroSlides.map(s => s.imagePath) : heroSlides;
+
+  const dbServicesRaw = await getServices();
+  const displayServices = dbServicesRaw.length > 0 ? dbServicesRaw.map(s => ({
+    id: s.id,
+    title: locale === "ar" && s.titleAr ? s.titleAr : s.title,
+    summary: locale === "ar" && s.summaryAr ? s.summaryAr : s.summary,
+    icon: s.icon,
+  })) : services.map(s => ({
+    id: s.titleKey,
+    title: servicesT(s.titleKey),
+    summary: servicesT(`${s.titleKey}Summary`),
+    icon: s.icon.name || "Wrench",
+  }));
+
   return (
     <>
-      <HeroCarousel slides={heroSlides} />
+      <HeroCarousel slides={activeHeroSlides} />
 
       <section className="border-y border-(--line) bg-white px-5 py-10 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, index) => (
-            <div key={stat.label} className="stat-card">
-              <strong>
-                <Counter value={stat.value} suffix={stat.suffix} />
-              </strong>
-              <span>{statLabels[index]}</span>
-            </div>
-          ))}
+          {[
+            { key: "years", defVal: 20, defSuf: "+" },
+            { key: "projects", defVal: 15, defSuf: "+" },
+            { key: "clients", defVal: 50, defSuf: "+" },
+            { key: "quality", defVal: 100, defSuf: "%" },
+          ].map((stat, index) => {
+            const valStr = statsT(`${stat.key}Value`);
+            const sufStr = statsT(`${stat.key}Suffix`);
+            const val = !valStr || valStr.includes("Value") ? stat.defVal : parseInt(valStr);
+            const suf = !sufStr || sufStr.includes("Suffix") ? stat.defSuf : sufStr;
+            return (
+              <div key={stat.key} className="stat-card">
+                <strong>
+                  <Counter value={val || stat.defVal} suffix={suf} />
+                </strong>
+                <span>{statLabels[index]}</span>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -44,17 +77,17 @@ export default function Home() {
               <div className="flex flex-col gap-4 h-full">
                 <div 
                   className="h-3/5 w-full rounded-sm bg-cover bg-center shadow-[0_12px_40px_rgba(10,36,99,0.1)]"
-                  style={{ backgroundImage: `url(${images.blueprint})` }}
+                  style={{ backgroundImage: `url(${tSettings("whoWeAre1") || images.blueprint})` }}
                 />
                 <div 
                   className="h-2/5 w-full rounded-sm bg-cover bg-center shadow-[0_12px_40px_rgba(10,36,99,0.1)]"
-                  style={{ backgroundImage: `url(${images.interior})` }}
+                  style={{ backgroundImage: `url(${tSettings("whoWeAre2") || images.interior})` }}
                 />
               </div>
               <div className="h-full pt-12 pb-4">
                 <div 
                   className="h-full w-full rounded-sm bg-cover bg-center shadow-[0_12px_40px_rgba(10,36,99,0.15)] transform transition hover:scale-[1.02] duration-500"
-                  style={{ backgroundImage: `url(${images.about})` }}
+                  style={{ backgroundImage: `url(${tSettings("whoWeAre3") || images.about})` }}
                 />
               </div>
             </div>
@@ -97,16 +130,17 @@ export default function Home() {
             subtitle={t("expertiseSubtitle")}
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {services.slice(0, 6).map((service, index) => {
-              const Icon = service.icon;
+            {displayServices.slice(0, 6).map((service, index) => {
+              // @ts-ignore
+              const Icon = Icons[service.icon] || Icons.Wrench;
               return (
-                <Reveal key={service.titleKey} delay={index * 0.05}>
+                <Reveal key={service.id} delay={index * 0.05}>
                   <article className="service-card h-full">
                     <Icon className="mb-6 text-[var(--gold)]" size={34} />
                     <h3 className="font-serif text-2xl font-semibold text-[var(--dark-text)]">
-                      {servicesT(service.titleKey)}
+                      {service.title}
                     </h3>
-                    <p className="mt-4 leading-7 text-[var(--muted)]">{servicesT(`${service.titleKey}Summary`)}</p>
+                    <p className="mt-4 leading-7 text-[var(--muted)]">{service.summary}</p>
                     <span className="text-link mt-7 inline-flex">
                       {t("learnMore")} <ArrowRight size={16} />
                     </span>

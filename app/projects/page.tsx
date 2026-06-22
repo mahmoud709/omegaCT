@@ -1,14 +1,41 @@
 import { CheckCircle2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations, getLocale } from "next-intl/server";
 import { ProjectFilter } from "../components/ProjectFilter";
 import { CtaBand, PageHero, SectionIntro } from "../components/Section";
 import { Reveal } from "../components/Reveal";
 import { images, projects } from "../data/site";
+import { getProjects } from "../actions/projects";
 
-export default function ProjectsPage() {
-  const t = useTranslations("ProjectsPage");
+type ProjectWithAr = {
+  id: string; slug: string; name: string; nameAr: string;
+  location: string; locationAr: string; category: string; categoryAr: string;
+  status: string; statusAr: string; details: string; detailsAr: string;
+  role: string; roleAr: string; image: string; galleryImages: string;
+  createdAt: Date; updatedAt: Date;
+};
 
-  const projectDetails = [
+export default async function ProjectsPage() {
+  const t = await getTranslations("ProjectsPage");
+  const locale = await getLocale();
+  const dbProjectsRaw = (await getProjects()) as unknown as ProjectWithAr[];
+  
+  const dbProjects = dbProjectsRaw.map(p => {
+    const isAr = locale === "ar";
+    return {
+      ...p,
+      name: isAr && p.nameAr ? p.nameAr : p.name,
+      location: isAr && p.locationAr ? p.locationAr : p.location,
+      category: isAr && p.categoryAr ? p.categoryAr : p.category,
+      status: isAr && p.statusAr ? p.statusAr : p.status,
+      details: isAr && p.detailsAr ? p.detailsAr : p.details,
+      role: isAr && p.roleAr ? p.roleAr : p.role,
+      galleryImages: p.galleryImages ? p.galleryImages.split(",").map(s => s.trim()) : []
+    };
+  });
+  
+  const displayProjects = dbProjects.length > 0 ? dbProjects : projects;
+
+  const projectDetails: [string, string][] = [
     [t("locationKey"), t("locationValue")],
     [t("landArea"), t("landAreaValue")],
     [t("height"), t("heightValue")],
@@ -39,11 +66,11 @@ export default function ProjectsPage() {
       <section className="section bg-white">
         <div className="mx-auto max-w-7xl">
           <SectionIntro label={t("portfolioLabel")} title={t("portfolioTitle")} />
-          <ProjectFilter projects={projects} />
+          <ProjectFilter projects={displayProjects as any} />
         </div>
       </section>
 
-      <section className="bg-[var(--off-white)]">
+      <section className="bg-(--off-white)">
         <div
           className="min-h-[420px] bg-cover bg-center"
           style={{ backgroundImage: `url(${images.skyline})` }}
@@ -53,16 +80,16 @@ export default function ProjectsPage() {
             <Reveal>
               <p className="section-label">{t("featuredLabel")}</p>
               <h2 className="section-title">{t("featuredTitle")}</h2>
-              <div className="mt-8 overflow-hidden rounded border border-[var(--line)] bg-white">
+              <div className="mt-8 overflow-hidden rounded border border-(--line) bg-white">
                 {projectDetails.map(([label, value]) => (
                   <div
                     key={label}
-                    className="grid grid-cols-[0.42fr_1fr] border-b border-[var(--line)] last:border-b-0"
+                    className="grid grid-cols-[0.42fr_1fr] border-b border-(--line) last:border-b-0"
                   >
-                    <strong className="bg-[var(--off-white)] px-4 py-4 text-sm uppercase tracking-[0.16em] text-[var(--gold)]">
+                    <strong className="bg-(--off-white) px-4 py-4 text-sm uppercase tracking-[0.16em] text-(--gold)">
                       {label}
                     </strong>
-                    <span className="px-4 py-4 text-[var(--dark-text)]">{value}</span>
+                    <span className="px-4 py-4 text-(--dark-text)">{value}</span>
                   </div>
                 ))}
               </div>
@@ -70,13 +97,13 @@ export default function ProjectsPage() {
 
             <Reveal delay={0.1}>
               <p className="section-label">{t("scopeLabel")}</p>
-              <h3 className="font-serif text-4xl font-semibold text-[var(--dark-text)]">
+              <h3 className="font-serif text-4xl font-semibold text-(--dark-text)">
                 {t("scopeTitle")}
               </h3>
               <div className="mt-8 grid gap-4">
                 {scopeItems.map((item) => (
-                  <p key={item} className="flex gap-3 text-[var(--dark-text)]">
-                    <CheckCircle2 className="mt-1 shrink-0 text-[var(--gold)]" size={20} />
+                  <p key={item} className="flex gap-3 text-(--dark-text)">
+                    <CheckCircle2 className="mt-1 shrink-0 text-(--gold)" size={20} />
                     {item}
                   </p>
                 ))}

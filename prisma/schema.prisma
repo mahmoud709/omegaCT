@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Project {
+  id            String   @id @default(uuid())
+  slug          String   @unique
+  name          String
+  nameAr        String   @default("")
+  location      String
+  locationAr    String   @default("")
+  category      String
+  categoryAr    String   @default("")
+  status        String
+  statusAr      String   @default("")
+  details       String
+  detailsAr     String   @default("")
+  role          String
+  roleAr        String   @default("")
+  image         String
+  galleryImages String   // Comma separated image URLs
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Client {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  logo      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model HeroSlide {
+  id        String   @id @default(uuid())
+  imagePath String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Translation {
+  id        String   @id @default(uuid())
+  namespace String
+  key       String
+  en        String
+  ar        String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([namespace, key])
+}
+
+model Service {
+  id            String   @id @default(uuid())
+  title         String   @unique
+  titleAr       String   @default("")
+  summary       String
+  summaryAr     String   @default("")
+  description   String
+  descriptionAr String   @default("")
+  scope         String   // Comma separated scope items
+  scopeAr       String   @default("") // Comma separated Arabic
+  icon          String   // Lucide icon name (e.g. "HardHat")
+  image         String   // Image URL
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model JobPosting {
+  id              String         @id @default(uuid())
+  title           String
+  titleAr         String         @default("")
+  department      String
+  departmentAr    String         @default("")
+  location        String
+  locationAr      String         @default("")
+  type            String
+  typeAr          String         @default("")
+  description     String
+  descriptionAr   String         @default("")
+  requirements    String
+  requirementsAr  String         @default("")
+  isOpen          Boolean        @default(true)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  applications    JobApplication[]
+}
+
+model JobApplication {
+  id          String   @id @default(uuid())
+  jobId       String
+  job         JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobTitle    String
+  name        String
+  email       String
+  phone       String   @default("")
+  cvUrl       String
+  coverLetter String   @default("")
+  status      String   @default("NEW")
+  hrNotes     String   @default("")
+  isRead      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model HrUser {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  role         String   @default("RECRUITER")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

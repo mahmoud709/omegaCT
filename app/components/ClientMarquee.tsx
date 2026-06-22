@@ -1,8 +1,12 @@
-import { clients } from "../data/site";
+import { clients as staticClients } from "../data/site";
+import { getClients } from "../actions/clients";
 
-export function ClientMarquee() {
-  const rowOne = [...clients, ...clients];
-  const rowTwo = [...clients.slice().reverse(), ...clients.slice().reverse()];
+export async function ClientMarquee() {
+  const dbClients = await getClients();
+  const activeClients = dbClients.length > 0 ? dbClients.map(c => c.name) : staticClients;
+
+  const rowOne = [...activeClients, ...activeClients];
+  const rowTwo = [...activeClients.slice().reverse(), ...activeClients.slice().reverse()];
 
   return (
     <div className="space-y-5 overflow-hidden">

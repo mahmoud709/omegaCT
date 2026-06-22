@@ -4,7 +4,7 @@ import Link from "next/link";
 import { brand, navItems, offices, services } from "../data/site";
 import { Logo } from "./Logo";
 
-const navKeys = ["home", "about", "services", "projects", "partners", "contact"] as const;
+const navKeys = ["home", "about", "services", "projects", "partners", "careers", "contact"] as const;
 
 export function Footer() {
   const footer = useTranslations("Footer");

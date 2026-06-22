@@ -13,13 +13,33 @@ export function getDirection(locale: Locale) {
   return locale === "ar" ? "rtl" : "ltr";
 }
 
+import { prisma } from "@/lib/prisma";
+
 export default getRequestConfig(async () => {
   const store = await cookies();
   const requested = store.get("locale")?.value;
   const locale = isLocale(requested) ? requested : defaultLocale;
 
+  // Load static messages from JSON
+  const staticMessages = (await import(`../messages/${locale}.json`)).default;
+  const mergedMessages = JSON.parse(JSON.stringify(staticMessages));
+
+  // Fetch dynamic translations from SQLite
+  try {
+    const dbTranslations = await prisma.translation.findMany();
+    for (const t of dbTranslations) {
+      if (!mergedMessages[t.namespace]) {
+        mergedMessages[t.namespace] = {};
+      }
+      // Override static with dynamic DB value
+      mergedMessages[t.namespace][t.key] = locale === "ar" ? t.ar : t.en;
+    }
+  } catch (error) {
+    console.error("Failed to load DB translations:", error);
+  }
+
   return {
     locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages: mergedMessages,
   };
 });

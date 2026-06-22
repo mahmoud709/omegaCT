@@ -9,7 +9,7 @@ import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { navItems } from "../data/site";
 
-const navKeys = ["home", "about", "services", "projects", "partners", "contact"] as const;
+const navKeys = ["home", "about", "services", "projects", "partners", "careers", "contact"] as const;
 
 export function Header() {
   const pathname = usePathname();

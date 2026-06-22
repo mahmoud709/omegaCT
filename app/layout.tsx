@@ -6,6 +6,8 @@ import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { WhatsAppButton } from "./components/WhatsAppButton";
 import { seoDescription } from "./data/site";
+import { HideOnAdmin } from "./components/HideOnAdmin";
+import { SplashScreen } from "./components/SplashScreen";
 import { getDirection, isLocale } from "../i18n/request";
 import "./globals.css";
 
@@ -71,12 +73,17 @@ export default async function RootLayout({
       dir={direction}
       className={`${inter.variable} ${playfair.variable} ${cinzel.variable} ${cairo.variable} scroll-smooth`}
     >
-      <body>
+      <body suppressHydrationWarning>
         <NextIntlClientProvider>
-          <Header />
+          <HideOnAdmin>
+            <SplashScreen />
+            <Header />
+          </HideOnAdmin>
           <main>{children}</main>
-          <Footer />
-          <WhatsAppButton />
+          <HideOnAdmin>
+            <Footer />
+            <WhatsAppButton />
+          </HideOnAdmin>
         </NextIntlClientProvider>
       </body>
     </html>
