@@ -50,22 +50,22 @@ export default async function ClientsManager() {
                     </td>
                   </tr>
                 ) : (
-                  clients.map((client) => (
-                    <tr key={client.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-gray-900">{client.name}</td>
-                      <td className="px-6 py-4 font-mono text-xs">{client.logo || "No Logo (Text Only)"}</td>
-                      <td className="px-6 py-4 text-right">
-                        <form action={async () => {
-                          "use server";
-                          await deleteClient(client.id);
-                        }}>
-                          <button type="submit" className="text-gray-400 hover:text-red-600 transition-colors" title="Delete">
-                            <Trash2 size={18} />
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ))
+                  clients.map((client) => {
+                    const deleteAction = deleteClient.bind(null, client.id);
+                    return (
+                      <tr key={client.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 font-medium text-gray-900">{client.name}</td>
+                        <td className="px-6 py-4 font-mono text-xs">{client.logo || "No Logo (Text Only)"}</td>
+                        <td className="px-6 py-4 text-right">
+                          <form action={deleteAction}>
+                            <button type="submit" className="text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                              <Trash2 size={18} />
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

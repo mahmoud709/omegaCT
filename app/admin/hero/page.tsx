@@ -39,50 +39,46 @@ export default async function HeroManager() {
                 No hero slides found. Add one on the left.
               </div>
             ) : (
-              slides.map((slide, index) => (
-                <div key={slide.id} className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:border-gray-300 transition-colors">
-                  <div 
-                    className="w-24 h-14 bg-cover bg-center rounded border border-gray-200 shrink-0"
-                    style={{ backgroundImage: `url(${slide.imagePath})` }}
-                  />
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 font-mono text-xs truncate" title={slide.imagePath}>
-                      {slide.imagePath.split('/').pop()}
-                    </p>
-                    <p className="text-xs text-gray-500 mt-0.5">Order: {slide.order}</p>
-                  </div>
-                  
-                  <div className="flex items-center gap-1 shrink-0">
-                    <div className="flex flex-col gap-1 mr-2">
-                      <form action={async () => {
-                        "use server";
-                        await moveHeroSlide(slide.id, "up");
-                      }}>
-                        <button type="submit" disabled={index === 0} className="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-30 disabled:hover:bg-transparent">
-                          <ChevronUp size={16} />
-                        </button>
-                      </form>
-                      <form action={async () => {
-                        "use server";
-                        await moveHeroSlide(slide.id, "down");
-                      }}>
-                        <button type="submit" disabled={index === slides.length - 1} className="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-30 disabled:hover:bg-transparent">
-                          <ChevronDown size={16} />
+              slides.map((slide, index) => {
+                const moveUpAction = moveHeroSlide.bind(null, slide.id, "up");
+                const moveDownAction = moveHeroSlide.bind(null, slide.id, "down");
+                const deleteAction = deleteHeroSlide.bind(null, slide.id);
+                return (
+                  <div key={slide.id} className="flex items-center gap-4 bg-white border border-gray-200 rounded-xl p-3 shadow-sm hover:border-gray-300 transition-colors">
+                    <div 
+                      className="w-24 h-14 bg-cover bg-center rounded border border-gray-200 shrink-0"
+                      style={{ backgroundImage: `url(${slide.imagePath})` }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 font-mono text-xs truncate" title={slide.imagePath}>
+                        {slide.imagePath.split('/').pop()}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5">Order: {slide.order}</p>
+                    </div>
+                    
+                    <div className="flex items-center gap-1 shrink-0">
+                      <div className="flex flex-col gap-1 mr-2">
+                        <form action={moveUpAction}>
+                          <button type="submit" disabled={index === 0} className="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-30 disabled:hover:bg-transparent">
+                            <ChevronUp size={16} />
+                          </button>
+                        </form>
+                        <form action={moveDownAction}>
+                          <button type="submit" disabled={index === slides.length - 1} className="p-1 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded disabled:opacity-30 disabled:hover:bg-transparent">
+                            <ChevronDown size={16} />
+                          </button>
+                        </form>
+                      </div>
+
+                      <form action={deleteAction}>
+                        <button type="submit" className="p-2.5 text-gray-400 hover:text-red-600 transition-colors bg-gray-50 hover:bg-red-50 rounded-lg">
+                          <Trash2 size={16} />
                         </button>
                       </form>
                     </div>
-
-                    <form action={async () => {
-                      "use server";
-                      await deleteHeroSlide(slide.id);
-                    }}>
-                      <button type="submit" className="p-2.5 text-gray-400 hover:text-red-600 transition-colors bg-gray-50 hover:bg-red-50 rounded-lg">
-                        <Trash2 size={16} />
-                      </button>
-                    </form>
                   </div>
-                </div>
-              ))
+                );
+              })
             )}
           </div>
         </div>

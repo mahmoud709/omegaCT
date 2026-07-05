@@ -58,26 +58,26 @@ export default async function TranslationsManager() {
                     </td>
                   </tr>
                 ) : (
-                  translations.map((t) => (
-                    <tr key={t.id} className="hover:bg-gray-50 transition-colors">
-                      <td className="px-6 py-4">
-                        <span className="block font-medium text-gray-900">{t.namespace}</span>
-                        <span className="block font-mono text-xs text-gray-400 mt-1">{t.key}</span>
-                      </td>
-                      <td className="px-6 py-4">{t.en}</td>
-                      <td className="px-6 py-4 text-right font-arabic" dir="rtl">{t.ar}</td>
-                      <td className="px-6 py-4 text-right">
-                        <form action={async () => {
-                          "use server";
-                          await deleteTranslation(t.id);
-                        }}>
-                          <button type="submit" className="text-gray-400 hover:text-red-600 transition-colors" title="Delete">
-                            <Trash2 size={18} />
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ))
+                  translations.map((t) => {
+                    const deleteAction = deleteTranslation.bind(null, t.id);
+                    return (
+                      <tr key={t.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <span className="block font-medium text-gray-900">{t.namespace}</span>
+                          <span className="block font-mono text-xs text-gray-400 mt-1">{t.key}</span>
+                        </td>
+                        <td className="px-6 py-4">{t.en}</td>
+                        <td className="px-6 py-4 text-right font-arabic" dir="rtl">{t.ar}</td>
+                        <td className="px-6 py-4 text-right">
+                          <form action={deleteAction}>
+                            <button type="submit" className="text-gray-400 hover:text-red-600 transition-colors" title="Delete">
+                              <Trash2 size={18} />
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

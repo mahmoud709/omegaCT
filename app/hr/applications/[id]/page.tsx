@@ -10,6 +10,16 @@ const STATUS_COLORS: Record<string, string> = {
   HIRED: "bg-green-100 text-green-700", REJECTED: "bg-red-100 text-red-600",
 };
 
+async function handleSaveHRNotes(id: string, fd: FormData) {
+  "use server";
+  await saveHRNotes(id, fd.get("hrNotes") as string);
+}
+
+async function handleUpdateStatus(id: string, status: string) {
+  "use server";
+  await updateStatus(id, status);
+}
+
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const app = await getApplication(id);
@@ -18,6 +28,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   await markRead(id);
 
   const duplicates = await checkDuplicates(app.email, id);
+  const saveNotesAction = handleSaveHRNotes.bind(null, id);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -82,10 +93,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           </a>
 
           {/* HR Notes */}
-          <form action={async (fd: FormData) => {
-            "use server";
-            await saveHRNotes(id, fd.get("hrNotes") as string);
-          }}>
+          <form action={saveNotesAction}>
             <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">Private HR Notes</h3>
             <textarea name="hrNotes" defaultValue={app.hrNotes} rows={4}
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition text-sm resize-none"
@@ -98,18 +106,21 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 h-fit">
           <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Update Status</h3>
           <div className="space-y-2">
-            {PIPELINE.map(status => (
-              <form key={status} action={async () => { "use server"; await updateStatus(id, status); }}>
-                <button type="submit"
-                  className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
-                    app.status === status
-                      ? `${STATUS_COLORS[status]} border-current shadow-sm`
-                      : "text-gray-600 border-gray-100 hover:border-gray-200 hover:bg-gray-50"
-                  }`}>
-                  {app.status === status && "✓ "}{status}
-                </button>
-              </form>
-            ))}
+            {PIPELINE.map(status => {
+              const statusAction = handleUpdateStatus.bind(null, id, status);
+              return (
+                <form key={status} action={statusAction}>
+                  <button type="submit"
+                    className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
+                      app.status === status
+                        ? `${STATUS_COLORS[status]} border-current shadow-sm`
+                        : "text-gray-600 border-gray-100 hover:border-gray-200 hover:bg-gray-50"
+                    }`}>
+                    {app.status === status && "✓ "}{status}
+                  </button>
+                </form>
+              );
+            })}
           </div>
         </div>
       </div>

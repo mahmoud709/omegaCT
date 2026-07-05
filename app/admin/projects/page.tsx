@@ -41,37 +41,37 @@ export default async function ProjectsManager() {
                 </td>
               </tr>
             ) : (
-              projects.map((project) => (
-                <tr key={project.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4">
-                    <img 
-                      src={project.image} 
-                      alt={project.name} 
-                      className="w-20 h-14 object-cover rounded shadow-sm border border-gray-200"
-                    />
-                  </td>
-                  <td className="px-6 py-4 font-medium text-gray-900">{project.name}</td>
-                  <td className="px-6 py-4">
-                    <span className="px-2.5 py-1 bg-green-100 text-green-700 rounded-md text-xs font-semibold">
-                      {project.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">{project.location}</td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-3">
-                      <Link href={`/admin/projects/${project.id}`} className="text-gray-400 hover:text-blue-600 transition-colors" title="Edit">
-                        <Edit size={18} />
-                      </Link>
-                      <form action={async () => {
-                        "use server";
-                        await deleteProject(project.id);
-                      }}>
-                        <DeleteProjectButton id={project.id} />
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              projects.map((project) => {
+                const deleteAction = deleteProject.bind(null, project.id);
+                return (
+                  <tr key={project.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4">
+                      <img 
+                        src={project.image} 
+                        alt={project.name} 
+                        className="w-20 h-14 object-cover rounded shadow-sm border border-gray-200"
+                      />
+                    </td>
+                    <td className="px-6 py-4 font-medium text-gray-900">{project.name}</td>
+                    <td className="px-6 py-4">
+                      <span className="px-2.5 py-1 bg-green-100 text-green-700 rounded-md text-xs font-semibold">
+                        {project.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">{project.location}</td>
+                    <td className="px-6 py-4 text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <Link href={`/admin/projects/${project.id}`} className="text-gray-400 hover:text-blue-600 transition-colors" title="Edit">
+                          <Edit size={18} />
+                        </Link>
+                        <form action={deleteAction}>
+                          <DeleteProjectButton id={project.id} />
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

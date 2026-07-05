@@ -31,27 +31,27 @@ export default async function ServicesManager() {
             {services.length === 0 ? (
               <tr>
                 <td colSpan={3} className="px-6 py-10 text-center text-gray-500">
-                  No services found. Click "Add Service" to create one.
+                  No services found. Click &quot;Add Service&quot; to create one.
                 </td>
               </tr>
             ) : (
-              services.map((service) => (
-                <tr key={service.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 font-medium text-gray-900">{service.title}</td>
-                  <td className="px-6 py-4 truncate max-w-xs">{service.summary}</td>
-                  <td className="px-6 py-4 text-right flex justify-end gap-2">
-                    <Link href={`/admin/services/${service.id}`} className="p-2 text-gray-400 hover:text-[var(--gold)] transition-colors" title="Edit">
-                      <Pencil size={18} />
-                    </Link>
-                    <form action={async () => {
-                      "use server";
-                      await deleteService(service.id);
-                    }}>
-                      <DeleteServiceButton id={service.id} />
-                    </form>
-                  </td>
-                </tr>
-              ))
+              services.map((service) => {
+                const deleteAction = deleteService.bind(null, service.id);
+                return (
+                  <tr key={service.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-gray-900">{service.title}</td>
+                    <td className="px-6 py-4 truncate max-w-xs">{service.summary}</td>
+                    <td className="px-6 py-4 text-right flex justify-end gap-2">
+                      <Link href={`/admin/services/${service.id}`} className="p-2 text-gray-400 hover:text-[var(--gold)] transition-colors" title="Edit">
+                        <Pencil size={18} />
+                      </Link>
+                      <form action={deleteAction}>
+                        <DeleteServiceButton id={service.id} />
+                      </form>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
