@@ -757,6 +757,7 @@ textarea {
   margin-top: 1.2rem;
   display: grid;
   gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .selected-gallery-grid div {

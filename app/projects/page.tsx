@@ -29,11 +29,11 @@ export default async function ProjectsPage() {
       status: isAr && p.statusAr ? p.statusAr : p.status,
       details: isAr && p.detailsAr ? p.detailsAr : p.details,
       role: isAr && p.roleAr ? p.roleAr : p.role,
-      galleryImages: p.galleryImages ? p.galleryImages.split(",").map(s => s.trim()) : []
+      galleryImages: p.galleryImages ? p.galleryImages.split(",").map(s => s.trim()).filter(Boolean) : []
     };
   });
   
-  const displayProjects = dbProjects.length > 0 ? dbProjects : projects;
+  const displayProjects = [...dbProjects, ...projects.filter(p => !dbProjects.find((dp: unknown) => dp.slug === p.slug))];
 
   const projectDetails: [string, string][] = [
     [t("locationKey"), t("locationValue")],

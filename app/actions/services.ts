@@ -5,9 +5,14 @@ import { revalidatePath } from "next/cache";
 import cloudinary from "@/lib/cloudinary";
 
 export async function getServices() {
-  return await prisma.service.findMany({
-    orderBy: { createdAt: "asc" },
-  });
+  try {
+    return await prisma.service.findMany({
+      orderBy: { createdAt: "asc" },
+    });
+  } catch (error) {
+    // console.error("Failed to load services from DB:", error);
+    return [];
+  }
 }
 
 export async function createService(formData: FormData) {

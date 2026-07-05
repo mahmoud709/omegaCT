@@ -9,6 +9,7 @@ import { seoDescription } from "./data/site";
 import { HideOnAdmin } from "./components/HideOnAdmin";
 import { SplashScreen } from "./components/SplashScreen";
 import { getDirection, isLocale } from "../i18n/request";
+import { prisma } from "@/lib/prisma";
 import "./globals.css";
 
 const inter = Inter({
@@ -67,6 +68,12 @@ export default async function RootLayout({
   const locale = isLocale(requestedLocale) ? requestedLocale : "en";
   const direction = getDirection(locale);
 
+  let logoUrl = undefined;
+  try {
+    const pLogo = await prisma.translation.findUnique({ where: { namespace_key: { namespace: "CompanyProfile", key: "logo" } } });
+    if (pLogo && pLogo.en) logoUrl = pLogo.en;
+  } catch(e) {}
+
   return (
     <html
       lang={locale}
@@ -77,7 +84,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           <HideOnAdmin>
             <SplashScreen />
-            <Header />
+            <Header logoUrl={logoUrl} />
           </HideOnAdmin>
           <main>{children}</main>
           <HideOnAdmin>

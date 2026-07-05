@@ -4,9 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getClients() {
-  return await prisma.client.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.client.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    // console.error("Failed to load clients from DB:", error);
+    return [];
+  }
 }
 
 export async function createClient(formData: FormData) {

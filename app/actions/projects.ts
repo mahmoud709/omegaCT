@@ -2,19 +2,38 @@
 
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+
+async function requireAdmin() {
+  const reqCookies = await cookies();
+  if (reqCookies.get("admin_session")?.value === "authenticated") {
+    return;
+  }
+  throw new Error("Unauthorized");
+}
 
 export async function getProjects() {
-  return await prisma.project.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.project.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    // console.error("Failed to load projects from DB:", error);
+    return [];
+  }
 }
 
 import cloudinary from "@/lib/cloudinary";
 
 export async function createProject(formData: FormData) {
+  await requireAdmin();
+  
   const name = formData.get("name") as string;
+  if (!name || name.trim().length < 2) throw new Error("Project name is required and must be at least 2 characters");
+  
   const nameAr = formData.get("nameAr") as string || "";
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const baseSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const slug = `${baseSlug}-${Math.random().toString(36).substring(2, 6)}`;
   const location = formData.get("location") as string;
   const locationAr = formData.get("locationAr") as string || "";
   const category = formData.get("category") as string;
@@ -31,6 +50,9 @@ export async function createProject(formData: FormData) {
   let imageUrl = "";
 
   if (file && file.size > 0) {
+    if (!file.type.startsWith("image/")) throw new Error("Main image must be an image file");
+    if (file.size > 5 * 1024 * 1024) throw new Error("Main image must be less than 5MB");
+    
     const arrayBuffer = await file.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
 
@@ -48,6 +70,9 @@ export async function createProject(formData: FormData) {
 
   for (const gFile of galleryFiles) {
     if (gFile && gFile.size > 0) {
+      if (!gFile.type.startsWith("image/")) throw new Error("Gallery files must be images");
+      if (gFile.size > 5 * 1024 * 1024) throw new Error("Gallery files must be less than 5MB");
+      
       const gArrayBuffer = await gFile.arrayBuffer();
       const gBuffer = new Uint8Array(gArrayBuffer);
 
@@ -89,9 +114,14 @@ export async function createProject(formData: FormData) {
 }
 
 export async function updateProject(id: string, formData: FormData) {
+  await requireAdmin();
+  
   const name = formData.get("name") as string;
+  if (!name || name.trim().length < 2) throw new Error("Project name is required and must be at least 2 characters");
+  
   const nameAr = formData.get("nameAr") as string || "";
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const baseSlug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+  const slug = `${baseSlug}-${Math.random().toString(36).substring(2, 6)}`;
   const location = formData.get("location") as string;
   const locationAr = formData.get("locationAr") as string || "";
   const category = formData.get("category") as string;
@@ -108,6 +138,9 @@ export async function updateProject(id: string, formData: FormData) {
   let imageUrl: string | undefined = undefined;
 
   if (file && file.size > 0) {
+    if (!file.type.startsWith("image/")) throw new Error("Main image must be an image file");
+    if (file.size > 5 * 1024 * 1024) throw new Error("Main image must be less than 5MB");
+    
     const arrayBuffer = await file.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
 
@@ -126,6 +159,9 @@ export async function updateProject(id: string, formData: FormData) {
 
   for (const gFile of galleryFiles) {
     if (gFile && gFile.size > 0) {
+      if (!gFile.type.startsWith("image/")) throw new Error("Gallery files must be images");
+      if (gFile.size > 5 * 1024 * 1024) throw new Error("Gallery files must be less than 5MB");
+      
       hasNewGallery = true;
       const gArrayBuffer = await gFile.arrayBuffer();
       const gBuffer = new Uint8Array(gArrayBuffer);
@@ -176,6 +212,8 @@ export async function updateProject(id: string, formData: FormData) {
 
 
 export async function deleteProject(id: string) {
+  await requireAdmin();
+  
   await prisma.project.delete({
     where: { id },
   });

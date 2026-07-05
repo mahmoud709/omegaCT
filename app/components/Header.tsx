@@ -9,9 +9,9 @@ import { Logo } from "./Logo";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { navItems } from "../data/site";
 
-const navKeys = ["home", "about", "services", "projects", "partners", "careers", "contact"] as const;
+const navKeys = ["home", "about", "services", "projects", "partners", "contact"] as const;
 
-export function Header() {
+export function Header({ logoUrl }: { logoUrl?: string }) {
   const pathname = usePathname();
   const t = useTranslations("Navigation");
   const [isScrolled, setIsScrolled] = useState(false);
@@ -35,7 +35,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 lg:px-8">
-        <Logo light={!solid} />
+        <Logo light={!solid} src={logoUrl} />
 
         <nav className="hidden items-center gap-8 lg:flex">
           {navItems.map((item, index) => {

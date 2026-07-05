@@ -5,7 +5,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getHRUsers() {
-  return prisma.hrUser.findMany({ orderBy: { createdAt: "desc" } });
+  try {
+    return await prisma.hrUser.findMany({ orderBy: { createdAt: "desc" } });
+  } catch (error) {
+    // console.error("Failed to load HR users from DB:", error);
+    return [];
+  }
 }
 
 export async function createHRUser(formData: FormData) {

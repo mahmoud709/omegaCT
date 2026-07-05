@@ -5,16 +5,26 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getJobs() {
-  return await prisma.jobPosting.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.jobPosting.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    // console.error("Failed to load jobs from DB:", error);
+    return [];
+  }
 }
 
 export async function getOpenJobs() {
-  return await prisma.jobPosting.findMany({
-    where: { isOpen: true },
-    orderBy: { createdAt: "desc" },
-  });
+  try {
+    return await prisma.jobPosting.findMany({
+      where: { isOpen: true },
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (error) {
+    // console.error("Failed to load open jobs from DB:", error);
+    return [];
+  }
 }
 
 export async function createJob(formData: FormData) {

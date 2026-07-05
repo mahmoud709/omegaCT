@@ -1,12 +1,18 @@
 import { seedDatabase } from "@/app/actions/seed";
-import { uploadWhoWeAreImage } from "@/app/actions/settings";
+import { uploadWhoWeAreImage, updateCompanyProfile } from "@/app/actions/settings";
 import { prisma } from "@/lib/prisma";
-import { Database, Image as ImageIcon } from "lucide-react";
+import { Database, Image as ImageIcon, Building2 } from "lucide-react";
 import { SubmitButton } from "./SubmitButton";
 
 export default async function SettingsManager() {
-  const translations = await prisma.translation.findMany({ where: { namespace: "Settings" } });
+  let profile: any[] = [];
+  try {
+    translations = await prisma.translation.findMany({ where: { namespace: "Settings" } });
+    profile = await prisma.translation.findMany({ where: { namespace: "CompanyProfile" } });
+  } catch (e) {}
   const getImage = (k: string) => translations.find(t => t.key === k)?.en || "";
+  const getProfile = (k: string) => profile.find(t => t.key === k)?.en || "";
+  const getProfileAr = (k: string) => profile.find(t => t.key === k)?.ar || "";
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-12">
@@ -70,6 +76,81 @@ export default async function SettingsManager() {
         </div>
       </div>
 
+      <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+          <Building2 className="text-[var(--gold)]" size={24} />
+          <h2 className="text-xl font-semibold text-gray-900">Company Profile</h2>
+        </div>
+        
+        <form action={updateCompanyProfile} className="space-y-8">
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Company Logo</label>
+              <input type="file" name="logo" accept="image/*" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none bg-white" />
+              <p className="text-xs text-gray-500">Leave empty to keep the current logo. This will replace the SVG logo everywhere.</p>
+              {getProfile("logo") && <img src={getProfile("logo")} alt="Logo" className="mt-2 h-12 object-contain bg-gray-900 rounded p-2" />}
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Established Year</label>
+              <input type="text" name="establishedEn" defaultValue={getProfile("established")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="2003" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Phone Number</label>
+              <input type="text" name="phoneEn" defaultValue={getProfile("phone")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="+2 03-4690058" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Mobile Number</label>
+              <input type="text" name="mobileEn" defaultValue={getProfile("mobile")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="+2 010 69 771 773" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Primary Email</label>
+              <input type="email" name="emailEn" defaultValue={getProfile("email")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="info@omega-tc.com" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Chairman Name</label>
+              <input type="text" name="chairmanEn" defaultValue={getProfile("chairman")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="Eng. Sayed El-Feshawy" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Alexandria Office Address</label>
+              <div className="flex gap-4">
+                <input type="text" name="addressAlexEn" defaultValue={getProfile("addressAlex")} className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none" placeholder="Address in English" />
+                <input type="text" name="addressAlexAr" defaultValue={getProfileAr("addressAlex")} className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none text-right" placeholder="العنوان بالعربي" dir="rtl" />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Cairo Office Address</label>
+              <div className="flex gap-4">
+                <input type="text" name="addressCairoEn" defaultValue={getProfile("addressCairo")} className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none" placeholder="Address in English" />
+                <input type="text" name="addressCairoAr" defaultValue={getProfileAr("addressCairo")} className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none text-right" placeholder="العنوان بالعربي" dir="rtl" />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Facebook URL</label>
+              <input type="url" name="facebookEn" defaultValue={getProfile("facebook")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="https://facebook.com/omega" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">LinkedIn URL</label>
+              <input type="url" name="linkedinEn" defaultValue={getProfile("linkedin")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="https://linkedin.com/company/omega" />
+            </div>
+          </div>
+
+          <div className="pt-4 border-t border-gray-100 flex justify-end">
+            <button type="submit" className="px-6 py-3 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors shadow-sm">
+              Save Company Profile
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

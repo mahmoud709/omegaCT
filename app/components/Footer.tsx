@@ -1,15 +1,38 @@
 import { BriefcaseBusiness, Camera, Mail, MapPin, Phone, Share2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 import { brand, navItems, offices, services } from "../data/site";
 import { Logo } from "./Logo";
+import { prisma } from "@/lib/prisma";
 
 const navKeys = ["home", "about", "services", "projects", "partners", "careers", "contact"] as const;
 
-export function Footer() {
-  const footer = useTranslations("Footer");
-  const nav = useTranslations("Navigation");
-  const servicesT = useTranslations("Services");
+export async function Footer() {
+  const footer = await getTranslations("Footer");
+  const nav = await getTranslations("Navigation");
+  const servicesT = await getTranslations("Services");
+  const locale = await getLocale();
+
+  let profile: any[] = [];
+  try {
+    profile = await prisma.translation.findMany({ where: { namespace: "CompanyProfile" } });
+  } catch(e){}
+  
+  const getP = (k: string) => {
+    const item = profile.find(t => t.key === k);
+    if (!item) return "";
+    return (locale === "ar" && item.ar) ? item.ar : item.en;
+  };
+
+  const established = getP("established") || brand.established;
+  const phone = getP("phone") || brand.phone;
+  const mobile = getP("mobile") || brand.mobile;
+  const email = getP("email") || brand.email;
+  const facebook = getP("facebook") || "#";
+  const linkedin = getP("linkedin") || "#";
+
+  const alexAddress = getP("addressAlex") || offices[0].address;
+  const cairoAddress = getP("addressCairo") || offices[1].address;
 
   return (
     <footer className="border-t-4 border-[var(--gold)] bg-[var(--navy)] text-white">
@@ -17,19 +40,15 @@ export function Footer() {
         <div className="space-y-5">
           <Logo light />
           <p className="max-w-sm text-sm leading-7 text-white/70">
-            {footer("summary", { year: brand.established })}
+            {footer("summary", { year: established })}
           </p>
           <div className="flex gap-3">
-            {[BriefcaseBusiness, Camera, Share2].map((Icon, index) => (
-              <a
-                key={index}
-                href="#"
-                aria-label="Social link"
-                className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10"
-              >
-                <Icon size={18} />
-              </a>
-            ))}
+            <a href={facebook} aria-label="Facebook" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
+              <Camera size={18} />
+            </a>
+            <a href={linkedin} aria-label="LinkedIn" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
+              <BriefcaseBusiness size={18} />
+            </a>
           </div>
         </div>
 
@@ -62,24 +81,28 @@ export function Footer() {
         <div>
           <h3 className="footer-heading">{footer("contactInfo")}</h3>
           <div className="space-y-4 text-sm leading-6 text-white/70">
-            {offices.map((office) => (
-              <p key={office.city} className="flex gap-3">
-                <MapPin className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
-                <span>
-                  <strong className="block text-white">{office.city}</strong>
-                  {office.address}
-                </span>
-              </p>
-            ))}
             <p className="flex gap-3">
-              <Phone className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
+              <MapPin className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
               <span>
-                {brand.phone} | {brand.mobile}
+                <strong className="block text-white">{locale === "ar" ? "مكتب الإسكندرية" : "Alexandria Office"}</strong>
+                {alexAddress}
               </span>
             </p>
             <p className="flex gap-3">
+              <MapPin className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
+              <span>
+                <strong className="block text-white">{locale === "ar" ? "مكتب القاهرة" : "Cairo Office"}</strong>
+                {cairoAddress}
+              </span>
+            </p>
+            
+            <p className="flex gap-3">
+              <Phone className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
+              <span>{phone} | {mobile}</span>
+            </p>
+            <p className="flex gap-3">
               <Mail className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
-              <span>{brand.email}</span>
+              <span>{email}</span>
             </p>
           </div>
         </div>

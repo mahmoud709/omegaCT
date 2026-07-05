@@ -29,9 +29,17 @@
   },
   "Stats": {
     "years": "Years of Excellence",
+    "yearsValue": "20",
+    "yearsSuffix": "+",
     "projects": "Projects Completed",
+    "projectsValue": "15",
+    "projectsSuffix": "+",
     "clients": "Luxury Clients",
-    "quality": "Quality Commitment"
+    "clientsValue": "50",
+    "clientsSuffix": "+",
+    "quality": "Quality Commitment",
+    "qualityValue": "100",
+    "qualitySuffix": "%"
   },
   "Home": {
     "whoLabel": "Who We Are",

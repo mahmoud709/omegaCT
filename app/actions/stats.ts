@@ -3,26 +3,42 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
+const STATS_DEFAULTS = {
+  yearsValue: "20",
+  yearsSuffix: "+",
+  projectsValue: "15",
+  projectsSuffix: "+",
+  clientsValue: "50",
+  clientsSuffix: "+",
+  qualityValue: "100",
+  qualitySuffix: "%",
+};
+
 export async function getStatsData() {
-  const translations = await prisma.translation.findMany({
-    where: { namespace: "Stats" }
-  });
+  try {
+    const translations = await prisma.translation.findMany({
+      where: { namespace: "Stats" }
+    });
 
-  const getVal = (key: string, def: string) => {
-    const t = translations.find(t => t.key === key);
-    return t ? t.en : def;
-  };
+    const getVal = (key: string, def: string) => {
+      const t = translations.find(t => t.key === key);
+      return t ? t.en : def;
+    };
 
-  return {
-    yearsValue: getVal("yearsValue", "20"),
-    yearsSuffix: getVal("yearsSuffix", "+"),
-    projectsValue: getVal("projectsValue", "15"),
-    projectsSuffix: getVal("projectsSuffix", "+"),
-    clientsValue: getVal("clientsValue", "50"),
-    clientsSuffix: getVal("clientsSuffix", "+"),
-    qualityValue: getVal("qualityValue", "100"),
-    qualitySuffix: getVal("qualitySuffix", "%"),
-  };
+    return {
+      yearsValue: getVal("yearsValue", STATS_DEFAULTS.yearsValue),
+      yearsSuffix: getVal("yearsSuffix", STATS_DEFAULTS.yearsSuffix),
+      projectsValue: getVal("projectsValue", STATS_DEFAULTS.projectsValue),
+      projectsSuffix: getVal("projectsSuffix", STATS_DEFAULTS.projectsSuffix),
+      clientsValue: getVal("clientsValue", STATS_DEFAULTS.clientsValue),
+      clientsSuffix: getVal("clientsSuffix", STATS_DEFAULTS.clientsSuffix),
+      qualityValue: getVal("qualityValue", STATS_DEFAULTS.qualityValue),
+      qualitySuffix: getVal("qualitySuffix", STATS_DEFAULTS.qualitySuffix),
+    };
+  } catch (error) {
+    // console.error("Failed to load stats from DB:", error);
+    return STATS_DEFAULTS;
+  }
 }
 
 export async function updateStats(formData: FormData) {

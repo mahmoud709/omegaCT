@@ -3,12 +3,12 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "mongodb"
+  url      = env("MONGODB_URI")
 }
 
 model Project {
-  id            String   @id @default(uuid())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   slug          String   @unique
   name          String
   nameAr        String   @default("")
@@ -29,7 +29,7 @@ model Project {
 }
 
 model Client {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String   @unique
   logo      String?
   createdAt DateTime @default(now())
@@ -37,7 +37,7 @@ model Client {
 }
 
 model HeroSlide {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   imagePath String
   order     Int
   createdAt DateTime @default(now())
@@ -45,7 +45,7 @@ model HeroSlide {
 }
 
 model Translation {
-  id        String   @id @default(uuid())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   namespace String
   key       String
   en        String
@@ -57,7 +57,7 @@ model Translation {
 }
 
 model Service {
-  id            String   @id @default(uuid())
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
   title         String   @unique
   titleAr       String   @default("")
   summary       String
@@ -73,7 +73,7 @@ model Service {
 }
 
 model JobPosting {
-  id              String         @id @default(uuid())
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   titleAr         String         @default("")
   department      String
@@ -93,8 +93,8 @@ model JobPosting {
 }
 
 model JobApplication {
-  id          String   @id @default(uuid())
-  jobId       String
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  jobId       String     @db.ObjectId
   job         JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
   jobTitle    String
   name        String
@@ -110,7 +110,7 @@ model JobApplication {
 }
 
 model HrUser {
-  id           String   @id @default(uuid())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   email        String   @unique
   name         String
   passwordHash String

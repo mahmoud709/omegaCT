@@ -34,3 +34,46 @@ export async function uploadWhoWeAreImage(formData: FormData) {
   revalidatePath("/admin/settings");
   revalidatePath("/");
 }
+
+export async function updateCompanyProfile(formData: FormData) {
+  const keys = ["phone", "mobile", "email", "addressAlex", "addressCairo", "facebook", "linkedin", "chairman", "established"];
+  
+  for (const key of keys) {
+    const enVal = formData.get(`${key}En`) as string || "";
+    const arVal = formData.get(`${key}Ar`) as string || "";
+    
+    // We update even if empty, to allow clearing fields
+    try {
+      await prisma.translation.upsert({
+        where: { namespace_key: { namespace: "CompanyProfile", key } },
+        update: { en: enVal, ar: arVal },
+        create: { namespace: "CompanyProfile", key, en: enVal, ar: arVal },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  // Handle Logo Upload
+  const logoFile = formData.get("logo") as File;
+  if (logoFile && logoFile.size > 0) {
+    try {
+      const arrayBuffer = await logoFile.arrayBuffer();
+      const buffer = new Uint8Array(arrayBuffer);
+      const imageUrl = await new Promise<string>((resolve, reject) => {
+        cloudinary.uploader.upload_stream({ folder: "omega_settings" }, function (error, result) {
+          if (error) reject(error);
+          else resolve(result?.secure_url as string);
+        }).end(buffer);
+      });
+      
+      await prisma.translation.upsert({
+        where: { namespace_key: { namespace: "CompanyProfile", key: "logo" } },
+        update: { en: imageUrl, ar: imageUrl },
+        create: { namespace: "CompanyProfile", key: "logo", en: imageUrl, ar: imageUrl },
+      });
+    } catch(e) {}
+  }
+
+  revalidatePath("/", "layout");
+}

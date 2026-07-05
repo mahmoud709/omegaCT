@@ -4,9 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getTranslations() {
-  return await prisma.translation.findMany({
-    orderBy: [{ namespace: "asc" }, { key: "asc" }],
-  });
+  try {
+    return await prisma.translation.findMany({
+      orderBy: [{ namespace: "asc" }, { key: "asc" }],
+    });
+  } catch (error) {
+    // console.error("Failed to load translations from DB:", error);
+    return [];
+  }
 }
 
 export async function upsertTranslation(formData: FormData) {

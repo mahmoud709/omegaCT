@@ -55,19 +55,21 @@ export default async function EditProject({ params }: { params: Promise<{ id: st
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
               <label htmlFor="category" className="block text-sm font-medium text-gray-900">Category (EN) *</label>
-              <select id="category" name="category" defaultValue={project.category} required className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition bg-white">
-                <option value="Commercial">Commercial</option>
-                <option value="Hospitality">Hospitality</option>
-                <option value="Residential">Residential</option>
-              </select>
+              <input type="text" id="category" name="category" list="categoryList" defaultValue={project.category} required className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition bg-white" placeholder="Select or type new..." />
+              <datalist id="categoryList">
+                <option value="Commercial" />
+                <option value="Hospitality" />
+                <option value="Residential" />
+              </datalist>
             </div>
             <div className="space-y-2" dir="rtl">
               <label htmlFor="categoryAr" className="block text-sm font-medium text-gray-900">Category (AR)</label>
-              <select id="categoryAr" name="categoryAr" defaultValue={project.categoryAr} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition bg-white text-right" dir="rtl">
-                <option value="تجاري">تجاري (Commercial)</option>
-                <option value="ضيافة">ضيافة (Hospitality)</option>
-                <option value="سكني">سكني (Residential)</option>
-              </select>
+              <input type="text" id="categoryAr" name="categoryAr" list="categoryArList" defaultValue={project.categoryAr} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition bg-white text-right" dir="rtl" placeholder="اختر أو اكتب فئة..." />
+              <datalist id="categoryArList">
+                <option value="تجاري" />
+                <option value="ضيافة" />
+                <option value="سكني" />
+              </datalist>
             </div>
           </div>
 

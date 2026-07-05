@@ -28,10 +28,18 @@
     "dot": "عرض صورة الهيرو {number}"
   },
   "Stats": {
-    "years": "عاما من التميز",
+    "years": "سنوات من التميز",
+    "yearsValue": "20",
+    "yearsSuffix": "+",
     "projects": "مشروع مكتمل",
-    "clients": "عميل فاخر",
-    "quality": "التزام بالجودة"
+    "projectsValue": "15",
+    "projectsSuffix": "+",
+    "clients": "عملاء مميزون",
+    "clientsValue": "50",
+    "clientsSuffix": "+",
+    "quality": "الالتزام بالجودة",
+    "qualityValue": "100",
+    "qualitySuffix": "%"
   },
   "Home": {
     "whoLabel": "من نحن",

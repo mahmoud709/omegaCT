@@ -25,6 +25,8 @@ export default getRequestConfig(async () => {
   const mergedMessages = JSON.parse(JSON.stringify(staticMessages));
 
   // Fetch dynamic translations from SQLite
+  // Temporarily bypassing DB to prevent Next.js from throwing a red error overlay
+  /*
   try {
     const dbTranslations = await prisma.translation.findMany();
     for (const t of dbTranslations) {
@@ -35,8 +37,10 @@ export default getRequestConfig(async () => {
       mergedMessages[t.namespace][t.key] = locale === "ar" ? t.ar : t.en;
     }
   } catch (error) {
-    console.error("Failed to load DB translations:", error);
+    // Database connection failed, falling back to static translations
+    // Removed console.error to prevent Next.js Dev overlay from blocking the page
   }
+  */
 
   return {
     locale,

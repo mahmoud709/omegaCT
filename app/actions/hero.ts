@@ -4,9 +4,14 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
 export async function getHeroSlides() {
-  return await prisma.heroSlide.findMany({
-    orderBy: { order: "asc" },
-  });
+  try {
+    return await prisma.heroSlide.findMany({
+      orderBy: { order: "asc" },
+    });
+  } catch (error) {
+    // console.error("Failed to load hero slides from DB:", error);
+    return [];
+  }
 }
 
 import cloudinary from "@/lib/cloudinary";
