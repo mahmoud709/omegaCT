@@ -24,9 +24,7 @@ export default getRequestConfig(async () => {
   const staticMessages = (await import(`../messages/${locale}.json`)).default;
   const mergedMessages = JSON.parse(JSON.stringify(staticMessages));
 
-  // Fetch dynamic translations from SQLite
-  // Temporarily bypassing DB to prevent Next.js from throwing a red error overlay
-  /*
+  // Fetch dynamic translations from MongoDB
   try {
     const dbTranslations = await prisma.translation.findMany();
     for (const t of dbTranslations) {
@@ -38,9 +36,7 @@ export default getRequestConfig(async () => {
     }
   } catch (error) {
     // Database connection failed, falling back to static translations
-    // Removed console.error to prevent Next.js Dev overlay from blocking the page
   }
-  */
 
   return {
     locale,

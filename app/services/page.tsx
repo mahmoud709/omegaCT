@@ -31,6 +31,17 @@ export default async function ServicesPage() {
     image: null,
   }));
 
+  const tSettings = await getTranslations("Settings");
+  const getSettingImage = (key: string, defaultValue: string) => {
+    try {
+      const val = tSettings(key);
+      return val && val !== key ? val : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+  const servicesBannerImg = getSettingImage("servicesBanner", images.blueprint);
+
   const processSteps = [
     { titleKey: "processConsultationTitle", textKey: "processConsultationText", Icon: Icons.ClipboardCheck },
     { titleKey: "processDesignTitle", textKey: "processDesignText", Icon: Icons.DraftingCompass },
@@ -45,7 +56,7 @@ export default async function ServicesPage() {
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={images.blueprint}
+        image={servicesBannerImg}
       />
 
       <section className="bg-white">
@@ -74,7 +85,7 @@ export default async function ServicesPage() {
                       {service.description}
                     </p>
                     <div className="mt-8 flex flex-wrap gap-3">
-                      {service.scope.split(",").map((s) => s.trim()).filter(Boolean).map((scopeItem) => (
+                      {service.scope.map((s) => s.trim()).filter(Boolean).map((scopeItem) => (
                         <span key={scopeItem} className="scope-pill">
                           {scopeItem}
                         </span>
@@ -105,7 +116,7 @@ export default async function ServicesPage() {
           <div className="mt-12 grid gap-4 rounded bg-[var(--off-white)] p-6 md:grid-cols-2">
             {[t("sp1"), t("sp2"), t("sp3"), t("sp4")].map((point) => (
               <p key={point} className="flex gap-3 text-sm font-semibold text-[var(--dark-text)]">
-                <CheckCircle2 size={19} className="shrink-0 text-[var(--gold)]" />
+                <Icons.CheckCircle2 size={19} className="shrink-0 text-[var(--gold)]" />
                 {point}
               </p>
             ))}

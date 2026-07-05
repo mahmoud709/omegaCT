@@ -33,12 +33,13 @@ export async function Footer() {
 
   const alexAddress = getP("addressAlex") || offices[0].address;
   const cairoAddress = getP("addressCairo") || offices[1].address;
+  const logoUrl = getP("logo") || undefined;
 
   return (
     <footer className="border-t-4 border-[var(--gold)] bg-[var(--navy)] text-white">
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1.4fr] lg:px-8">
         <div className="space-y-5">
-          <Logo light />
+          <Logo light src={logoUrl} />
           <p className="max-w-sm text-sm leading-7 text-white/70">
             {footer("summary", { year: established })}
           </p>

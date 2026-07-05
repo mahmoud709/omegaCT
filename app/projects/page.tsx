@@ -3,7 +3,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { ProjectFilter } from "../components/ProjectFilter";
 import { CtaBand, PageHero, SectionIntro } from "../components/Section";
 import { Reveal } from "../components/Reveal";
-import { images, projects } from "../data/site";
+import { images } from "../data/site";
 import { getProjects } from "../actions/projects";
 
 type ProjectWithAr = {
@@ -33,7 +33,29 @@ export default async function ProjectsPage() {
     };
   });
   
-  const displayProjects = [...dbProjects, ...projects.filter(p => !dbProjects.find((dp: unknown) => dp.slug === p.slug))];
+  const displayProjects = dbProjects;
+
+  const tSettings = await getTranslations("Settings");
+  const getSettingImage = (key: string, defaultValue: string) => {
+    try {
+      const val = tSettings(key);
+      return val && val !== key ? val : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+  const projectsBannerImg = getSettingImage("projectsBanner", images.skyline);
+
+  const featuredProject = dbProjects.find(p => p.slug === "obsidier-towers");
+  const defaultFeaturedImages = [images.about, images.blueprint, images.mep, images.interior];
+  const featuredImages: string[] = [];
+  for (let i = 0; i < 4; i++) {
+    if (featuredProject && featuredProject.galleryImages && featuredProject.galleryImages[i]) {
+      featuredImages.push(featuredProject.galleryImages[i]);
+    } else {
+      featuredImages.push(defaultFeaturedImages[i]);
+    }
+  }
 
   const projectDetails: [string, string][] = [
     [t("locationKey"), t("locationValue")],
@@ -60,7 +82,7 @@ export default async function ProjectsPage() {
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={images.skyline}
+        image={projectsBannerImg}
       />
 
       <section className="section bg-white">
@@ -73,7 +95,7 @@ export default async function ProjectsPage() {
       <section className="bg-(--off-white)">
         <div
           className="min-h-[420px] bg-cover bg-center"
-          style={{ backgroundImage: `url(${images.skyline})` }}
+          style={{ backgroundImage: `url(${projectsBannerImg})` }}
         />
         <div className="section">
           <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
@@ -112,9 +134,9 @@ export default async function ProjectsPage() {
           </div>
 
           <div className="mx-auto mt-12 grid max-w-7xl gap-5 md:grid-cols-4">
-            {[images.about, images.blueprint, images.mep, images.interior].map((image, index) => (
+            {featuredImages.map((image, index) => (
               <div
-                key={image}
+                key={image + index}
                 className="min-h-[220px] bg-cover bg-center shadow-sm"
                 style={{ backgroundImage: `url(${image})` }}
                 aria-label={`Obsidier gallery image ${index + 1}`}

@@ -7,6 +7,18 @@ import { brand, images, offices } from "../data/site";
 
 export default function ContactPage() {
   const t = useTranslations("ContactPage");
+  const tSettings = useTranslations("Settings");
+
+  const getSettingImage = (key: string, defaultValue: string) => {
+    try {
+      const val = tSettings(key);
+      return val && val !== key ? val : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+
+  const contactBannerImg = getSettingImage("contactBanner", images.contact);
 
   return (
     <>
@@ -14,7 +26,7 @@ export default function ContactPage() {
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={images.contact}
+        image={contactBannerImg}
       />
 
       <section className="section bg-[var(--off-white)]">

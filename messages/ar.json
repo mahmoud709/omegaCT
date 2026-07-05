@@ -304,5 +304,17 @@
     "processQualityText": "الامتثال الصارم للمعايير",
     "processHandoverTitle": "التسليم",
     "processHandoverText": "التسليم مع التوثيق الكامل"
+  },
+  "Settings": {
+    "whoWeAre1": "",
+    "whoWeAre2": "",
+    "whoWeAre3": "",
+    "aboutBanner": "",
+    "servicesBanner": "",
+    "projectsBanner": "",
+    "contactBanner": "",
+    "partnersBanner": "",
+    "aboutBusiness": "",
+    "aboutTeam": ""
   }
 }

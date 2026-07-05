@@ -8,6 +8,20 @@ import { images } from "../data/site";
 export default function AboutPage() {
   const t = useTranslations("AboutPage");
   const d = useTranslations("AboutData");
+  const tSettings = useTranslations("Settings");
+
+  const getSettingImage = (key: string, defaultValue: string) => {
+    try {
+      const val = tSettings(key);
+      return val && val !== key ? val : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+
+  const bannerImg = getSettingImage("aboutBanner", images.about);
+  const businessImg = getSettingImage("aboutBusiness", images.business);
+  const teamImg = getSettingImage("aboutTeam", images.team);
 
   const timeline = [
     ["2003", d("timeline2003")],
@@ -41,7 +55,7 @@ export default function AboutPage() {
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={images.about}
+        image={bannerImg}
       />
 
       <section className="section bg-white">
@@ -110,7 +124,7 @@ export default function AboutPage() {
 
       <section className="section bg-[var(--off-white)]">
         <div className="mx-auto max-w-7xl">
-          <ImagePanel image={images.business} reverse>
+          <ImagePanel image={businessImg} reverse>
             <Reveal>
               <p className="section-label">{t("businessLabel")}</p>
               <h2 className="section-title">{t("businessTitle")}</h2>
@@ -127,7 +141,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="parallax-band" style={{ backgroundImage: `url(${images.team})` }}>
+      <section className="parallax-band" style={{ backgroundImage: `url(${teamImg})` }}>
         <div className="hero-scrim" />
         <Reveal className="relative mx-auto max-w-7xl px-5 py-28 text-white lg:px-8">
           <p className="section-label text-[var(--gold-light)]">{t("teamLabel")}</p>

@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { projects } from "@/app/data/site";
 import { ProjectCarousel } from "@/app/components/ProjectCarousel";
 import { Reveal } from "@/app/components/Reveal";
 import { MapPin, Building2, HardHat } from "lucide-react";
@@ -15,15 +14,11 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
 
   // Try DB
   let dbProjectRaw = null;
-  // Temporarily bypassing DB to prevent Next.js from throwing a red error overlay 
-  // due to the MongoDB IP whitelist timeout.
-  /*
   try {
     dbProjectRaw = await prisma.project.findUnique({ where: { slug } });
   } catch (error) {
-    // DB error or disconnected
+    console.error("Failed to load project from DB:", error);
   }
-  */
 
   let project = null;
 
@@ -39,21 +34,6 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
       role: isAr && dbProjectRaw.roleAr ? dbProjectRaw.roleAr : dbProjectRaw.role,
       galleryImages: dbProjectRaw.galleryImages ? dbProjectRaw.galleryImages.split(",").map(s => s.trim()).filter(Boolean) : []
     };
-  } else {
-    // Try static
-    const staticProject = projects.find(p => p.slug === slug);
-    if (staticProject) {
-      let projectName = staticProject.name;
-      try {
-        projectName = tNames(staticProject.slug as any);
-      } catch (e) {
-        // Fallback to english name if translation missing
-      }
-      project = {
-        ...staticProject,
-        name: projectName
-      };
-    }
   }
 
   if (!project) {

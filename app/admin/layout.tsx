@@ -11,17 +11,23 @@ import {
   Wrench,
   BarChart,
   BriefcaseBusiness,
-  UserCog
+  UserCog,
+  Mail
 } from "lucide-react";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   let newAppsCount = 0;
-  try { newAppsCount = await prisma.jobApplication.count({ where: { status: "NEW" } }); } catch {}
+  let unreadMessagesCount = 0;
+  try { 
+    newAppsCount = await prisma.jobApplication.count({ where: { status: "NEW" } }); 
+    unreadMessagesCount = await prisma.contactMessage.count({ where: { isRead: false } }); 
+  } catch {}
   const navLinks = [
     { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { name: "Projects", href: "/admin/projects", icon: FolderKanban },
     { name: "Clients & Partners", href: "/admin/clients", icon: Users },
     { name: "Services", href: "/admin/services", icon: Wrench },
+    { name: "Messages", href: "/admin/messages", icon: Mail, badge: unreadMessagesCount },
     { name: "Careers", href: "/admin/careers", icon: BriefcaseBusiness, badge: newAppsCount },
     { name: "HR Accounts", href: "/admin/hr-users", icon: UserCog },
     { name: "Stats", href: "/admin/stats", icon: BarChart },

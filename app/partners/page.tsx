@@ -12,6 +12,18 @@ import {
 
 export default function PartnersPage() {
   const t = useTranslations("PartnersPage");
+  const tSettings = useTranslations("Settings");
+
+  const getSettingImage = (key: string, defaultValue: string) => {
+    try {
+      const val = tSettings(key);
+      return val && val !== key ? val : defaultValue;
+    } catch {
+      return defaultValue;
+    }
+  };
+
+  const partnersBannerImg = getSettingImage("partnersBanner", images.business);
 
   return (
     <>
@@ -19,7 +31,7 @@ export default function PartnersPage() {
         eyebrow={t("eyebrow")}
         title={t("title")}
         subtitle={t("subtitle")}
-        image={images.business}
+        image={partnersBannerImg}
       />
 
       <section className="section overflow-hidden bg-white">

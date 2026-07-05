@@ -6,6 +6,7 @@ import { SubmitButton } from "./SubmitButton";
 
 export default async function SettingsManager() {
   let profile: any[] = [];
+  let translations: any[] = [];
   try {
     translations = await prisma.translation.findMany({ where: { namespace: "Settings" } });
     profile = await prisma.translation.findMany({ where: { namespace: "CompanyProfile" } });
@@ -52,6 +53,45 @@ export default async function SettingsManager() {
             { key: "whoWeAre1", label: "Top Left Image (Blueprint)" },
             { key: "whoWeAre2", label: "Bottom Left Image (Interior)" },
             { key: "whoWeAre3", label: "Right Tall Image (Site)" }
+          ].map((img) => (
+            <div key={img.key} className="space-y-4">
+              <h3 className="font-medium text-gray-900 text-sm">{img.label}</h3>
+              {getImage(img.key) ? (
+                <div 
+                  className="w-full h-32 bg-cover bg-center rounded-lg border border-gray-200"
+                  style={{ backgroundImage: `url(${getImage(img.key)})` }}
+                />
+              ) : (
+                <div className="w-full h-32 bg-gray-50 rounded-lg border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
+                  Default Image Used
+                </div>
+              )}
+              
+              <form action={uploadWhoWeAreImage} className="flex flex-col gap-2">
+                <input type="hidden" name="imageKey" value={img.key} />
+                <input type="file" name="image" accept="image/*" required className="text-xs w-full" />
+                <SubmitButton />
+              </form>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-6 pb-4 border-b border-gray-100">
+          <ImageIcon className="text-[var(--gold)]" size={24} />
+          <h2 className="text-xl font-semibold text-gray-900">Page Banner & Layout Images</h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            { key: "aboutBanner", label: "About Page Banner" },
+            { key: "servicesBanner", label: "Services Page Banner" },
+            { key: "projectsBanner", label: "Projects Page Banner" },
+            { key: "contactBanner", label: "Contact Page Banner" },
+            { key: "partnersBanner", label: "Partners Page Banner" },
+            { key: "aboutBusiness", label: "About Page Business Image" },
+            { key: "aboutTeam", label: "About Page Team Image" }
           ].map((img) => (
             <div key={img.key} className="space-y-4">
               <h3 className="font-medium text-gray-900 text-sm">{img.label}</h3>

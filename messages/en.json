@@ -304,5 +304,17 @@
     "processQualityText": "Rigorous standards compliance",
     "processHandoverTitle": "Handover",
     "processHandoverText": "Delivery with full documentation"
+  },
+  "Settings": {
+    "whoWeAre1": "",
+    "whoWeAre2": "",
+    "whoWeAre3": "",
+    "aboutBanner": "",
+    "servicesBanner": "",
+    "projectsBanner": "",
+    "contactBanner": "",
+    "partnersBanner": "",
+    "aboutBusiness": "",
+    "aboutTeam": ""
   }
 }

@@ -33,6 +33,11 @@ export async function uploadWhoWeAreImage(formData: FormData) {
 
   revalidatePath("/admin/settings");
   revalidatePath("/");
+  revalidatePath("/about");
+  revalidatePath("/services");
+  revalidatePath("/projects");
+  revalidatePath("/contact");
+  revalidatePath("/partners");
 }
 
 export async function updateCompanyProfile(formData: FormData) {
