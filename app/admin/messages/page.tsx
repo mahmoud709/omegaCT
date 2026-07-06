@@ -42,7 +42,7 @@ export default async function AdminMessagesPage() {
                     </div>
 
                     <div className="flex flex-wrap gap-y-2 gap-x-6 text-sm text-gray-500">
-                      <a href={`mailto:${msg.email}`} className="hover:text-[var(--gold)] font-medium transition-colors">
+                      <a href={`mailto:${msg.email}`} className="hover:text-(--gold) font-medium transition-colors">
                         {msg.email}
                       </a>
                       {msg.phone && (
@@ -121,6 +121,7 @@ export default async function AdminMessagesPage() {
                 <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
               </div>
             </div>
+            );
           })}
         </div>
       )}
