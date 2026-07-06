@@ -1,4 +1,4 @@
-import { BriefcaseBusiness, Camera, Mail, MapPin, Phone, Share2 } from "lucide-react";
+import { Mail, MapPin, Phone } from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 import { brand, navItems, offices, services } from "../data/site";
@@ -28,8 +28,9 @@ export async function Footer() {
   const phone = getP("phone") || brand.phone;
   const mobile = getP("mobile") || brand.mobile;
   const email = getP("email") || brand.email;
-  const facebook = getP("facebook") || "#";
-  const linkedin = getP("linkedin") || "#";
+  const facebook = getP("facebook") || brand.facebook;
+  const linkedin = getP("linkedin") || brand.linkedin;
+  const instagram = getP("instagram") || brand.instagram;
 
   const alexAddress = getP("addressAlex") || offices[0].address;
   const cairoAddress = getP("addressCairo") || offices[1].address;
@@ -44,12 +45,31 @@ export async function Footer() {
             {footer("summary", { year: established })}
           </p>
           <div className="flex gap-3">
-            <a href={facebook} aria-label="Facebook" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
-              <Camera size={18} />
-            </a>
-            <a href={linkedin} aria-label="LinkedIn" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
-              <BriefcaseBusiness size={18} />
-            </a>
+            {facebook && facebook !== "#" && (
+              <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
+                <svg className="size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </a>
+            )}
+            {instagram && instagram !== "#" && (
+              <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
+                <svg className="size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                </svg>
+              </a>
+            )}
+            {linkedin && linkedin !== "#" && (
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="grid size-10 place-items-center rounded border border-white/15 text-[var(--gold)] transition hover:border-[var(--gold)] hover:bg-white/10">
+                <svg className="size-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect width="4" height="12" x="2" y="9" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg>
+              </a>
+            )}
           </div>
         </div>
 
@@ -103,7 +123,9 @@ export async function Footer() {
             </p>
             <p className="flex gap-3">
               <Mail className="mt-1 shrink-0 text-[var(--gold)]" size={16} />
-              <span>{email}</span>
+              <a href={`mailto:${email}`} className="hover:text-[var(--gold)] transition-colors">
+                {email}
+              </a>
             </p>
           </div>
         </div>

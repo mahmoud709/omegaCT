@@ -173,10 +173,14 @@ export default async function SettingsManager() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-900">Facebook URL</label>
               <input type="url" name="facebookEn" defaultValue={getProfile("facebook")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="https://facebook.com/omega" />
+            </div>
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-900">Instagram URL</label>
+              <input type="url" name="instagramEn" defaultValue={getProfile("instagram")} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="https://instagram.com/omega" />
             </div>
             <div className="space-y-2">
               <label className="block text-sm font-medium text-gray-900">LinkedIn URL</label>

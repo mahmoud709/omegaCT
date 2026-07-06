@@ -73,6 +73,9 @@ export const brand = {
   phone: "+2 03-4690058",
   mobile: "+2 010 69 771 773",
   chairman: "Eng. Sayed El-Feshawy",
+  facebook: "https://web.facebook.com/profile.php?id=61586830762653",
+  instagram: "https://www.instagram.com/omega_ct/",
+  linkedin: "https://www.linkedin.com/company/omega-ct/",
 };
 
 export const offices = [
