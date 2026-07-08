@@ -235,3 +235,22 @@ export async function deleteProject(id: string) {
   revalidatePath("/projects");
   revalidatePath("/");
 }
+
+export async function removeGalleryImage(projectId: string, imageUrlToRemove: string) {
+  await requireAdmin();
+  
+  const existingProject = await prisma.project.findUnique({ where: { id: projectId } });
+  if (!existingProject || !existingProject.galleryImages) return;
+
+  const currentImages = existingProject.galleryImages.split(",").filter(Boolean);
+  const updatedImages = currentImages.filter(img => img !== imageUrlToRemove);
+
+  await prisma.project.update({
+    where: { id: projectId },
+    data: { galleryImages: updatedImages.join(",") },
+  });
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/projects");
+  revalidatePath("/");
+}

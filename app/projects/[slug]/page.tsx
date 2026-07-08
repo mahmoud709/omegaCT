@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { ImageCarousel } from "@/app/components/ImageCarousel";
+import { ProjectGalleryViewer } from "@/app/components/ProjectGalleryViewer";
 import { Reveal } from "@/app/components/Reveal";
 import { MapPin, Building2, HardHat } from "lucide-react";
 
@@ -95,23 +95,21 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
             <div className="mt-20 mb-10 text-center">
               <p className="section-label">{t("galleryLabel")}</p>
             </div>
-            {galleryImages.length > 3 ? (
-              <ImageCarousel images={galleryImages} projectName={project.name} />
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {galleryImages.map((img: string, idx: number) => (
-                  <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100 relative">
-                    <Image 
-                      src={img} 
-                      alt={`${project.name} gallery image ${idx + 1}`}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+            <ProjectGalleryViewer 
+              images={galleryImages} 
+              project={{
+                name: locale === "ar" ? project.nameAr || project.name : project.name,
+                category: locale === "ar" ? project.categoryAr || project.category : project.category,
+                location: locale === "ar" ? project.locationAr || project.location : project.location,
+                role: locale === "ar" ? project.roleAr || project.role : project.role,
+                details: locale === "ar" ? project.detailsAr || project.details : project.details,
+              }}
+              labels={{
+                category: t("type") || "Type",
+                location: t("locationKey") || "Location",
+                role: t("role") || "Role",
+              }}
+            />
           </Reveal>
         )}
 

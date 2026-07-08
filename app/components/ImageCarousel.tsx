@@ -9,8 +9,22 @@ export function ImageCarousel({ images, projectName }: { images: string[]; proje
   const [isPlaying, setIsPlaying] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoplayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
 
   const totalImages = images.length;
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) setItemsPerPage(3);
+      else if (window.innerWidth >= 768) setItemsPerPage(2);
+      else setItemsPerPage(1);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalPages = Math.ceil(totalImages / itemsPerPage);
 
   const handleScroll = () => {
     if (scrollContainerRef.current) {
@@ -34,25 +48,25 @@ export function ImageCarousel({ images, projectName }: { images: string[]; proje
   };
 
   const handlePrev = () => {
-    const nextIndex = activeIndex === 0 ? totalImages - 1 : activeIndex - 1;
+    const nextIndex = activeIndex === 0 ? totalPages - 1 : activeIndex - 1;
     scrollTo(nextIndex);
   };
 
   const handleNext = () => {
-    const nextIndex = activeIndex === totalImages - 1 ? 0 : activeIndex + 1;
+    const nextIndex = activeIndex === totalPages - 1 ? 0 : activeIndex + 1;
     scrollTo(nextIndex);
   };
 
   const togglePlay = () => setIsPlaying((prev) => !prev);
 
   useEffect(() => {
-    if (isPlaying && totalImages > 0) {
+    if (isPlaying && totalPages > 1) {
       autoplayTimerRef.current = setInterval(() => handleNext(), 4000);
     }
     return () => {
       if (autoplayTimerRef.current) clearInterval(autoplayTimerRef.current);
     };
-  }, [isPlaying, activeIndex, totalImages]);
+  }, [isPlaying, activeIndex, totalPages]);
 
   if (totalImages === 0) return null;
 
@@ -87,7 +101,7 @@ export function ImageCarousel({ images, projectName }: { images: string[]; proje
       <div className="flex items-center justify-center gap-6 pt-2">
         <button type="button" onClick={handlePrev} className="p-2 border border-gray-200 hover:border-[var(--gold)] hover:text-[var(--gold)] text-gray-400 rounded-full transition-colors bg-white shadow-sm"><ChevronLeft size={16} /></button>
         <div className="flex items-center gap-2">
-          {Array.from({ length: totalImages }).map((_, index) => (
+          {Array.from({ length: totalPages }).map((_, index) => (
             <button
               key={index}
               type="button"

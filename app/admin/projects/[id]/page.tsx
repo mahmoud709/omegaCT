@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { SubmitButton } from "@/app/components/SubmitButton";
+import { GalleryManager } from "@/app/components/GalleryManager";
 
 export const maxDuration = 60;
 
@@ -129,14 +130,7 @@ export default async function EditProject({ params }: { params: Promise<{ id: st
             <input type="file" id="galleryImages" name="galleryImages" accept="image/*" multiple className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition bg-white" />
             <p className="text-xs text-gray-500">Uploading new images here will append them to your current gallery. Hold Ctrl/Cmd to select multiple files at once.</p>
             {project.galleryImages && project.galleryImages.length > 0 && (
-              <div className="mt-4">
-                <p className="text-xs font-semibold text-gray-700 mb-2">Current Gallery Images:</p>
-                <div className="flex flex-wrap gap-2">
-                  {project.galleryImages.split(",").filter(Boolean).map((img, idx) => (
-                    <img key={idx} src={img} alt={`Gallery ${idx + 1}`} className="w-20 h-20 object-cover rounded border border-gray-200" />
-                  ))}
-                </div>
-              </div>
+              <GalleryManager projectId={project.id} galleryString={project.galleryImages} />
             )}
           </div>
 
