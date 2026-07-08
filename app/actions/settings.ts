@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import cloudinary from "@/lib/cloudinary";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function uploadWhoWeAreImage(formData: FormData) {
   const imageKey = formData.get("imageKey") as string;
@@ -82,4 +82,5 @@ export async function updateCompanyProfile(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
+  revalidateTag("profile");
 }
