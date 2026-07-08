@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, Clock, MapPin, Building2, HardHat } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, MapPin, Building2, HardHat } from "lucide-react";
+import { createPortal } from "react-dom";
 import { ImageCarousel } from "./ImageCarousel";
 
 interface ProjectGalleryViewerProps {
@@ -24,6 +25,13 @@ interface ProjectGalleryViewerProps {
 export function ProjectGalleryViewer({ images, project, labels }: ProjectGalleryViewerProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
   if (images.length === 0) return null;
 
@@ -79,13 +87,13 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
       )}
 
       {/* Modal */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 animate-in fade-in duration-200">
+      {modalOpen && mounted && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 animate-in fade-in duration-200" style={{ position: "fixed" }}>
           
-          {/* Close Button (moved outside for better visibility) */}
+          {/* Close Button */}
           <button 
             onClick={closeModal}
-            className="absolute top-6 right-6 md:top-8 md:right-8 z-50 p-3 bg-black/50 hover:bg-black/80 rounded-full text-white shadow-lg transition-colors border border-white/10"
+            className="absolute top-6 right-6 md:top-8 md:right-8 z-[100000] p-3 bg-black/50 hover:bg-black/80 rounded-full text-white shadow-lg transition-colors border border-white/10 cursor-pointer"
           >
             <X size={24} />
           </button>
@@ -93,7 +101,7 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
           <div className="bg-white w-full max-w-7xl h-[90vh] md:h-[85vh] rounded-3xl overflow-hidden flex flex-col md:flex-row relative shadow-2xl mt-8 md:mt-0">
 
             {/* Left: Image Slider */}
-            <div className="w-full md:w-2/3 h-[50vh] md:h-full relative bg-gray-100 flex items-center justify-center group">
+            <div className="w-full md:w-2/3 h-[50vh] md:h-full relative bg-gray-100 flex items-center justify-center group" onClick={(e) => e.stopPropagation()}>
               <Image 
                 src={images[currentIndex]} 
                 alt={`${project.name} preview`}
@@ -117,7 +125,7 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
             </div>
 
             {/* Right: Project Details Panel */}
-            <div className="w-full md:w-1/3 h-[40vh] md:h-full bg-white overflow-y-auto p-8 md:p-10 border-l rtl:border-l-0 rtl:border-r border-gray-100" dir="auto">
+            <div className="w-full md:w-1/3 h-[40vh] md:h-full bg-white overflow-y-auto p-8 md:p-10 border-l rtl:border-l-0 rtl:border-r border-gray-100" dir="auto" onClick={(e) => e.stopPropagation()}>
               <div className="inline-block px-3 py-1 bg-blue-50 text-blue-600 text-xs font-bold tracking-wider uppercase rounded-full mb-6">
                 {project.category}
               </div>
@@ -154,14 +162,23 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
               </div>
 
               <div className="mt-8 pt-8 border-t border-gray-100">
-                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line text-left rtl:text-right">
+                <p className={`text-gray-600 text-sm leading-relaxed whitespace-pre-line text-left rtl:text-right transition-all duration-300 ${isExpanded ? "" : "line-clamp-4"}`}>
                   {project.details}
                 </p>
+                {project.details.length > 200 && (
+                  <button 
+                    onClick={() => setIsExpanded(!isExpanded)}
+                    className="mt-3 text-sm font-bold text-[var(--gold)] hover:text-yellow-600 uppercase tracking-wider"
+                  >
+                    {isExpanded ? "Show Less" : "Read More"}
+                  </button>
+                )}
               </div>
             </div>
 
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
