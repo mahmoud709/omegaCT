@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
+import { unstable_cache } from "next/cache";
 
 export const locales = ["en", "ar"] as const;
 export type Locale = (typeof locales)[number];
@@ -24,9 +25,21 @@ export default getRequestConfig(async () => {
   const staticMessages = (await import(`../messages/${locale}.json`)).default;
   const mergedMessages = JSON.parse(JSON.stringify(staticMessages));
 
-  // Fetch dynamic translations from MongoDB
+  // Fetch dynamic translations from MongoDB using cache to fix slow Vercel cold starts
+  const getCachedTranslations = unstable_cache(
+    async () => {
+      try {
+        return await prisma.translation.findMany();
+      } catch (error) {
+        return [];
+      }
+    },
+    ["global-translations"],
+    { tags: ["translations"] }
+  );
+
   try {
-    const dbTranslations = await prisma.translation.findMany();
+    const dbTranslations = await getCachedTranslations();
     for (const t of dbTranslations) {
       if (!mergedMessages[t.namespace]) {
         mergedMessages[t.namespace] = {};

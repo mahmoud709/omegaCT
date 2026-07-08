@@ -79,8 +79,8 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
         <Reveal delay={0.2}>
           <div className="max-w-4xl mx-auto bg-white p-8 md:p-14 rounded-2xl shadow-sm border border-[var(--line)]">
             <p className="section-label mb-5">{t("scopeLabel")}</p>
-            <h2 className="font-serif text-3xl md:text-4xl text-[var(--dark-text)] font-semibold mb-8">Project Overview</h2>
-            <p className="text-lg md:text-xl text-[var(--muted)] leading-relaxed mb-8 border-l-4 border-[var(--gold)] pl-6">
+            <h2 className="font-serif text-3xl md:text-4xl text-[var(--dark-text)] font-semibold mb-8">{t("projectOverview") || "Project Overview"}</h2>
+            <p className="text-base md:text-lg text-[var(--muted)] leading-relaxed mb-8 border-l-4 rtl:border-l-0 rtl:border-r-4 border-[var(--gold)] pl-6 rtl:pl-0 rtl:pr-6">
               {project.details}
             </p>
           </div>
