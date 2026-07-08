@@ -1,7 +1,7 @@
 import { seedDatabase } from "@/app/actions/seed";
 import { uploadWhoWeAreImage, updateCompanyProfile } from "@/app/actions/settings";
 import { prisma } from "@/lib/prisma";
-import { Database, Image as ImageIcon, Building2 } from "lucide-react";
+import { Database, Image as ImageIcon, Building2, Upload } from "lucide-react";
 import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default async function SettingsManager() {
@@ -70,7 +70,9 @@ export default async function SettingsManager() {
               <form action={uploadWhoWeAreImage} className="flex flex-col gap-2">
                 <input type="hidden" name="imageKey" value={img.key} />
                 <input type="file" name="image" accept="image/*" required className="text-xs w-full" />
-                <SubmitButton />
+                <SubmitButton className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-sm transition-colors mt-2 disabled:opacity-50" loadingText="Uploading...">
+                  <Upload size={14} /> Upload & Save
+                </SubmitButton>
               </form>
             </div>
           ))}
@@ -109,7 +111,9 @@ export default async function SettingsManager() {
               <form action={uploadWhoWeAreImage} className="flex flex-col gap-2">
                 <input type="hidden" name="imageKey" value={img.key} />
                 <input type="file" name="image" accept="image/*" required className="text-xs w-full" />
-                <SubmitButton />
+                <SubmitButton className="flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1.5 rounded text-sm transition-colors mt-2 disabled:opacity-50" loadingText="Uploading...">
+                  <Upload size={14} /> Upload & Save
+                </SubmitButton>
               </form>
             </div>
           ))}
