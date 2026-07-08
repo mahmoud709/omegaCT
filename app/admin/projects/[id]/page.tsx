@@ -5,6 +5,8 @@ import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { SubmitButton } from "@/app/components/SubmitButton";
 
+export const maxDuration = 60;
+
 export default async function EditProject({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
   const project = await prisma.project.findUnique({ where: { id: resolvedParams.id } });

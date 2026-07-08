@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { ImageCarousel } from "@/app/components/ImageCarousel";
@@ -67,10 +68,13 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
 
         <Reveal delay={0.1}>
           <div className="w-full h-[50vh] md:h-[65vh] rounded-2xl overflow-hidden shadow-2xl relative mb-16 border border-gray-100">
-            <img 
+            <Image 
               src={project.image || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=80'} 
               alt={project.name}
-              className="w-full h-full object-cover"
+              fill
+              priority
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>
@@ -96,11 +100,13 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {galleryImages.map((img: string, idx: number) => (
-                  <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                    <img 
+                  <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100 relative">
+                    <Image 
                       src={img} 
-                      alt={`${project.name} gallery image ${idx + 1}`} 
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                      alt={`${project.name} gallery image ${idx + 1}`}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover hover:scale-105 transition-transform duration-500"
                     />
                   </div>
                 ))}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
+import Image from "next/image";
 
 export function ImageCarousel({ images, projectName }: { images: string[]; projectName: string }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -69,11 +70,13 @@ export function ImageCarousel({ images, projectName }: { images: string[]; proje
             key={index} 
             className="snap-start shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
           >
-            <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-              <img 
+            <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100 relative">
+              <Image 
                 src={img} 
                 alt={`${projectName} gallery image ${index + 1}`} 
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                className="object-cover hover:scale-105 transition-transform duration-500" 
               />
             </div>
           </div>
