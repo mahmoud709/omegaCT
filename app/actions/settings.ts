@@ -38,6 +38,7 @@ export async function uploadWhoWeAreImage(formData: FormData) {
   revalidatePath("/projects");
   revalidatePath("/contact");
   revalidatePath("/partners");
+  // @ts-ignore
   revalidateTag("profile");
 }
 
@@ -82,5 +83,6 @@ export async function updateCompanyProfile(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
+  // @ts-ignore
   revalidateTag("profile");
 }
