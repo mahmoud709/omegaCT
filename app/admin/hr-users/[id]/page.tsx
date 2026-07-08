@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 const inp = "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition text-sm";
 const lbl = "block text-sm font-medium text-gray-900 mb-1.5";
@@ -65,9 +66,9 @@ export default async function EditHRUserPage({ params }: { params: Promise<{ id:
             <Link href="/admin/hr-users" className="px-5 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition-colors text-sm">
               Cancel
             </Link>
-            <button type="submit" className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors text-sm">
+            <SubmitButton className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors text-sm">
               Save Changes
-            </button>
+            </SubmitButton>
           </div>
         </form>
 

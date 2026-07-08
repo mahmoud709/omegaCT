@@ -1,5 +1,6 @@
 import { getStatsData, updateStats } from "@/app/actions/stats";
 import { Save } from "lucide-react";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default async function StatsManager() {
   const stats = await getStatsData();
@@ -72,9 +73,9 @@ export default async function StatsManager() {
 
         </div>
         <div className="bg-gray-50 border-t border-gray-200 p-5 px-8 flex justify-end">
-          <button type="submit" className="flex items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
+          <SubmitButton className="flex items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
             <Save size={18} /> Save Stats
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </div>

@@ -2,7 +2,7 @@ import { seedDatabase } from "@/app/actions/seed";
 import { uploadWhoWeAreImage, updateCompanyProfile } from "@/app/actions/settings";
 import { prisma } from "@/lib/prisma";
 import { Database, Image as ImageIcon, Building2 } from "lucide-react";
-import { SubmitButton } from "./SubmitButton";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default async function SettingsManager() {
   let profile: any[] = [];
@@ -34,9 +34,9 @@ export default async function SettingsManager() {
             </p>
             
             <form action={seedDatabase}>
-              <button type="submit" className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-lg font-medium transition-colors">
+              <SubmitButton className="flex items-center gap-2 bg-gray-900 hover:bg-black text-white px-5 py-2.5 rounded-lg font-medium transition-colors">
                 <Database size={16} /> Run Data Migration
-              </button>
+              </SubmitButton>
             </form>
           </div>
         </div>
@@ -189,9 +189,9 @@ export default async function SettingsManager() {
           </div>
 
           <div className="pt-4 border-t border-gray-100 flex justify-end">
-            <button type="submit" className="px-6 py-3 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors shadow-sm">
+            <SubmitButton className="px-6 py-3 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors shadow-sm">
               Save Company Profile
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </div>

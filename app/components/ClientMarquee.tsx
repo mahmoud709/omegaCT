@@ -5,8 +5,13 @@ export async function ClientMarquee() {
   const dbClients = await getClients();
   const activeClients = dbClients.length > 0 ? dbClients.map(c => c.name) : staticClients;
 
-  const rowOne = [...activeClients, ...activeClients];
-  const rowTwo = [...activeClients.slice().reverse(), ...activeClients.slice().reverse()];
+  // Repeat the base array so it's wide enough for any screen (min 10 items)
+  const repeatCount = Math.max(1, Math.ceil(12 / activeClients.length));
+  const baseArray = Array(repeatCount).fill(activeClients).flat();
+
+  // Marquee needs exactly two identical halves to loop properly with translateX(-50%)
+  const rowOne = [...baseArray, ...baseArray];
+  const rowTwo = [...baseArray.slice().reverse(), ...baseArray.slice().reverse()];
 
   return (
     <div className="space-y-5 overflow-hidden">

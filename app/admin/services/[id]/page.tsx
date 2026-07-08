@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft, Save } from "lucide-react";
 import { notFound } from "next/navigation";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default async function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
@@ -90,9 +91,9 @@ export default async function EditServicePage({ params }: { params: Promise<{ id
         </div>
 
         <div className="bg-gray-50 px-8 py-5 border-t border-gray-200 flex justify-end">
-          <button type="submit" className="flex items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
+          <SubmitButton className="flex items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-6 py-2.5 rounded-lg font-medium transition-colors">
             <Save size={18} /> Update Service
-          </button>
+          </SubmitButton>
         </div>
       </form>
     </div>

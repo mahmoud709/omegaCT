@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 const inputClass =
   "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition";
@@ -129,9 +130,9 @@ export default async function EditJobPage({ params }: { params: Promise<{ id: st
             <Link href="/admin/careers" className="px-5 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition-colors">
               Cancel
             </Link>
-            <button type="submit" className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
+            <SubmitButton className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
               Save Changes
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </div>

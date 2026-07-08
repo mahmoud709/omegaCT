@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
-import { ProjectCarousel } from "@/app/components/ProjectCarousel";
+import { ImageCarousel } from "@/app/components/ImageCarousel";
 import { Reveal } from "@/app/components/Reveal";
 import { MapPin, Building2, HardHat } from "lucide-react";
 
@@ -91,17 +91,21 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
             <div className="mt-20 mb-10 text-center">
               <p className="section-label">{t("galleryLabel")}</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {galleryImages.map((img: string, idx: number) => (
-                <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100">
-                  <img 
-                    src={img} 
-                    alt={`${project.name} gallery image ${idx + 1}`} 
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
-                  />
-                </div>
-              ))}
-            </div>
+            {galleryImages.length > 3 ? (
+              <ImageCarousel images={galleryImages} projectName={project.name} />
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {galleryImages.map((img: string, idx: number) => (
+                  <div key={idx} className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+                    <img 
+                      src={img} 
+                      alt={`${project.name} gallery image ${idx + 1}`} 
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" 
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </Reveal>
         )}
 

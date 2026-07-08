@@ -311,6 +311,15 @@ textarea {
   gap: 0.7rem;
 }
 
+@media (max-width: 768px) {
+  .hero-arrows {
+    display: none;
+  }
+  .hero-dots {
+    bottom: 1rem;
+  }
+}
+
 .hero-dots button {
   width: 0.72rem;
   height: 0.72rem;
@@ -497,13 +506,21 @@ html[dir="rtl"] .spotlight-overlay {
   width: max-content;
   gap: 1rem;
   animation: marquee 40s linear infinite;
-  }
+}
+
+[dir="rtl"] .marquee-track {
+  animation: marquee-rtl 40s linear infinite;
+}
   
-  .marquee-mask:hover .marquee-track {
-    animation-play-state: paused;
+.marquee-mask:hover .marquee-track {
+  animation-play-state: paused;
 }
 
 .marquee-reverse {
+  animation-direction: reverse;
+}
+
+[dir="rtl"] .marquee-track.marquee-reverse {
   animation-direction: reverse;
 }
 
@@ -912,6 +929,16 @@ html[dir="rtl"] .spotlight-overlay {
 
   to {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(50%);
   }
 }
 

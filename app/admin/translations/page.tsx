@@ -1,5 +1,6 @@
 import { getTranslations, upsertTranslation, deleteTranslation } from "@/app/actions/translations";
 import { Plus, Trash2 } from "lucide-react";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default async function TranslationsManager() {
   const translations = await getTranslations();
@@ -32,9 +33,9 @@ export default async function TranslationsManager() {
                 <label htmlFor="ar" className="block text-sm font-medium text-gray-900 mb-1">Arabic Text *</label>
                 <textarea id="ar" name="ar" required rows={3} placeholder="أبراج أوبسيدير" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none resize-none text-right" dir="rtl"></textarea>
               </div>
-              <button type="submit" className="w-full flex justify-center items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors">
+              <SubmitButton className="w-full flex justify-center items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors">
                 <Plus size={18} /> Save Text
-              </button>
+              </SubmitButton>
             </form>
           </div>
         </div>

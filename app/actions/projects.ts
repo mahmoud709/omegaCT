@@ -116,6 +116,9 @@ export async function createProject(formData: FormData) {
 export async function updateProject(id: string, formData: FormData) {
   await requireAdmin();
   
+  const existingProject = await prisma.project.findUnique({ where: { id } });
+  if (!existingProject) throw new Error("Project not found");
+  
   const name = formData.get("name") as string;
   if (!name || name.trim().length < 2) throw new Error("Project name is required and must be at least 2 characters");
   
@@ -146,7 +149,10 @@ export async function updateProject(id: string, formData: FormData) {
 
     imageUrl = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream({ folder: "omega_projects" }, function (error, result) {
-        if (error) reject(error);
+        if (error) {
+          console.error("🔥 CLOUDINARY MAIN IMAGE ERROR:", error);
+          reject(error);
+        }
         else resolve(result?.secure_url as string);
       }).end(buffer);
     });
@@ -168,7 +174,10 @@ export async function updateProject(id: string, formData: FormData) {
 
       const gUrl = await new Promise<string>((resolve, reject) => {
         cloudinary.uploader.upload_stream({ folder: "omega_projects_gallery" }, function (error, result) {
-          if (error) reject(error);
+          if (error) {
+            console.error("🔥 CLOUDINARY GALLERY UPLOAD ERROR:", error);
+            reject(error);
+          }
           else resolve(result?.secure_url as string);
         }).end(gBuffer);
       });
@@ -197,7 +206,11 @@ export async function updateProject(id: string, formData: FormData) {
   }
   
   if (hasNewGallery) {
-    dataToUpdate.galleryImages = galleryUrls.join(",");
+    if (existingProject.galleryImages && existingProject.galleryImages.trim().length > 0) {
+      dataToUpdate.galleryImages = existingProject.galleryImages + "," + galleryUrls.join(",");
+    } else {
+      dataToUpdate.galleryImages = galleryUrls.join(",");
+    }
   }
 
   await prisma.project.update({

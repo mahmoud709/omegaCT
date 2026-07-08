@@ -56,16 +56,12 @@ export default async function ProjectsPage() {
   };
   const projectsBannerImg = getSettingImage("projectsBanner", images.skyline);
 
-  const featuredProject = dbProjects.find(p => p.slug === "obsidier-towers");
-  const defaultFeaturedImages = [images.about, images.blueprint, images.mep, images.interior];
-  const featuredImages: string[] = [];
-  for (let i = 0; i < 4; i++) {
-    if (featuredProject && featuredProject.galleryImages && featuredProject.galleryImages[i]) {
-      featuredImages.push(featuredProject.galleryImages[i]);
-    } else {
-      featuredImages.push(defaultFeaturedImages[i]);
-    }
-  }
+  const featuredImages: string[] = [
+    getSettingImage("projectGalleryImage1", images.about),
+    getSettingImage("projectGalleryImage2", images.blueprint),
+    getSettingImage("projectGalleryImage3", images.mep),
+    getSettingImage("projectGalleryImage4", images.interior)
+  ];
 
   const projectDetails: [string, string][] = [
     [t("locationKey"), t("locationValue")],

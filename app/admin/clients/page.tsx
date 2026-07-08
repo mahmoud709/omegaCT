@@ -1,5 +1,6 @@
 import { getClients, createClient, deleteClient } from "@/app/actions/clients";
 import { Plus, Trash2 } from "lucide-react";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default async function ClientsManager() {
   const clients = await getClients();
@@ -25,9 +26,9 @@ export default async function ClientsManager() {
                 <input type="text" id="logo" name="logo" placeholder="/images/clients/hilton.png" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" />
                 <p className="text-xs text-gray-500 mt-1">If blank, only the name text will show up.</p>
               </div>
-              <button type="submit" className="w-full flex justify-center items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors">
+              <SubmitButton className="w-full flex justify-center items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-4 py-2.5 rounded-lg font-medium transition-colors">
                 <Plus size={18} /> Add Client
-              </button>
+              </SubmitButton>
             </form>
           </div>
         </div>

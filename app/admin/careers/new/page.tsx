@@ -1,6 +1,7 @@
 import { createJob } from "@/app/actions/careers";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 const inputClass =
   "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition";
@@ -120,9 +121,9 @@ export default function NewJobPage() {
             <Link href="/admin/careers" className="px-5 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition-colors">
               Cancel
             </Link>
-            <button type="submit" className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
+            <SubmitButton className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
               Publish Job
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </div>

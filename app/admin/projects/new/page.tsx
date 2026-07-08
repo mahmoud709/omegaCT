@@ -1,6 +1,7 @@
 import { createProject } from "@/app/actions/projects";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { SubmitButton } from "@/app/components/SubmitButton";
 
 export default function NewProject() {
   return (
@@ -117,9 +118,9 @@ export default function NewProject() {
             <Link href="/admin/projects" className="px-5 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition-colors">
               Cancel
             </Link>
-            <button type="submit" className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
+            <SubmitButton className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
               Save Project
-            </button>
+            </SubmitButton>
           </div>
         </form>
       </div>
