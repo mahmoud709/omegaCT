@@ -50,11 +50,8 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
     <>
       {/* Gallery Display */}
       {images.length > 3 ? (
-        <div className="relative group cursor-pointer" onClick={() => openModal(0)}>
-          <div className="absolute inset-0 z-10 hidden group-hover:flex items-center justify-center bg-black/20 rounded-2xl backdrop-blur-[2px] transition-all">
-            <span className="bg-white/90 text-black px-6 py-3 rounded-full font-medium shadow-lg hover:scale-105 transition-transform">View Gallery</span>
-          </div>
-          <ImageCarousel images={images} projectName={project.name} />
+        <div className="relative">
+          <ImageCarousel images={images} projectName={project.name} onImageClick={openModal} />
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -64,7 +61,11 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
               onClick={() => openModal(idx)}
               className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100 relative cursor-pointer group"
             >
-              <div className="absolute inset-0 z-10 hidden group-hover:block bg-black/10 transition-colors" />
+              <div className="absolute inset-0 z-10 hidden group-hover:flex items-center justify-center bg-black/20 transition-all backdrop-blur-[2px]">
+                <span className="bg-white/90 text-[var(--gold)] p-3 rounded-full shadow-lg scale-90 group-hover:scale-100 transition-transform">
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                </span>
+              </div>
               <Image 
                 src={img} 
                 alt={`${project.name} gallery image ${idx + 1}`}
@@ -80,15 +81,16 @@ export function ProjectGalleryViewer({ images, project, labels }: ProjectGallery
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 md:p-8 animate-in fade-in duration-200">
-          <div className="bg-white w-full max-w-7xl h-[90vh] md:h-[85vh] rounded-3xl overflow-hidden flex flex-col md:flex-row relative shadow-2xl">
-            
-            {/* Close Button */}
-            <button 
-              onClick={closeModal}
-              className="absolute top-4 right-4 z-50 p-2 bg-white/90 hover:bg-gray-100 rounded-full shadow-md transition-colors"
-            >
-              <X size={20} className="text-gray-700" />
-            </button>
+          
+          {/* Close Button (moved outside for better visibility) */}
+          <button 
+            onClick={closeModal}
+            className="absolute top-6 right-6 md:top-8 md:right-8 z-50 p-3 bg-black/50 hover:bg-black/80 rounded-full text-white shadow-lg transition-colors border border-white/10"
+          >
+            <X size={24} />
+          </button>
+
+          <div className="bg-white w-full max-w-7xl h-[90vh] md:h-[85vh] rounded-3xl overflow-hidden flex flex-col md:flex-row relative shadow-2xl mt-8 md:mt-0">
 
             {/* Left: Image Slider */}
             <div className="w-full md:w-2/3 h-[50vh] md:h-full relative bg-gray-100 flex items-center justify-center group">

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { ChevronLeft, ChevronRight, Play, Pause } from "lucide-react";
 import Image from "next/image";
 
-export function ImageCarousel({ images, projectName }: { images: string[]; projectName: string }) {
+export function ImageCarousel({ images, projectName, onImageClick }: { images: string[]; projectName: string; onImageClick?: (index: number) => void }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -82,15 +82,23 @@ export function ImageCarousel({ images, projectName }: { images: string[]; proje
         {images.map((img, index) => (
           <div 
             key={index} 
-            className="snap-start shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]"
+            onClick={() => onImageClick?.(index)}
+            className={`snap-start shrink-0 w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] ${onImageClick ? 'cursor-pointer group' : ''}`}
           >
             <div className="aspect-[4/3] rounded-2xl overflow-hidden shadow-sm border border-gray-100 relative">
+              {onImageClick && (
+                <div className="absolute inset-0 z-10 hidden group-hover:flex items-center justify-center bg-black/20 backdrop-blur-[2px] transition-all">
+                  <span className="bg-white/90 text-[var(--gold)] p-3 rounded-full shadow-lg scale-90 group-hover:scale-100 transition-transform">
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                  </span>
+                </div>
+              )}
               <Image 
                 src={img} 
                 alt={`${projectName} gallery image ${index + 1}`} 
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover hover:scale-105 transition-transform duration-500" 
+                className={`object-cover transition-transform duration-500 ${onImageClick ? 'group-hover:scale-105' : 'hover:scale-105'}`} 
               />
             </div>
           </div>
