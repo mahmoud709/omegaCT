@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export function Logo({ light = false, src }: { light?: boolean, src?: string }) {
-  const finalSrc = src || "/images/logo/logo32.png";
+  const finalSrc = src || "/images/logo/logo33.png";
   return (
     <Link href="/" className="group flex items-center" aria-label="Omega home">
       <img

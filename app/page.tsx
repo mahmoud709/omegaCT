@@ -49,7 +49,8 @@ export default async function Home() {
   const dbProjectsRaw = await getProjects();
   const projectsToDisplay = dbProjectsRaw.length > 0 ? dbProjectsRaw : defaultProjects;
 
-  const displayProjects = projectsToDisplay.map(p => {
+  const displayProjects = projectsToDisplay.map(pRaw => {
+    const p = pRaw as any;
     const isAr = locale === "ar";
     const resolvedName = (p.id || p.nameAr) ? (isAr && p.nameAr ? p.nameAr : p.name) : tNames(p.slug as any);
     const resolvedLocation = isAr && p.locationAr ? p.locationAr : p.location;
