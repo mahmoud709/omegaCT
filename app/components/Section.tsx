@@ -88,7 +88,7 @@ export function CtaBand() {
           <Link href="/contact" className="btn btn-gold">
             {t("getInTouch")}
           </Link>
-          <a href="#" className="btn btn-light">
+          <a href="https://www.omega-tc.com/wp-content/uploads/2026/03/Omega-El-Feshawy-Company-profile-v2-Web-Version-small-size.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-light">
             {t("downloadProfile")}
           </a>
         </div>

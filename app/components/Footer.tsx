@@ -3,7 +3,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 import { brand, navItems, offices, services } from "../data/site";
 import { Logo } from "./Logo";
-import { prisma } from "@/lib/prisma";
+import { getCachedProfile } from "@/lib/getProfile";
 
 const navKeys = ["home", "about", "services", "projects", "partners", "careers", "contact"] as const;
 
@@ -15,7 +15,7 @@ export async function Footer() {
 
   let profile: any[] = [];
   try {
-    profile = await prisma.translation.findMany({ where: { namespace: "CompanyProfile" } });
+    profile = await getCachedProfile();
   } catch(e){}
   
   const getP = (k: string) => {

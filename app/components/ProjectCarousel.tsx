@@ -142,8 +142,9 @@ export function ProjectCarousel({ projects, viewDetailsLabel }: { projects: Proj
                     </span>
                     
                     {/* Right: Action */}
-                    <span className="text-[var(--gold)] group-hover:text-yellow-600 transition-colors uppercase tracking-wider flex items-center gap-1">
-                      {viewDetailsLabel} &rarr;
+                    <span className="text-[var(--gold)] group-hover:text-yellow-600 transition-colors uppercase tracking-wider flex items-center gap-2">
+                      {viewDetailsLabel}
+                      <svg className="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                     </span>
                   </div>
                 </div>

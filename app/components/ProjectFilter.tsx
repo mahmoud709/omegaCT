@@ -48,7 +48,7 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {visible.map((project) => (
           <Link key={project.slug} href={`/projects/${project.slug}`} className="block">
-            <article className="project-card animate-scale-in transition-transform hover:-translate-y-1 hover:shadow-xl cursor-pointer h-full">
+            <article className="group project-card animate-scale-in transition-transform hover:-translate-y-1 hover:shadow-xl cursor-pointer h-full">
               <div className="project-image" style={{ backgroundImage: `url(${project.image || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=800&q=80'})` }}>
                 <span className="project-badge left-4">{project.category}</span>
                 <span className="project-badge right-4">{project.status}</span>
@@ -62,9 +62,15 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
                   {((project as any).id || (project as any).nameAr) ? project.name : tNames(project.slug as any)}
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-[var(--muted)] line-clamp-3">{project.details}</p>
-                <p className="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--gold)]">
-                  {project.role}
-                </p>
+                <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--gold)]">
+                    {project.role}
+                  </span>
+                  <span className="text-sm font-semibold text-[var(--navy)] group-hover:text-[var(--gold)] transition-colors inline-flex items-center gap-2">
+                    {t("showDetails")}
+                    <svg className="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                  </span>
+                </div>
               </div>
             </article>
           </Link>

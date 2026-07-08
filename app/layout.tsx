@@ -9,7 +9,7 @@ import { seoDescription } from "./data/site";
 import { HideOnAdmin } from "./components/HideOnAdmin";
 import { SplashScreen } from "./components/SplashScreen";
 import { getDirection, isLocale } from "../i18n/request";
-import { prisma } from "@/lib/prisma";
+import { getCachedProfile } from "@/lib/getProfile";
 import "./globals.css";
 
 const inter = Inter({
@@ -70,7 +70,8 @@ export default async function RootLayout({
 
   let logoUrl = undefined;
   try {
-    const pLogo = await prisma.translation.findUnique({ where: { namespace_key: { namespace: "CompanyProfile", key: "logo" } } });
+    const profile = await getCachedProfile();
+    const pLogo = profile.find(t => t.key === "logo");
     if (pLogo && pLogo.en) logoUrl = pLogo.en;
   } catch(e) {}
 

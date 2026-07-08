@@ -38,6 +38,7 @@ export async function uploadWhoWeAreImage(formData: FormData) {
   revalidatePath("/projects");
   revalidatePath("/contact");
   revalidatePath("/partners");
+  revalidateTag("profile");
 }
 
 export async function updateCompanyProfile(formData: FormData) {

@@ -483,7 +483,7 @@ export const clients = [
 
 export const preferredPartners = [
   "Sigma Consultants & Contractors",
-  "ACC (Talaat Mostafa Group)",
+  "TMG (Talaat Mostafa Group)",
   "Square Engineering Firm",
   "DEPA Hotel Interiors",
   "Richmond Group Egypt",

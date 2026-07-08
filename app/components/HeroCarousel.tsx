@@ -46,19 +46,19 @@ export function HeroCarousel({ slides }: { slides: string[] }) {
           <p className="mt-8 font-label text-sm uppercase tracking-[0.34em] text-(--gold-light)">
             {t("tag")}
           </p>
-          <h1 className="mt-4 font-serif text-[clamp(2.7rem,11vw,9.5rem)] font-semibold leading-[1.05] md:leading-[0.98] text-white">
+          <h1 className="mt-4 font-serif text-[clamp(2.5rem,8vw,5.5rem)] font-semibold leading-[1.15] md:leading-[1.1] text-white">
             {t("titleLine1")}
             <span className="block gold-gradient">{t("titleLine2")}</span>
           </h1>
-          <p className="mt-5 md:mt-6 max-w-3xl text-base md:text-xl leading-relaxed md:leading-9 text-white/84">
+          <p className="mt-5 md:mt-6 max-w-3xl text-base md:text-lg leading-relaxed md:leading-8 text-white/84">
             {t("body")}
           </p>
-          <div className="mt-9 flex flex-wrap gap-4">
-            <Link href="/projects" className="btn btn-gold">
+          <div className="mt-9 flex flex-wrap gap-5">
+            <Link href="/projects" className="btn btn-gold flex items-center gap-2 px-8 py-4">
               {t("projects")}
-              <ArrowRight size={17} />
+              <ArrowRight size={17} className="rtl:-scale-x-100" />
             </Link>
-            <Link href="/about" className="btn btn-outline-light">
+            <Link href="/about" className="btn btn-outline-light px-8 py-4 flex items-center">
               {t("about")}
             </Link>
           </div>
