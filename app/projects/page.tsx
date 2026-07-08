@@ -20,7 +20,8 @@ export default async function ProjectsPage() {
   const dbProjectsRaw = (await getProjects()) as unknown as ProjectWithAr[];
   const projectsToUse = dbProjectsRaw.length > 0 ? dbProjectsRaw : defaultProjects;
   
-  const dbProjects = projectsToUse.map(p => {
+  const dbProjects = projectsToUse.map(pRaw => {
+    const p = pRaw as any;
     const isAr = locale === "ar";
     let galleryImagesArr: string[] = [];
     if (p.galleryImages) {
