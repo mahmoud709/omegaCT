@@ -82,7 +82,7 @@ export default async function AdminMessagesPage() {
                   </div>
 
                   <div className="flex items-center gap-3 self-end md:self-start">
-                    <form action={toggleReadAction}>
+                    <form action={toggleReadAction as any}>
                       <button 
                         type="submit" 
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
@@ -104,7 +104,7 @@ export default async function AdminMessagesPage() {
                       </button>
                     </form>
 
-                    <form action={deleteAction}>
+                    <form action={deleteAction as any}>
                       <button 
                         type="submit" 
                         className="p-1.5 border border-gray-200 text-gray-400 hover:text-red-600 hover:border-red-200 rounded-lg transition-colors"

@@ -152,7 +152,8 @@
     "filterHospitality": "Hospitality",
     "filterResidential": "Residential",
     "filterCommercial": "Commercial",
-    "filterInstitutional": "Institutional"
+    "filterInstitutional": "Institutional",
+    "viewDetails": "View Details"
   },
   "PartnersPage": {
     "eyebrow": "Home / Partners",

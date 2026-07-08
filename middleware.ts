@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function proxy(req: NextRequest) {
+export function middleware(req: NextRequest) {
   // Only protect the /admin routes
   if (req.nextUrl.pathname.startsWith("/admin")) {
     const adminCookie = req.cookies.get("admin_session");

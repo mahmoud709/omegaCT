@@ -7,9 +7,11 @@ import { Counter } from "./components/Counter";
 import { CtaBand, SectionIntro } from "./components/Section";
 import { HeroCarousel } from "./components/HeroCarousel";
 import { Reveal } from "./components/Reveal";
-import { heroSlides, images, services, stats } from "./data/site";
+import { heroSlides, images, services, stats, projects as defaultProjects } from "./data/site";
 import { getHeroSlides } from "./actions/hero";
 import { getServices } from "./actions/services";
+import { getProjects } from "./actions/projects";
+import { ProjectCarousel } from "./components/ProjectCarousel";
 
 export default async function Home() {
   const t = await getTranslations("Home");
@@ -40,6 +42,34 @@ export default async function Home() {
     summary: servicesT(`${s.titleKey}Summary`),
     icon: s.icon.name || "Wrench",
   }));
+
+  const tProjects = await getTranslations("ProjectsPage");
+  const tNames = await getTranslations("ProjectNames");
+
+  const dbProjectsRaw = await getProjects();
+  const projectsToDisplay = dbProjectsRaw.length > 0 ? dbProjectsRaw : defaultProjects;
+
+  const displayProjects = projectsToDisplay.map(p => {
+    const isAr = locale === "ar";
+    const resolvedName = (p.id || p.nameAr) ? (isAr && p.nameAr ? p.nameAr : p.name) : tNames(p.slug as any);
+    const resolvedLocation = isAr && p.locationAr ? p.locationAr : p.location;
+    const resolvedCategory = isAr && p.categoryAr ? p.categoryAr : p.category;
+    const resolvedStatus = isAr && p.statusAr ? p.statusAr : p.status;
+    const resolvedDetails = isAr && p.detailsAr ? p.detailsAr : p.details;
+    const resolvedRole = isAr && p.roleAr ? p.roleAr : p.role;
+    
+    return {
+      id: p.id || p.slug,
+      slug: p.slug,
+      name: resolvedName,
+      location: resolvedLocation,
+      category: resolvedCategory,
+      status: resolvedStatus,
+      details: resolvedDetails,
+      role: resolvedRole,
+      image: p.image || '',
+    };
+  });
 
   return (
     <>
@@ -154,6 +184,26 @@ export default async function Home() {
               {t("viewServices")}
               <ArrowRight size={17} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section bg-[var(--off-white)] border-y border-(--line)">
+        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+          <SectionIntro
+            label={locale === "ar" ? "محفظة مشروعاتنا" : "OUR PORTFOLIO"}
+            title={locale === "ar" ? "المشروعات المميزة" : "Featured Projects"}
+            subtitle={
+              locale === "ar" 
+                ? "استكشف أحدث مشروعاتنا المكتملة التي تجسد الجودة والتميز في التنفيذ." 
+                : "Explore our latest completed projects, showcasing the quality and craftsmanship we deliver on every build."
+            }
+          />
+          <div className="mt-12">
+            <ProjectCarousel 
+              projects={displayProjects} 
+              viewDetailsLabel={tProjects("viewDetails") || (locale === "ar" ? "عرض التفاصيل" : "View Details")} 
+            />
           </div>
         </div>
       </section>

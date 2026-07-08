@@ -152,7 +152,8 @@
     "filterHospitality": "ضيافة",
     "filterResidential": "سكني",
     "filterCommercial": "تجاري",
-    "filterInstitutional": "مؤسسي"
+    "filterInstitutional": "مؤسسي",
+    "viewDetails": "عرض التفاصيل"
   },
   "PartnersPage": {
     "eyebrow": "الرئيسية / الشركاء",

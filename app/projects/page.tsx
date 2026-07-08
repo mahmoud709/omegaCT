@@ -3,7 +3,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { ProjectFilter } from "../components/ProjectFilter";
 import { CtaBand, PageHero, SectionIntro } from "../components/Section";
 import { Reveal } from "../components/Reveal";
-import { images } from "../data/site";
+import { images, projects as defaultProjects } from "../data/site";
 import { getProjects } from "../actions/projects";
 
 type ProjectWithAr = {
@@ -18,9 +18,18 @@ export default async function ProjectsPage() {
   const t = await getTranslations("ProjectsPage");
   const locale = await getLocale();
   const dbProjectsRaw = (await getProjects()) as unknown as ProjectWithAr[];
+  const projectsToUse = dbProjectsRaw.length > 0 ? dbProjectsRaw : defaultProjects;
   
-  const dbProjects = dbProjectsRaw.map(p => {
+  const dbProjects = projectsToUse.map(p => {
     const isAr = locale === "ar";
+    let galleryImagesArr: string[] = [];
+    if (p.galleryImages) {
+      if (Array.isArray(p.galleryImages)) {
+        galleryImagesArr = p.galleryImages;
+      } else if (typeof p.galleryImages === "string") {
+        galleryImagesArr = (p.galleryImages as string).split(",").map(s => s.trim()).filter(Boolean);
+      }
+    }
     return {
       ...p,
       name: isAr && p.nameAr ? p.nameAr : p.name,
@@ -29,7 +38,7 @@ export default async function ProjectsPage() {
       status: isAr && p.statusAr ? p.statusAr : p.status,
       details: isAr && p.detailsAr ? p.detailsAr : p.details,
       role: isAr && p.roleAr ? p.roleAr : p.role,
-      galleryImages: p.galleryImages ? p.galleryImages.split(",").map(s => s.trim()).filter(Boolean) : []
+      galleryImages: galleryImagesArr
     };
   });
   
