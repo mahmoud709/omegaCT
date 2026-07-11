@@ -2,6 +2,7 @@ import { getOpenJobs } from "@/app/actions/careers";
 import { getLocale } from "next-intl/server";
 import { MapPin, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { images } from "@/app/data/site";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
 
@@ -31,10 +32,15 @@ export default async function CareersPage() {
   return (
     <>
       {/* Hero */}
-      <section
-        className="hero-small"
-        style={{ backgroundImage: `url(${images.skyline})` }}
-      >
+      <section className="hero-small">
+        <Image
+          src={images.skyline}
+          alt={isAr ? "الوظائف المتاحة" : "Careers at Omega"}
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
         <div className="hero-scrim" />
         <div className="relative mx-auto flex min-h-[62vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-32 lg:px-8">
           <div className="max-w-3xl animate-fade-up">
@@ -46,7 +52,7 @@ export default async function CareersPage() {
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-white/82">
               {isAr
-                ? "ابنِ مستقبلك المهني مع مجموعة أوميغا للمقاولات والتجارة — حيث تلتقي الخبرة بالطموح."
+                ? "ابنِ مستقبلك المهني مع مجموعة أوميجا للمقاولات والتجارة — حيث تلتقي الخبرة بالطموح."
                 : "Build your career with Omega Contracting & Trading — where expertise meets ambition."}
             </p>
           </div>

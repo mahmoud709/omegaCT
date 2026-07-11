@@ -89,7 +89,7 @@ export const offices = [
   {
     city: "Cairo Office",
     address:
-      "A424 North 90th Street, Fifth Settlement, Office 409, 4th Floor, Cairo Business Plaza, New Cairo",
+      "Top 90 Mall, South 90th Street, Fifth Settlement, 2nd Floor, Office 218, New Cairo",
     phone: "+2 03-4690058",
     mobile: "+2 010 69 771 773",
   },

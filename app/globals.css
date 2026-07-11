@@ -3,6 +3,7 @@
 :root {
   --navy: #0a2463;
   --gold: #c9a84c;
+  --gold-dark: #8c7335;
   --gold-light: #e8c97a;
   --white: #ffffff;
   --off-white: #f8f6f1;
@@ -74,7 +75,7 @@ textarea {
   font-weight: 700;
   letter-spacing: 0.26em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-dark);
 }
 
 .section-title {
@@ -111,15 +112,15 @@ textarea {
 }
 
 .btn-gold {
-  border: 1px solid var(--gold);
-  background: var(--gold);
+  border: 1px solid var(--gold-dark);
+  background: var(--gold-dark);
   color: white;
-  box-shadow: 0 16px 34px rgba(201, 168, 76, 0.24);
+  box-shadow: 0 16px 34px rgba(140, 115, 53, 0.24);
 }
 
 .btn-gold:hover {
-  background: #b5963f;
-  border-color: #b5963f;
+  background: #76602c;
+  border-color: #76602c;
 }
 
 .btn-outline {
@@ -851,7 +852,7 @@ html[dir="rtl"] .spotlight-overlay {
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--gold-dark);
 }
 
 .field-control {

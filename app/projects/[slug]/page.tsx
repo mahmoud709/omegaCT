@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { ProjectGalleryViewer } from "@/app/components/ProjectGalleryViewer";
 import { Reveal } from "@/app/components/Reveal";
 import { MapPin, Building2, HardHat } from "lucide-react";
+import { projects as defaultProjects } from "@/app/data/site";
 
 export default async function ProjectDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const t = await getTranslations("ProjectsPage");
@@ -35,6 +36,22 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
       role: isAr && dbProjectRaw.roleAr ? dbProjectRaw.roleAr : dbProjectRaw.role,
       galleryImages: dbProjectRaw.galleryImages ? dbProjectRaw.galleryImages.split(",").map(s => s.trim()).filter(Boolean) : []
     };
+  } else {
+    // Fallback to static site data
+    const localProject = defaultProjects.find(p => p.slug === slug);
+    if (localProject) {
+      const isAr = locale === "ar";
+      let resolvedName = localProject.name;
+      try {
+        resolvedName = tNames(localProject.slug as any);
+      } catch (err) {}
+      
+      project = {
+        ...localProject,
+        name: resolvedName,
+        galleryImages: localProject.galleryImages || []
+      };
+    }
   }
 
   if (!project) {

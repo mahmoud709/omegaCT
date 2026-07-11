@@ -5,6 +5,16 @@ import { ContactForm } from "../components/ContactForm";
 import { PageHero, SectionIntro } from "../components/Section";
 import { Reveal } from "../components/Reveal";
 import { brand, images, offices } from "../data/site";
+import dynamic from "next/dynamic";
+
+const ContactMap = dynamic(() => import("../components/ContactMap").then(mod => mod.ContactMap), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-[500px] bg-gray-100 animate-pulse rounded-2xl flex items-center justify-center text-gray-400 font-medium">
+      Loading office locations map...
+    </div>
+  )
+});
 
 export default async function ContactPage() {
   const t = await getTranslations("ContactPage");
@@ -138,15 +148,13 @@ export default async function ContactPage() {
         </div>
       </section>
 
-      <section className="section bg-white">
-        <div className="mx-auto max-w-7xl">
+      <section className="section bg-white pt-0">
+        <div className="mx-auto max-w-4xl">
           <SectionIntro label={t("locationsLabel")} title={t("locationsTitle")} />
-          <div className="overflow-hidden rounded border border-[var(--line)] shadow-[0_24px_70px_rgba(10,36,99,0.08)]">
-            <iframe
-              title="Omega offices map"
-              src="https://www.google.com/maps?q=San%20Stefano%20Grand%20Plaza%20Alexandria%20Egypt%20Cairo%20Business%20Plaza%20New%20Cairo&output=embed"
-              className="h-[320px] w-full md:h-[450px]"
-              loading="lazy"
+          <div className="mt-10">
+            <ContactMap
+              alexLabel={locale === "ar" ? "مكتب الإسكندرية" : "Alexandria Office"}
+              cairoLabel={locale === "ar" ? "مكتب القاهرة" : "Cairo Office"}
             />
           </div>
         </div>

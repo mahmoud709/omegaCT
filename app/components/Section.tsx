@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
@@ -34,7 +35,15 @@ export function PageHero({
   image: string;
 }) {
   return (
-    <section className="hero-small" style={{ backgroundImage: `url(${image})` }}>
+    <section className="hero-small">
+      <Image
+        src={image}
+        alt={title}
+        fill
+        priority
+        className="object-cover"
+        sizes="100vw"
+      />
       <div className="hero-scrim" />
       <div className="relative mx-auto flex min-h-[62vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-32 lg:px-8">
         <div className="max-w-3xl animate-fade-up">
