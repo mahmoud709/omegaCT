@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ClientMarquee } from "./components/ClientMarquee";
 import { Counter } from "./components/Counter";
 import { CtaBand, SectionIntro } from "./components/Section";
+import { ServicesViewer } from "./components/ServicesViewer";
 import { HeroCarousel } from "./components/HeroCarousel";
 import { Reveal } from "./components/Reveal";
 import { heroSlides, images, services, stats, projects as defaultProjects } from "./data/site";
@@ -35,12 +36,18 @@ export default async function Home() {
     id: s.id,
     title: locale === "ar" && s.titleAr ? s.titleAr : s.title,
     summary: locale === "ar" && s.summaryAr ? s.summaryAr : s.summary,
+    description: locale === "ar" && s.descriptionAr ? s.descriptionAr : s.description,
+    scope: (locale === "ar" && s.scopeAr ? s.scopeAr : s.scope || "").split(",").map(i => i.trim()).filter(Boolean),
     icon: s.icon,
+    image: s.image,
   })) : services.map(s => ({
     id: s.titleKey,
     title: servicesT(s.titleKey),
     summary: servicesT(`${s.titleKey}Summary`),
+    description: servicesT(`${s.titleKey}Description`),
+    scope: [servicesT("scope1"), servicesT("scope2"), servicesT("scope3")],
     icon: s.icon.name || "Wrench",
+    image: null,
   }));
 
   const tProjects = await getTranslations("ProjectsPage");
@@ -160,26 +167,14 @@ export default async function Home() {
             title={t("expertiseTitle")}
             subtitle={t("expertiseSubtitle")}
           />
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {displayServices.slice(0, 6).map((service, index) => {
-              // @ts-ignore
-              const Icon = Icons[service.icon] || Icons.Wrench;
-              return (
-                <Reveal key={service.id} delay={index * 0.05}>
-                  <article className="service-card h-full">
-                    <Icon className="mb-6 text-[var(--gold)]" size={34} />
-                    <h3 className="font-serif text-2xl font-semibold text-[var(--dark-text)]">
-                      {service.title}
-                    </h3>
-                    <p className="mt-4 leading-7 text-[var(--muted)]">{service.summary}</p>
-                    <span className="text-link mt-7 inline-flex">
-                      {t("learnMore")} <ArrowRight size={16} />
-                    </span>
-                  </article>
-                </Reveal>
-              );
-            })}
-          </div>
+          <ServicesViewer
+            services={displayServices.slice(0, 6)}
+            learnMoreLabel={t("learnMore")}
+            closeLabel={locale === "ar" ? "إغلاق" : "Close"}
+            serviceLabel={locale === "ar" ? "الخدمة" : "Service"}
+            scopeTitle={locale === "ar" ? "نطاق العمل" : "Scope of Work"}
+            overviewTitle={locale === "ar" ? "نظرة عامة" : "Overview"}
+          />
           <div className="mt-12 text-center">
             <Link href="/services" className="btn btn-outline">
               {t("viewServices")}
