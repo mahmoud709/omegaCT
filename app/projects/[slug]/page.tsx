@@ -6,6 +6,7 @@ import { ProjectGalleryViewer } from "@/app/components/ProjectGalleryViewer";
 import { Reveal } from "@/app/components/Reveal";
 import { MapPin, Building2, HardHat } from "lucide-react";
 import { projects as defaultProjects } from "@/app/data/site";
+import { getOptimizedImageUrl } from "@/app/utils/image";
 
 export default async function ProjectDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const t = await getTranslations("ProjectsPage");
@@ -86,12 +87,13 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
         <Reveal delay={0.1}>
           <div className="w-full h-[50vh] md:h-[65vh] rounded-2xl overflow-hidden shadow-2xl relative mb-16 border border-gray-100">
             <Image 
-              src={project.image || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=80'} 
+              src={getOptimizedImageUrl(project.image || 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1600&q=80', 1600)} 
               alt={project.name}
               fill
               priority
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
+              unoptimized={project.image?.startsWith("http")}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
           </div>

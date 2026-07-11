@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
+import { getOptimizedImageUrl } from "../utils/image";
 
 export function SectionIntro({
   label,
@@ -34,15 +35,19 @@ export function PageHero({
   subtitle: string;
   image: string;
 }) {
+  const optimizedImage = getOptimizedImageUrl(image, 1920);
+  const isExternal = optimizedImage.startsWith("http");
+
   return (
     <section className="hero-small">
       <Image
-        src={image}
+        src={optimizedImage}
         alt={title}
         fill
         priority
         className="object-cover"
         sizes="100vw"
+        unoptimized={isExternal}
       />
       <div className="hero-scrim" />
       <div className="relative mx-auto flex min-h-[62vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-32 lg:px-8">
@@ -71,7 +76,7 @@ export function ImagePanel({
     <div className={`grid items-center gap-10 lg:grid-cols-2 ${reverse ? "lg:[&>*:first-child]:order-2" : ""}`}>
       <div
         className="min-h-[420px] rounded-sm bg-cover bg-center shadow-[0_24px_70px_rgba(10,36,99,0.12)]"
-        style={{ backgroundImage: `url(${image})` }}
+        style={{ backgroundImage: `url(${getOptimizedImageUrl(image, 1200)})` }}
       />
       <div>{children}</div>
     </div>

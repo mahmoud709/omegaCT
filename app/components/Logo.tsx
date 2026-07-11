@@ -11,6 +11,8 @@ export function Logo({ light = false, src }: { light?: boolean, src?: string }) 
         alt="Omega Contracting and Trading"
         width={150}
         height={50}
+        sizes="150px"
+        unoptimized={finalSrc.startsWith("http")}
         priority
         className={`h-7 sm:h-8 md:h-10 lg:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 ${
           light ? "brightness-0 invert opacity-90" : ""

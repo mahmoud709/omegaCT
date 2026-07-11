@@ -4,6 +4,7 @@ import { MapPin, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { images } from "@/app/data/site";
+import { getOptimizedImageUrl } from "@/app/utils/image";
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
 
 export const metadata = {
@@ -34,12 +35,13 @@ export default async function CareersPage() {
       {/* Hero */}
       <section className="hero-small">
         <Image
-          src={images.skyline}
+          src={getOptimizedImageUrl(images.skyline, 1920)}
           alt={isAr ? "الوظائف المتاحة" : "Careers at Omega"}
           fill
           priority
           className="object-cover"
           sizes="100vw"
+          unoptimized={images.skyline?.startsWith("http")}
         />
         <div className="hero-scrim" />
         <div className="relative mx-auto flex min-h-[62vh] max-w-7xl flex-col justify-end px-5 pb-20 pt-32 lg:px-8">
