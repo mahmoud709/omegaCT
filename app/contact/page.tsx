@@ -5,16 +5,7 @@ import { ContactForm } from "../components/ContactForm";
 import { PageHero, SectionIntro } from "../components/Section";
 import { Reveal } from "../components/Reveal";
 import { brand, images, offices } from "../data/site";
-import dynamic from "next/dynamic";
-
-const ContactMap = dynamic(() => import("../components/ContactMap").then(mod => mod.ContactMap), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-[500px] bg-gray-100 animate-pulse rounded-2xl flex items-center justify-center text-gray-400 font-medium">
-      Loading office locations map...
-    </div>
-  )
-});
+import { ContactMap } from "../components/ContactMap";
 
 export default async function ContactPage() {
   const t = await getTranslations("ContactPage");

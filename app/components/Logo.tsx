@@ -1,8 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
+import { getOptimizedImageUrl } from "../utils/image";
 
 export function Logo({ light = false, src }: { light?: boolean, src?: string }) {
-  const finalSrc = src || "/images/logo/logo33.png";
+  const finalSrc = getOptimizedImageUrl(src || "/images/logo/logo33.png", 300);
   return (
     <Link href="/" className="group flex items-center" aria-label="Omega home">
       <Image

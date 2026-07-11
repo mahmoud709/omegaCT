@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MapPin } from "lucide-react";
 
 interface ContactMapProps {
@@ -10,6 +10,11 @@ interface ContactMapProps {
 
 export function ContactMap({ alexLabel, cairoLabel }: ContactMapProps) {
   const [activeTab, setActiveTab] = useState<"alex" | "cairo">("alex");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const maps = {
     alex: {
@@ -21,6 +26,20 @@ export function ContactMap({ alexLabel, cairoLabel }: ContactMapProps) {
       q: "Top 90 Mall, South 90th Street, Fifth Settlement, New Cairo, Egypt",
     },
   };
+
+  if (!mounted) {
+    return (
+      <div className="space-y-6">
+        <div className="flex justify-center gap-4">
+          <div className="w-32 h-11 bg-gray-100 rounded-lg animate-pulse" />
+          <div className="w-32 h-11 bg-gray-100 rounded-lg animate-pulse" />
+        </div>
+        <div className="h-[350px] w-full md:h-[480px] bg-gray-100 animate-pulse rounded-xl border border-[var(--line)] flex items-center justify-center text-gray-400 font-medium">
+          Loading office locations map...
+        </div>
+      </div>
+    );
+  }
 
   const activeMap = maps[activeTab];
 

@@ -4,6 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getOptimizedImageUrl } from "../utils/image";
 
 export function HeroCarousel({ slides }: { slides: string[] }) {
   const t = useTranslations("Hero");
@@ -32,7 +33,7 @@ export function HeroCarousel({ slides }: { slides: string[] }) {
           <div
             key={slide}
             className={`hero-slide ${index === active ? "is-active" : ""}`}
-            style={{ backgroundImage: `url(${slide})` }}
+            style={{ backgroundImage: `url(${getOptimizedImageUrl(slide, 1920)})` }}
           />
         ))}
       </div>

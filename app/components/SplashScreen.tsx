@@ -40,6 +40,7 @@ export function SplashScreen() {
               alt="Omega Logo" 
               fill 
               className="object-contain"
+              sizes="(max-width: 768px) 192px, 224px"
               priority
             />
           </div>
