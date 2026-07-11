@@ -3,12 +3,7 @@ import * as Icons from "lucide-react";
 import { getTranslations, getLocale } from "next-intl/server";
 import Link from "next/link";
 import { ClientMarquee } from "./components/ClientMarquee";
-import dynamic from "next/dynamic";
-
-const Counter = dynamic(() => import("./components/Counter").then((mod) => mod.Counter), {
-  ssr: false,
-  loading: () => <span>0+</span>,
-});
+import { Counter } from "./components/Counter";
 import { CtaBand, SectionIntro } from "./components/Section";
 import { HeroCarousel } from "./components/HeroCarousel";
 import { Reveal } from "./components/Reveal";
