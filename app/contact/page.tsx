@@ -79,12 +79,12 @@ export default async function ContactPage() {
                   <h2 className="font-label text-sm uppercase tracking-[0.22em] text-[var(--gold)]">
                     {office.city}
                   </h2>
-                  <p className="mt-5 flex gap-3 leading-7 text-[var(--muted)]">
-                    <MapPin className="mt-1 shrink-0 text-[var(--gold)]" size={20} />
+                  <p className="mt-5 flex gap-3 leading-7 text-(--muted)">
+                    <MapPin className="mt-1 shrink-0 text-(--gold)" size={20} />
                     {office.address}
                   </p>
-                  <p className="mt-4 flex gap-3 text-[var(--dark-text)]">
-                    <Phone className="text-[var(--gold)]" size={20} />
+                  <p className="mt-4 flex gap-3 text-(--dark-text)">
+                    <Phone className="text-(--gold)" size={20} />
                     {office.phone} | {office.mobile}
                   </p>
                 </article>
@@ -94,15 +94,15 @@ export default async function ContactPage() {
                 <h2 className="font-label text-sm uppercase tracking-[0.22em] text-[var(--gold)]">
                   {t("generalLabel")}
                 </h2>
-                <p className="mt-5 flex gap-3 text-[var(--dark-text)]">
-                  <Mail className="text-[var(--gold)]" size={20} />
-                  <a href={`mailto:${dbEmail}`} className="hover:text-[var(--gold)] transition-colors">
+                <p className="mt-5 flex gap-3 text-(--dark-text)">
+                  <Mail className="text-(--gold)" size={20} />
+                  <a href={`mailto:${dbEmail}`} className="hover:text-(--gold) transition-colors">
                     {dbEmail}
                   </a>
                 </p>
-                <p className="mt-4 flex gap-3 text-[var(--dark-text)]">
-                  <Globe className="text-[var(--gold)]" size={20} />
-                  <a href={`https://${dbWebsite}`} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--gold)] transition-colors">
+                <p className="mt-4 flex gap-3 text-(--dark-text)">
+                  <Globe className="text-(--gold)" size={20} />
+                  <a href={`https://${dbWebsite}`} target="_blank" rel="noopener noreferrer" className="hover:text-(--gold) transition-colors">
                     {dbWebsite}
                   </a>
                 </p>

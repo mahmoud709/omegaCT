@@ -115,11 +115,11 @@ export default async function ProjectDetailsPage({ params }: { params: Promise<{
             <ProjectGalleryViewer 
               images={galleryImages} 
               project={{
-                name: locale === "ar" ? project.nameAr || project.name : project.name,
-                category: locale === "ar" ? project.categoryAr || project.category : project.category,
-                location: locale === "ar" ? project.locationAr || project.location : project.location,
-                role: locale === "ar" ? project.roleAr || project.role : project.role,
-                details: locale === "ar" ? project.detailsAr || project.details : project.details,
+                name: project.name,
+                category: project.category,
+                location: project.location,
+                role: project.role,
+                details: project.details,
               }}
               labels={{
                 category: t("type") || "Type",
