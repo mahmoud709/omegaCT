@@ -62,11 +62,11 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
                   {((project as any).id || (project as any).nameAr) ? project.name : tNames(project.slug as any)}
                 </h3>
                 <p className="mt-3 text-sm leading-6 text-[var(--muted)] line-clamp-3">{project.details}</p>
-                <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--gold)]">
+                <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between min-w-0">
+                  <span className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--gold)] truncate min-w-0 mr-2 rtl:mr-0 rtl:ml-2">
                     {project.role}
                   </span>
-                  <span className="text-sm font-semibold text-[var(--navy)] group-hover:text-[var(--gold)] transition-colors inline-flex items-center gap-2">
+                  <span className="text-sm font-semibold text-[var(--navy)] group-hover:text-[var(--gold)] transition-colors inline-flex items-center gap-2 whitespace-nowrap shrink-0">
                     {t("showDetails")}
                     <svg className="w-4 h-4 rtl:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                   </span>
