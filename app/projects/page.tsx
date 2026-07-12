@@ -138,20 +138,8 @@ export default async function ProjectsPage() {
               </div>
             </Reveal>
           </div>
-
-          <div className="mx-auto mt-12 grid max-w-7xl gap-5 md:grid-cols-4">
-            {featuredImages.map((image, index) => (
-              <div
-                key={image + index}
-                className="min-h-[220px] bg-cover bg-center shadow-sm"
-                style={{ backgroundImage: `url(${image})` }}
-                aria-label={`Obsidier gallery image ${index + 1}`}
-              />
-            ))}
-          </div>
         </div>
       </section>
-
       <CtaBand />
     </>
   );
