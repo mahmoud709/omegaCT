@@ -24,6 +24,7 @@ model Project {
   roleAr        String   @default("")
   image         String
   galleryImages String   // Comma separated image URLs
+  order         Int      @default(0)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 }

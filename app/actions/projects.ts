@@ -15,11 +15,36 @@ async function requireAdmin() {
 export async function getProjects() {
   try {
     return await prisma.project.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: [
+        { order: "asc" },
+        { createdAt: "desc" }
+      ],
     });
   } catch (error) {
     // console.error("Failed to load projects from DB:", error);
     return [];
+  }
+}
+
+export async function updateProjectsOrder(ids: string[]) {
+  await requireAdmin();
+  
+  try {
+    const updates = ids.map((id, index) => 
+      prisma.project.update({
+        where: { id },
+        data: { order: index }
+      })
+    );
+    await prisma.$transaction(updates);
+    
+    revalidatePath("/admin/projects");
+    revalidatePath("/projects");
+    revalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update projects order:", error);
+    throw new Error("Failed to update order");
   }
 }
 

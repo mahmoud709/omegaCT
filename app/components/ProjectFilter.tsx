@@ -55,13 +55,13 @@ export function ProjectFilter({ projects }: { projects: Project[] }) {
               </div>
               <div className="p-6">
                 <div className="mb-3 flex items-center gap-2 text-sm text-[var(--muted)]">
-                  <MapPin size={16} className="text-[var(--gold)]" />
+                  <MapPin size={16} className="text-(--gold)" />
                   {project.location}
                 </div>
-                <h3 className="font-serif text-2xl font-semibold text-[var(--dark-text)] group-hover:text-[var(--gold)] transition-colors">
+                <h3 className="font-serif text-2xl font-semibold text-[var(--dark-text)] group-hover:text-(--gold) transition-colors">
                   {((project as any).id || (project as any).nameAr) ? project.name : tNames(project.slug as any)}
                 </h3>
-                <p className="mt-3 text-sm leading-6 text-[var(--muted)] line-clamp-3">{project.details}</p>
+                <p className="mt-3 text-sm leading-6 text-(--muted) line-clamp-3">{project.details}</p>
                 <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between min-w-0">
                   <span className="text-xs font-bold uppercase tracking-[0.15em] text-[var(--gold)] truncate min-w-0 mr-2 rtl:mr-0 rtl:ml-2">
                     {project.role}
