@@ -20,7 +20,7 @@ export default async function ProjectsPage() {
   const dbProjectsRaw = (await getProjects()) as unknown as ProjectWithAr[];
   const projectsToUse = dbProjectsRaw.length > 0 ? dbProjectsRaw : defaultProjects;
   
-  const dbProjects = projectsToUse.map(pRaw => {
+  const dbProjects = projectsToUse.map((pRaw: any) => {
     const p = pRaw as any;
     const isAr = locale === "ar";
     let galleryImagesArr: string[] = [];
@@ -28,7 +28,7 @@ export default async function ProjectsPage() {
       if (Array.isArray(p.galleryImages)) {
         galleryImagesArr = p.galleryImages;
       } else if (typeof p.galleryImages === "string") {
-        galleryImagesArr = (p.galleryImages as string).split(",").map(s => s.trim()).filter(Boolean);
+        galleryImagesArr = (p.galleryImages as string).split(",").map((s: string) => s.trim()).filter(Boolean);
       }
     }
     return {

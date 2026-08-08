@@ -193,6 +193,9 @@
     "thanks": "Thanks. This demo form is front-end only, so connect an email endpoint when ready."
   },
   "Services": {
+    "scope1": "Residential, Commercial & Hospitality",
+    "scope2": "Civil & Structural Works",
+    "scope3": "Architectural Finishing",
     "generalContracting": "General Contracting & Construction",
     "generalContractingSummary": "Turnkey construction for residential, commercial, and hospitality projects.",
     "generalContractingDescription": "Turnkey construction covering civil, architectural, and MEP works with strict adherence to safety, quality, and deadlines.",
@@ -319,5 +322,19 @@
     "partnersBanner": "",
     "aboutBusiness": "",
     "aboutTeam": ""
+  },
+  "CompanyPage": {
+    "title": "Omega Contracting & Trading",
+    "subtitle": "Excellence in Construction & Execution",
+    "connectTitle": "Connect with us on social media",
+    "whatsappLabel": "WhatsApp",
+    "whatsappDesc": "Chat with us directly",
+    "facebookLabel": "Facebook",
+    "facebookDesc": "Follow us on Facebook",
+    "instagramLabel": "Instagram",
+    "instagramDesc": "See our work",
+    "emailLabel": "Email",
+    "copyright": "© {year} Omega Contracting & Trading",
+    "allRights": "All rights reserved"
   }
 }

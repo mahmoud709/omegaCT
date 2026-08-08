@@ -43,7 +43,7 @@ export async function uploadWhoWeAreImage(formData: FormData) {
 }
 
 export async function updateCompanyProfile(formData: FormData) {
-  const keys = ["phone", "mobile", "email", "addressAlex", "addressCairo", "facebook", "linkedin", "instagram", "chairman", "established"];
+  const keys = ["phone", "mobile", "email", "addressAlex", "addressCairo", "facebook", "linkedin", "instagram", "chairman", "established", "qrUrl"];
   
   for (const key of keys) {
     const enVal = formData.get(`${key}En`) as string || "";

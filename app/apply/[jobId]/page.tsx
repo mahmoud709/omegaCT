@@ -4,6 +4,7 @@ import { ApplicationForm } from "./ApplicationForm";
 import { MapPin, Briefcase } from "lucide-react";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { CopyJobLinkButton } from "@/app/components/CopyJobLinkButton";
 
 export default async function ApplyPage({ params }: { params: Promise<{ jobId: string }> }) {
   const { jobId } = await params;
@@ -15,10 +16,11 @@ export default async function ApplyPage({ params }: { params: Promise<{ jobId: s
     <div className="min-h-screen bg-[var(--off-white)]">
       {/* Header bar */}
       <div className="bg-white border-b border-[var(--line)] px-5 py-4 lg:px-8">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-3xl flex items-center justify-between">
           <Link href="/careers" className="inline-flex items-center gap-2 text-sm text-[var(--muted)] hover:text-[var(--dark-text)] transition-colors">
             <ArrowLeft size={16} /> Back to Careers
           </Link>
+          <CopyJobLinkButton jobId={job.id} />
         </div>
       </div>
 

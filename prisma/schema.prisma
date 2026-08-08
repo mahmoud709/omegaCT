@@ -94,20 +94,25 @@ model JobPosting {
 }
 
 model JobApplication {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  jobId       String     @db.ObjectId
-  job         JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  jobTitle    String
-  name        String
-  email       String
-  phone       String   @default("")
-  cvUrl       String
-  coverLetter String   @default("")
-  status      String   @default("NEW")
-  hrNotes     String   @default("")
-  isRead      Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                String     @id @default(auto()) @map("_id") @db.ObjectId
+  jobId             String     @db.ObjectId
+  job               JobPosting @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  jobTitle          String
+  name              String
+  email             String
+  phone             String   @default("")
+  cvType            String   @default("FILE") // FILE or LINK
+  cvUrl             String
+  employmentStatus  String   @default("") // UNEMPLOYED or EMPLOYED
+  noticePeriod      String   @default("")
+  yearsOfExperience String   @default("")
+  lastSalary        String   @default("")
+  coverLetter       String   @default("")
+  status            String   @default("NEW")
+  hrNotes           String   @default("")
+  isRead            Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }
 
 model HrUser {

@@ -29,18 +29,18 @@ export default async function Home() {
   const locale = await getLocale();
 
   const dbHeroSlides = await getHeroSlides();
-  const activeHeroSlides = dbHeroSlides.length > 0 ? dbHeroSlides.map(s => s.imagePath) : heroSlides;
+  const activeHeroSlides = dbHeroSlides.length > 0 ? dbHeroSlides.map((s: any) => s.imagePath) : heroSlides;
 
   const dbServicesRaw = await getServices();
-  const displayServices = dbServicesRaw.length > 0 ? dbServicesRaw.map(s => ({
+  const displayServices = dbServicesRaw.length > 0 ? dbServicesRaw.map((s: any) => ({
     id: s.id,
     title: locale === "ar" && s.titleAr ? s.titleAr : s.title,
     summary: locale === "ar" && s.summaryAr ? s.summaryAr : s.summary,
     description: locale === "ar" && s.descriptionAr ? s.descriptionAr : s.description,
-    scope: (locale === "ar" && s.scopeAr ? s.scopeAr : s.scope || "").split(",").map(i => i.trim()).filter(Boolean),
+    scope: (locale === "ar" && s.scopeAr ? s.scopeAr : s.scope || "").split(",").map((i: string) => i.trim()).filter(Boolean),
     icon: s.icon,
     image: s.image,
-  })) : services.map(s => ({
+  })) : services.map((s: any) => ({
     id: s.titleKey,
     title: servicesT(s.titleKey),
     summary: servicesT(`${s.titleKey}Summary`),
@@ -56,7 +56,7 @@ export default async function Home() {
   const dbProjectsRaw = await getProjects();
   const projectsToDisplay = dbProjectsRaw.length > 0 ? dbProjectsRaw : defaultProjects;
 
-  const displayProjects = projectsToDisplay.map(pRaw => {
+  const displayProjects = projectsToDisplay.map((pRaw: any) => {
     const p = pRaw as any;
     const isAr = locale === "ar";
     const resolvedName = (p.id || p.nameAr) ? (isAr && p.nameAr ? p.nameAr : p.name) : tNames(p.slug as any);

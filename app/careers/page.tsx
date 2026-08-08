@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { images } from "@/app/data/site";
 import { getOptimizedImageUrl } from "@/app/utils/image";
-import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, Key } from "react";
+import { CopyJobLinkButton } from "@/app/components/CopyJobLinkButton";
 
 export const metadata = {
   title: "Careers | Omega Contracting & Trading",
@@ -137,7 +137,8 @@ export default async function CareersPage() {
                         {job.description}
                       </p>
                     </div>
-                    <div className="shrink-0">
+                    <div className="shrink-0 flex items-center gap-3">
+                      <CopyJobLinkButton jobId={job.id} isAr={isAr} />
                       <Link
                         href={`/apply/${job.id}`}
                         className="btn btn-gold whitespace-nowrap"
@@ -154,7 +155,7 @@ export default async function CareersPage() {
                         {isAr ? "المتطلبات:" : "Requirements:"}
                       </h3>
                       <ul className="grid sm:grid-cols-2 gap-2">
-                        {job.requirements.map((req: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, i: Key | null | undefined) => (
+                        {job.requirements.map((req: string, i: number) => (
                           <li key={i} className="flex items-start gap-2 text-sm text-(--muted)">
                             <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-(--gold)" />
                             {req}

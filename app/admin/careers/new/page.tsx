@@ -1,13 +1,39 @@
+"use client";
+
 import { createJob } from "@/app/actions/careers";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { SubmitButton } from "@/app/components/SubmitButton";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 const inputClass =
   "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition";
 const labelClass = "block text-sm font-medium text-gray-900 mb-1.5";
 
 export default function NewJobPage() {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setError("");
+    const formData = new FormData(e.currentTarget);
+
+    startTransition(async () => {
+      try {
+        const res = await createJob(formData);
+        if (res?.success) {
+          router.push("/admin/careers");
+          router.refresh();
+        }
+      } catch (err) {
+        console.error("Create job error:", err);
+        setError("An error occurred while creating the job posting. Please try again.");
+      }
+    });
+  }
+
   return (
     <div className="max-w-4xl mx-auto pb-12">
       <div className="mb-6">
@@ -25,17 +51,22 @@ export default function NewJobPage() {
       </header>
 
       <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-8">
-        <form action={createJob} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {error && (
+            <div className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg">
+              {error}
+            </div>
+          )}
 
           {/* Title */}
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label htmlFor="title" className={labelClass}>Job Title (EN) *</label>
-              <input type="text" id="title" name="title" required className={inputClass} placeholder="e.g. Senior Project Manager" />
+              <input type="text" id="title" name="title" required className={inputClass} placeholder="e.g. Senior Tendering Engineer" />
             </div>
             <div dir="rtl">
               <label htmlFor="titleAr" className={labelClass}>Job Title (AR)</label>
-              <input type="text" id="titleAr" name="titleAr" className={`${inputClass} text-right`} placeholder="مدير مشروع أول" />
+              <input type="text" id="titleAr" name="titleAr" className={`${inputClass} text-right`} placeholder="مهندس مناقصات أول" />
             </div>
           </div>
 
@@ -43,11 +74,11 @@ export default function NewJobPage() {
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label htmlFor="department" className={labelClass}>Department (EN) *</label>
-              <input type="text" id="department" name="department" required className={inputClass} placeholder="e.g. Engineering" />
+              <input type="text" id="department" name="department" required className={inputClass} placeholder="e.g. Tendering & Estimation" />
             </div>
             <div dir="rtl">
               <label htmlFor="departmentAr" className={labelClass}>Department (AR)</label>
-              <input type="text" id="departmentAr" name="departmentAr" className={`${inputClass} text-right`} placeholder="الهندسة" />
+              <input type="text" id="departmentAr" name="departmentAr" className={`${inputClass} text-right`} placeholder="المناقصات والتسعير" />
             </div>
           </div>
 
@@ -55,11 +86,11 @@ export default function NewJobPage() {
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label htmlFor="location" className={labelClass}>Location (EN) *</label>
-              <input type="text" id="location" name="location" required className={inputClass} placeholder="e.g. Cairo, Egypt" />
+              <input type="text" id="location" name="location" required className={inputClass} placeholder="e.g. Fifth Settlement, New Cairo" />
             </div>
             <div dir="rtl">
               <label htmlFor="locationAr" className={labelClass}>Location (AR)</label>
-              <input type="text" id="locationAr" name="locationAr" className={`${inputClass} text-right`} placeholder="القاهرة، مصر" />
+              <input type="text" id="locationAr" name="locationAr" className={`${inputClass} text-right`} placeholder="التجمع الخامس، القاهرة الجديدة" />
             </div>
           </div>
 
@@ -96,11 +127,11 @@ export default function NewJobPage() {
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label htmlFor="description" className={labelClass}>Job Description (EN) *</label>
-              <textarea id="description" name="description" required rows={5} className={inputClass} placeholder="Describe the role, responsibilities, and what success looks like..." />
+              <textarea id="description" name="description" required rows={5} className={inputClass} placeholder="Study project BOQs, specifications, calculate accurate cost estimations..." />
             </div>
             <div dir="rtl">
               <label htmlFor="descriptionAr" className={labelClass}>Job Description (AR)</label>
-              <textarea id="descriptionAr" name="descriptionAr" rows={5} className={`${inputClass} text-right`} placeholder="اكتب وصف الوظيفة هنا..." />
+              <textarea id="descriptionAr" name="descriptionAr" rows={5} className={`${inputClass} text-right`} placeholder="دراسة جداول الكميات والرسومات الهندسية وحساب التكاليف..." />
             </div>
           </div>
 
@@ -108,12 +139,12 @@ export default function NewJobPage() {
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label htmlFor="requirements" className={labelClass}>Requirements (EN) *</label>
-              <textarea id="requirements" name="requirements" required rows={4} className={inputClass} placeholder="Enter each requirement on a new line, e.g.&#10;5+ years experience&#10;Bachelor's degree in Civil Engineering" />
+              <textarea id="requirements" name="requirements" required rows={4} className={inputClass} placeholder="5 to 8 years experience in Construction Tendering&#10;BSc in Engineering&#10;Advanced MS Excel" />
               <p className="text-xs text-gray-400 mt-1">Enter each requirement on a new line.</p>
             </div>
             <div dir="rtl">
               <label htmlFor="requirementsAr" className={labelClass}>Requirements (AR)</label>
-              <textarea id="requirementsAr" name="requirementsAr" rows={4} className={`${inputClass} text-right`} placeholder="خبرة 5 سنوات أو أكثر&#10;بكالوريوس في الهندسة المدنية" />
+              <textarea id="requirementsAr" name="requirementsAr" rows={4} className={`${inputClass} text-right`} placeholder="خبرة من 5 إلى 8 سنوات في مجال المناقصات والتسعير&#10;بكالوريوس هندسة&#10;إتقان برنامج Excel ومهارات التفاوض" />
             </div>
           </div>
 
@@ -121,9 +152,20 @@ export default function NewJobPage() {
             <Link href="/admin/careers" className="px-5 py-2.5 text-gray-700 bg-gray-100 hover:bg-gray-200 font-medium rounded-lg transition-colors">
               Cancel
             </Link>
-            <SubmitButton className="px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors">
-              Publish Job
-            </SubmitButton>
+            <button
+              type="submit"
+              disabled={isPending}
+              className="flex items-center gap-2 px-5 py-2.5 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors disabled:opacity-60"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  Publishing...
+                </>
+              ) : (
+                "Publish Job"
+              )}
+            </button>
           </div>
         </form>
       </div>

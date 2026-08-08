@@ -10,10 +10,20 @@ export async function POST(req: NextRequest) {
     const email = formData.get("email") as string;
     const phone = (formData.get("phone") as string) || "";
     const coverLetter = (formData.get("coverLetter") as string) || "";
+    
+    // Screening Questions
+    const employmentStatus = (formData.get("employmentStatus") as string) || "";
+    const noticePeriod = (formData.get("noticePeriod") as string) || "";
+    const yearsOfExperience = (formData.get("yearsOfExperience") as string) || "";
+    const lastSalary = (formData.get("lastSalary") as string) || "";
+    
+    // CV Submission (File vs Link)
+    const cvType = (formData.get("cvType") as string) || "FILE";
+    const cvLink = (formData.get("cvLink") as string) || "";
     const cvFile = formData.get("cv") as File | null;
 
-    if (!jobId || !name || !email || !cvFile || cvFile.size === 0) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    if (!jobId || !name || !email) {
+      return NextResponse.json({ error: "Missing required personal details" }, { status: 400 });
     }
 
     const job = await prisma.jobPosting.findUnique({ where: { id: jobId } });
@@ -21,17 +31,43 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "This position is no longer open" }, { status: 404 });
     }
 
-    // Upload CV to Cloudinary as raw file (PDF)
-    const buffer = new Uint8Array(await cvFile.arrayBuffer());
-    const cvUrl = await new Promise<string>((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        { folder: "omega_cvs", resource_type: "raw", use_filename: true, unique_filename: true },
-        (err, result) => { if (err) reject(err); else resolve(result!.secure_url); }
-      ).end(buffer);
-    });
+    let finalCvUrl = "";
 
-    await prisma.jobApplication.create({
-      data: { jobId, jobTitle: job.title, name, email, phone, coverLetter, cvUrl, status: "NEW" },
+    if (cvType === "LINK") {
+      if (!cvLink || !cvLink.trim()) {
+        return NextResponse.json({ error: "Please provide your CV link" }, { status: 400 });
+      }
+      finalCvUrl = cvLink.trim();
+    } else {
+      if (!cvFile || cvFile.size === 0) {
+        return NextResponse.json({ error: "Please upload your CV file" }, { status: 400 });
+      }
+      // Upload CV to Cloudinary as raw file (PDF)
+      const buffer = new Uint8Array(await cvFile.arrayBuffer());
+      finalCvUrl = await new Promise<string>((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          { folder: "omega_cvs", resource_type: "raw", use_filename: true, unique_filename: true },
+          (err, result) => { if (err) reject(err); else resolve(result!.secure_url); }
+        ).end(buffer);
+      });
+    }
+
+    await (prisma as any).jobApplication.create({
+      data: {
+        jobId,
+        jobTitle: job.title,
+        name,
+        email,
+        phone,
+        cvType,
+        cvUrl: finalCvUrl,
+        employmentStatus,
+        noticePeriod,
+        yearsOfExperience,
+        lastSalary,
+        coverLetter,
+        status: "NEW",
+      },
     });
 
     return NextResponse.json({ success: true });

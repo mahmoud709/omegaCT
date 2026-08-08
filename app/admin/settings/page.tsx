@@ -3,6 +3,7 @@ import { uploadWhoWeAreImage, updateCompanyProfile } from "@/app/actions/setting
 import { prisma } from "@/lib/prisma";
 import { Database, Image as ImageIcon, Building2, Upload } from "lucide-react";
 import { SubmitButton } from "@/app/components/SubmitButton";
+import { FixedQrCode } from "@/app/admin/settings/FixedQrCode";
 
 export default async function SettingsManager() {
   let profile: any[] = [];
@@ -14,6 +15,7 @@ export default async function SettingsManager() {
   const getImage = (k: string) => translations.find(t => t.key === k)?.en || "";
   const getProfile = (k: string) => profile.find(t => t.key === k)?.en || "";
   const getProfileAr = (k: string) => profile.find(t => t.key === k)?.ar || "";
+  const getQrUrl = () => profile.find(t => t.key === "qrUrl")?.en || "https://www.omega-tc.com";
 
   return (
     <div className="max-w-5xl mx-auto space-y-8 pb-12">
@@ -192,12 +194,22 @@ export default async function SettingsManager() {
             </div>
           </div>
 
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-900">Fixed QR Code URL</label>
+            <input type="url" name="qrUrlEn" defaultValue={getQrUrl()} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[var(--gold)] outline-none" placeholder="https://omega-tc.com/company" />
+            <p className="text-xs text-gray-500">This URL is stored once and used to generate a static QR code until you change it here.</p>
+          </div>
+
           <div className="pt-4 border-t border-gray-100 flex justify-end">
             <SubmitButton className="px-6 py-3 bg-[var(--gold)] hover:bg-yellow-600 text-white font-medium rounded-lg transition-colors shadow-sm">
               Save Company Profile
             </SubmitButton>
           </div>
         </form>
+
+        <div className="mt-10">
+          <FixedQrCode qrUrl={getQrUrl()} />
+        </div>
       </div>
     </div>
   );

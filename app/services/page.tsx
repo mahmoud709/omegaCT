@@ -13,15 +13,15 @@ export default async function ServicesPage() {
   const locale = await getLocale();
 
   const dbServicesRaw = await getServices();
-  const displayServices = dbServicesRaw.length > 0 ? dbServicesRaw.map(s => ({
+  const displayServices = dbServicesRaw.length > 0 ? dbServicesRaw.map((s: any) => ({
     id: s.id,
     title: locale === "ar" && s.titleAr ? s.titleAr : s.title,
     summary: locale === "ar" && s.summaryAr ? s.summaryAr : s.summary,
     description: locale === "ar" && s.descriptionAr ? s.descriptionAr : s.description,
-    scope: (locale === "ar" && s.scopeAr ? s.scopeAr : s.scope).split(",").map(i => i.trim()),
+    scope: (locale === "ar" && s.scopeAr ? s.scopeAr : s.scope).split(",").map((i: string) => i.trim()),
     icon: s.icon,
     image: s.image,
-  })) : services.map(s => ({
+  })) : services.map((s: any) => ({
     id: s.titleKey,
     title: servicesT(s.titleKey),
     summary: servicesT(`${s.titleKey}Summary`),
@@ -85,7 +85,7 @@ export default async function ServicesPage() {
                       {service.description}
                     </p>
                     <div className="mt-8 flex flex-wrap gap-3">
-                      {service.scope.map((s) => s.trim()).filter(Boolean).map((scopeItem) => (
+                      {service.scope.map((s: string) => s.trim()).filter(Boolean).map((scopeItem: string) => (
                         <span key={scopeItem} className="scope-pill">
                           {scopeItem}
                         </span>

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 export function HideOnAdmin({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   
-  if (pathname.startsWith("/admin") || pathname.startsWith("/hr")) {
+  if (pathname.startsWith("/admin") || pathname.startsWith("/hr") || pathname === "/company") {
     return null;
   }
   

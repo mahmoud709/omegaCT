@@ -12,9 +12,31 @@ async function requireAdmin() {
   throw new Error("Unauthorized");
 }
 
-export async function getProjects() {
+export interface ProjectRecord {
+  id: string;
+  slug: string;
+  name: string;
+  nameAr?: string | null;
+  location: string;
+  locationAr?: string | null;
+  category: string;
+  categoryAr?: string | null;
+  status: string;
+  statusAr?: string | null;
+  details: string;
+  detailsAr?: string | null;
+  role: string;
+  roleAr?: string | null;
+  image: string;
+  galleryImages: string;
+  order?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export async function getProjects(): Promise<ProjectRecord[]> {
   try {
-    return await prisma.project.findMany({
+    return await (prisma.project as any).findMany({
       orderBy: [
         { order: "asc" },
         { createdAt: "desc" }
@@ -31,7 +53,7 @@ export async function updateProjectsOrder(ids: string[]) {
   
   try {
     const updates = ids.map((id, index) => 
-      prisma.project.update({
+      (prisma.project as any).update({
         where: { id },
         data: { order: index }
       })
