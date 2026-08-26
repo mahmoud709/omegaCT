@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getLocale } from "next-intl/server";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
-import { WhatsAppButton } from "./components/WhatsAppButton";
+import { OmegaChat } from "./components/OmegaChat";
 import { seoDescription } from "./data/site";
 import { HideOnAdmin } from "./components/HideOnAdmin";
 import { SplashScreen } from "./components/SplashScreen";
@@ -94,7 +94,7 @@ export default async function RootLayout({
           <main>{children}</main>
           <HideOnAdmin>
             <Footer />
-            <WhatsAppButton />
+            <OmegaChat />
           </HideOnAdmin>
         </NextIntlClientProvider>
       </body>

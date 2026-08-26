@@ -139,3 +139,18 @@ model ContactMessage {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model ChatLead {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  requestNumber String   @unique
+  name          String
+  phone         String   @default("")
+  email         String   @default("")
+  company       String   @default("")
+  type          String   @default("general") // project, job, supplier, contractor, training, partnership, complaint, general
+  notes         String   @default("")
+  status        String   @default("NEW")     // NEW, IN_PROGRESS, DONE
+  isRead        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

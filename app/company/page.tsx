@@ -1,4 +1,4 @@
-import { MessageCircle, Mail, Share2, Camera } from "lucide-react";
+import { MessageCircle, Mail, Share2, Camera, MapPin, Globe, ChevronLeft } from "lucide-react";
 import { getCachedProfile } from "@/lib/getProfile";
 import { getProjects } from "@/app/actions/projects";
 import { ScrollingProjects } from "./components/ScrollingProjects";
@@ -39,36 +39,77 @@ export default async function CompanyPage() {
       </div>
 
       {/* Main Card */}
-      <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-6 border border-[#CCA164]/20 relative z-10">
+      <div className="w-full max-w-md bg-white/90 backdrop-blur-sm rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.01)] p-6 border border-[#CCA164]/20 relative z-10">
         {/* Logo Section */}
         <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:items-center sm:gap-4">
           {logoUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img 
               src={logoUrl} 
               alt="Omega Logo" 
               className="w-24 h-24 object-contain drop-shadow-lg"
             />
           ) : (
-            <div className="w-20 h-20 bg-gradient-to-br from-[#CCA164] to-[#B8914F] rounded-full flex items-center justify-center shadow-lg border-2 border-[#B8914F]">
+            <div className="w-20 h-20 bg-linear-to-br from-[#CCA164] to-[#B8914F] rounded-full flex items-center justify-center shadow-lg border-2 border-[#B8914F]">
               <span className="text-white font-bold text-xl tracking-wider">OMEGA</span>
             </div>
           )}
           <div className="text-center sm:text-right">
-            <h1 className="text-[#CCA164] text-2xl font-bold my-3 tracking-wide leading-tight">
+            <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-[#0a2463] to-[#1a365d] text-2xl font-extrabold my-3 tracking-tight leading-tight drop-shadow-sm">
               شركة أوميجا للمقاولات والتجارة
             </h1>
           </div>
         </div>
 
-        {/* Website Link */}
-        <div className="mb-6">
+        {/* Links */}
+        <div className="mb-5 space-y-3">
           <a
             href="https://www.omega-tc.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full bg-gradient-to-r from-[#CCA164] to-[#B8914F] text-white rounded-2xl p-4 hover:from-[#B8914F] hover:to-[#A67D3E] transition-all duration-300 shadow-lg hover:shadow-xl text-center font-semibold text-lg transform hover:scale-[1.02]"
+            className="flex items-center justify-between w-full bg-white/80 border border-[#CCA164]/30 rounded-2xl p-3 transition-all duration-300 shadow-sm hover:shadow-md hover:bg-white group transform hover:-translate-y-1"
           >
-            قم بزيارة موقعنا الإلكتروني
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-linear-to-br from-[#CCA164] to-[#B8914F] text-white flex items-center justify-center shadow-inner">
+                <Globe size={24} strokeWidth={1.5} />
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="font-bold text-gray-800 text-base">موقعنا الإلكتروني</span>
+                <span className="text-[11px] text-gray-500">تصفح خدماتنا وأحدث مشاريعنا</span>
+              </div>
+            </div>
+            <div className="text-[#CCA164] opacity-50 group-hover:opacity-100 group-hover:-translate-x-1 transition-all duration-300 pl-2">
+               <ChevronLeft size={20} />
+            </div>
+          </a>
+        </div>
+
+        {/* Locations */}
+        <div className="flex gap-3 mb-8">
+          <a
+            href="https://maps.app.goo.gl/gtSh5JA32CGWMuSD8"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-white/80 hover:bg-white border border-gray-200/80 rounded-2xl p-3 transition-all duration-300 shadow-sm hover:shadow-md flex flex-col items-center justify-center transform hover:-translate-y-1 group"
+          >
+            <div className="w-10 h-10 rounded-full bg-slate-50 text-[#0a2463] flex items-center justify-center mb-2 group-hover:bg-[#0a2463] group-hover:text-white transition-colors duration-300">
+               <MapPin size={20} />
+            </div>
+            <span className="font-bold text-sm text-gray-800 text-center">مكتب القاهرة</span>
+            <span className="text-[11px] text-gray-500 text-center mt-0.5">التجمع الخامس</span>
+          </a>
+
+          <a
+            href="https://maps.app.goo.gl/LJzSp7Uw2j9EmhGBA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-white/80 hover:bg-white border border-gray-200/80 rounded-2xl p-3 transition-all duration-300 shadow-sm hover:shadow-md flex flex-col items-center justify-center transform hover:-translate-y-1 group"
+          >
+            <div className="w-10 h-10 rounded-full bg-slate-50 text-[#0a2463] flex items-center justify-center mb-2 group-hover:bg-[#0a2463] group-hover:text-white transition-colors duration-300">
+               <MapPin size={20} />
+            </div>
+            <span className="font-bold text-sm text-gray-800 text-center">مكتب الإسكندرية</span>
+            <span className="text-[11px] text-gray-500 text-center mt-0.5">سان ستيفانو</span>
           </a>
         </div>
 
