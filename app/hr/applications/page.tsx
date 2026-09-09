@@ -13,6 +13,17 @@ const STATUS_COLORS: Record<string, string> = {
 };
 const STATUSES = ["ALL", "NEW", "REVIEWED", "SHORTLISTED", "INTERVIEW", "HIRED", "REJECTED"];
 
+function formatCvUrl(url: string, name: string) {
+  if (!url) return "#";
+  if (url.includes("res.cloudinary.com") && url.includes("/raw/upload/")) {
+    if (!/\.(pdf|doc|docx)$/i.test(url)) {
+      const safeName = name ? name.replace(/[^a-zA-Z0-9_-]/g, "_") : "CV";
+      return `${url}/${safeName}_CV.pdf`;
+    }
+  }
+  return url;
+}
+
 export default async function ApplicationsPage({
   searchParams,
 }: {
@@ -83,22 +94,23 @@ export default async function ApplicationsPage({
               <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">No applications found.</td></tr>
             ) : apps.map(app => {
               const color = STATUS_COLORS[app.status] || STATUS_COLORS.NEW;
+              const cvDownloadUrl = formatCvUrl(app.cvUrl, app.name);
               return (
                 <tr key={app.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
-                    <Link href={`/hr/applications/${app.id}`} className="font-medium text-gray-900 hover:text-[var(--gold)] flex items-center gap-2">
+                    <Link href={`/hr/applications/${app.id}`} className="font-medium text-gray-900 hover:text-[var(--gold)] flex items-center gap-2" dir="auto">
                       {!app.isRead && <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" title="Unread" />}
                       {app.name}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 text-gray-500">{app.jobTitle}</td>
+                  <td className="px-6 py-4 text-gray-500" dir="auto">{app.jobTitle}</td>
                   <td className="px-6 py-4 text-gray-500">{app.email}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${color}`}>{app.status}</span>
                   </td>
                   <td className="px-6 py-4 text-gray-400">{new Date(app.createdAt).toLocaleDateString()}</td>
                   <td className="px-6 py-4">
-                    <a href={app.cvUrl} target="_blank" rel="noopener noreferrer" className="text-[var(--gold)] hover:underline text-xs font-medium">View CV</a>
+                    <a href={cvDownloadUrl} target="_blank" rel="noopener noreferrer" download={`${app.name.replace(/\s+/g, '_')}_CV.pdf`} className="text-[var(--gold)] hover:underline text-xs font-medium">View / Download CV</a>
                   </td>
                 </tr>
               );

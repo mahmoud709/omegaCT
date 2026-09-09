@@ -20,6 +20,17 @@ async function handleUpdateStatus(id: string, status: string) {
   await updateStatus(id, status);
 }
 
+function formatCvUrl(url: string, name: string) {
+  if (!url) return "#";
+  if (url.includes("res.cloudinary.com") && url.includes("/raw/upload/")) {
+    if (!/\.(pdf|doc|docx)$/i.test(url)) {
+      const safeName = name ? name.replace(/[^a-zA-Z0-9_-]/g, "_") : "CV";
+      return `${url}/${safeName}_CV.pdf`;
+    }
+  }
+  return url;
+}
+
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const app = await getApplication(id);
@@ -29,6 +40,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
 
   const duplicates = await checkDuplicates(app.email, id);
   const saveNotesAction = handleSaveHRNotes.bind(null, id);
+  const cvDownloadUrl = formatCvUrl(app.cvUrl, app.name);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -65,10 +77,10 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 space-y-6">
           <div>
             <div className="flex items-start justify-between gap-4 mb-1">
-              <h1 className="text-2xl font-bold text-gray-900">{app.name}</h1>
+              <h1 className="text-2xl font-bold text-gray-900" dir="auto">{app.name}</h1>
               <span className={`px-3 py-1 rounded-full text-sm font-semibold ${STATUS_COLORS[app.status]}`}>{app.status}</span>
             </div>
-            <p className="text-[var(--gold)] font-medium text-sm">{app.jobTitle}</p>
+            <p className="text-[var(--gold)] font-medium text-sm" dir="auto">{app.jobTitle}</p>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
@@ -81,12 +93,12 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
 
           {app.coverLetter && (
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">Cover Letter</h3>
-              <p className="text-gray-600 leading-7 text-sm whitespace-pre-line bg-gray-50 rounded-lg p-4">{app.coverLetter}</p>
+              <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">Cover Letter / خطاب التقديم</h3>
+              <p className="text-gray-600 leading-7 text-sm whitespace-pre-line bg-gray-50 rounded-lg p-4" dir="auto">{app.coverLetter}</p>
             </div>
           )}
 
-          <a href={app.cvUrl} target="_blank" rel="noopener noreferrer"
+          <a href={cvDownloadUrl} target="_blank" rel="noopener noreferrer" download={`${app.name.replace(/\s+/g, '_')}_CV.pdf`}
             className="flex items-center gap-3 border-2 border-dashed border-[var(--gold)] rounded-xl p-5 text-[var(--gold)] hover:bg-[var(--off-white)] transition-colors">
             <FileText size={24} />
             <div><p className="font-semibold">View / Download CV</p><p className="text-xs opacity-70 mt-0.5">Opens PDF in new tab</p></div>

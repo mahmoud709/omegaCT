@@ -42,11 +42,21 @@ export async function POST(req: NextRequest) {
       if (!cvFile || cvFile.size === 0) {
         return NextResponse.json({ error: "Please upload your CV file" }, { status: 400 });
       }
-      // Upload CV to Cloudinary as raw file (PDF)
+      // Upload CV to Cloudinary as raw file (preserving extension for clean PDF download)
       const buffer = new Uint8Array(await cvFile.arrayBuffer());
+      const originalName = cvFile.name || "resume.pdf";
+      const ext = originalName.includes(".") ? originalName.split(".").pop()?.toLowerCase() || "pdf" : "pdf";
+      const cleanBaseName = originalName.replace(/\.[^/.]+$/, "").replace(/[^a-zA-Z0-9_-]/g, "_");
+      const uniquePublicId = `${cleanBaseName}_${Date.now()}.${ext}`;
+
       finalCvUrl = await new Promise<string>((resolve, reject) => {
         cloudinary.uploader.upload_stream(
-          { folder: "omega_cvs", resource_type: "raw", use_filename: true, unique_filename: true },
+          { 
+            folder: "omega_cvs", 
+            resource_type: "raw", 
+            public_id: uniquePublicId,
+            use_filename: true 
+          },
           (err, result) => { if (err) reject(err); else resolve(result!.secure_url); }
         ).end(buffer);
       });

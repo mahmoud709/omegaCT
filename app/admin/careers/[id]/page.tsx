@@ -6,7 +6,7 @@ import { EditJobForm } from "./EditJobForm";
 
 export default async function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const job = await (prisma as any).jobPosting.findUnique({ where: { id } });
+  const job = await prisma.jobPosting.findUnique({ where: { id } });
 
   if (!job) notFound();
 

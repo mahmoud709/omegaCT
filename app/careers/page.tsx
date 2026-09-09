@@ -1,11 +1,11 @@
 import { getOpenJobs } from "@/app/actions/careers";
 import { getLocale } from "next-intl/server";
-import { MapPin, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { images } from "@/app/data/site";
 import { getOptimizedImageUrl } from "@/app/utils/image";
-import { CopyJobLinkButton } from "@/app/components/CopyJobLinkButton";
+import { JobCard } from "./JobModal";
 
 export const metadata = {
   title: "Careers | Omega Contracting & Trading",
@@ -19,15 +19,10 @@ export default async function CareersPage() {
 
   const jobs = rawJobs.map((j) => ({
     ...j,
-    title: isAr && j.titleAr ? j.titleAr : j.title,
-    department: isAr && j.departmentAr ? j.departmentAr : j.department,
-    location: isAr && j.locationAr ? j.locationAr : j.location,
-    type: isAr && j.typeAr ? j.typeAr : j.type,
-    description: isAr && j.descriptionAr ? j.descriptionAr : j.description,
-    requirements: (isAr && j.requirementsAr ? j.requirementsAr : j.requirements)
-      .split("\n")
-      .map((r) => r.trim())
-      .filter(Boolean),
+    requirements: (j.requirements ?? "")
+      .split("\n").map((r) => r.trim()).filter(Boolean),
+    requirementsAr: (j.requirementsAr ?? "")
+      .split("\n").map((r) => r.trim()).filter(Boolean),
   }));
 
   return (
@@ -37,10 +32,7 @@ export default async function CareersPage() {
         <Image
           src={getOptimizedImageUrl(images.skyline, 1920)}
           alt={isAr ? "الوظائف المتاحة" : "Careers at Omega"}
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
+          fill priority className="object-cover" sizes="100vw"
           unoptimized={images.skyline?.startsWith("http")}
         />
         <div className="hero-scrim" />
@@ -65,21 +57,9 @@ export default async function CareersPage() {
       <section className="border-y border-[var(--line)] bg-white px-5 py-12 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-3">
           {[
-            {
-              title: isAr ? "بيئة عمل احترافية" : "Professional Environment",
-              body: isAr ? "نعمل وفق أعلى معايير الجودة والسلامة المهنية" : "We operate to the highest standards of quality and professional safety.",
-              icon: "🏗️",
-            },
-            {
-              title: isAr ? "نمو ومسار مهني واضح" : "Clear Career Path",
-              body: isAr ? "نستثمر في موظفينا ونساعدهم على التطور المستمر" : "We invest in our people and support continuous development.",
-              icon: "📈",
-            },
-            {
-              title: isAr ? "مشاريع ذات تأثير" : "Impactful Projects",
-              body: isAr ? "شارك في بناء مشاريع تُشكّل ملامح مصر الحديثة" : "Contribute to projects that shape the face of modern Egypt.",
-              icon: "🌆",
-            },
+            { title: isAr ? "بيئة عمل احترافية" : "Professional Environment", body: isAr ? "نعمل وفق أعلى معايير الجودة والسلامة المهنية" : "We operate to the highest standards of quality and professional safety.", icon: "🏗️" },
+            { title: isAr ? "نمو ومسار مهني واضح" : "Clear Career Path", body: isAr ? "نستثمر في موظفينا ونساعدهم على التطور المستمر" : "We invest in our people and support continuous development.", icon: "📈" },
+            { title: isAr ? "مشاريع ذات تأثير" : "Impactful Projects", body: isAr ? "شارك في بناء مشاريع تُشكّل ملامح مصر الحديثة" : "Contribute to projects that shape the face of modern Egypt.", icon: "🌆" },
           ].map((v) => (
             <div key={v.title} className="flex gap-4 items-start">
               <span className="text-4xl">{v.icon}</span>
@@ -92,14 +72,12 @@ export default async function CareersPage() {
         </div>
       </section>
 
-      {/* Job Listings */}
+      {/* Job Listings — 3-column grid */}
       <section className="section bg-[var(--off-white)]">
         <div className="mx-auto max-w-7xl">
           <div className="mb-12 max-w-3xl">
             <p className="section-label">{isAr ? "الفرص الوظيفية" : "Open Positions"}</p>
-            <h2 className="section-title">
-              {isAr ? "وظائف شاغرة حالياً" : "Current Openings"}
-            </h2>
+            <h2 className="section-title">{isAr ? "وظائف شاغرة حالياً" : "Current Openings"}</h2>
           </div>
 
           {jobs.length === 0 ? (
@@ -109,62 +87,9 @@ export default async function CareersPage() {
               </p>
             </div>
           ) : (
-            <div className="space-y-6">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {jobs.map((job) => (
-                <article
-                  key={job.id}
-                  className="bg-white rounded-xl border border-[var(--line)] p-8 shadow-[0_4px_24px_var(--shadow)] hover:shadow-[0_8px_40px_rgba(10,36,99,0.12)] transition-shadow"
-                  dir={isAr ? "rtl" : "ltr"}
-                >
-                  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-center gap-3 mb-3">
-                        <span className="text-xs font-semibold tracking-widest uppercase text-[var(--gold)] font-[var(--font-cinzel)]">
-                          {job.department}
-                        </span>
-                        <span className="px-2.5 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
-                          {job.type}
-                        </span>
-                      </div>
-                      <h2 className="font-serif text-2xl font-semibold text-[var(--dark-text)]">
-                        {job.title}
-                      </h2>
-                      <p className="flex items-center gap-2 mt-2 text-sm text-(--muted)">
-                        <MapPin size={14} className="text-[var(--gold)]" />
-                        {job.location}
-                      </p>
-                      <p className="mt-4 text-[var(--muted)] leading-7 max-w-2xl">
-                        {job.description}
-                      </p>
-                    </div>
-                    <div className="shrink-0 flex items-center gap-3">
-                      <CopyJobLinkButton jobId={job.id} isAr={isAr} />
-                      <Link
-                        href={`/apply/${job.id}`}
-                        className="btn btn-gold whitespace-nowrap"
-                      >
-                        {isAr ? "قدّم الآن" : "Apply Now"}
-                        <ArrowRight size={16} />
-                      </Link>
-                    </div>
-                  </div>
-
-                  {job.requirements.length > 0 && (
-                    <div className="mt-6 pt-6 border-t border-(--line)">
-                      <h3 className="text-sm font-semibold text-(--dark-text) mb-3">
-                        {isAr ? "المتطلبات:" : "Requirements:"}
-                      </h3>
-                      <ul className="grid sm:grid-cols-2 gap-2">
-                        {job.requirements.map((req: string, i: number) => (
-                          <li key={i} className="flex items-start gap-2 text-sm text-(--muted)">
-                            <CheckCircle2 size={15} className="mt-0.5 shrink-0 text-(--gold)" />
-                            {req}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </article>
+                <JobCard key={job.id} job={job} isAr={isAr} />
               ))}
             </div>
           )}

@@ -1,5 +1,4 @@
-"use server";
-
+"use server"
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 
@@ -24,7 +23,7 @@ export interface JobPosting {
 
 export async function getJobs(): Promise<JobPosting[]> {
   try {
-    return await (prisma as any).jobPosting.findMany({
+    return await prisma.jobPosting.findMany({
       orderBy: { createdAt: "desc" },
     });
   } catch (error) {
@@ -34,7 +33,7 @@ export async function getJobs(): Promise<JobPosting[]> {
 
 export async function getOpenJobs(): Promise<JobPosting[]> {
   try {
-    return await (prisma as any).jobPosting.findMany({
+    return await prisma.jobPosting.findMany({
       where: { isOpen: true },
       orderBy: { createdAt: "desc" },
     });
@@ -58,7 +57,7 @@ export async function createJob(formData: FormData) {
   const requirementsAr = (formData.get("requirementsAr") as string) || "";
   const isOpen = formData.get("isOpen") === "true";
 
-  await (prisma as any).jobPosting.create({
+  await prisma.jobPosting.create({
     data: {
       title,
       titleAr,
@@ -96,7 +95,7 @@ export async function updateJob(id: string, formData: FormData) {
   const requirementsAr = (formData.get("requirementsAr") as string) || "";
   const isOpen = formData.get("isOpen") === "true";
 
-  await (prisma as any).jobPosting.update({
+  await prisma.jobPosting.update({
     where: { id },
     data: {
       title,
@@ -121,7 +120,7 @@ export async function updateJob(id: string, formData: FormData) {
 }
 
 export async function deleteJob(id: string) {
-  await (prisma as any).jobPosting.delete({ where: { id } });
+  await prisma.jobPosting.delete({ where: { id } });
   revalidatePath("/admin/careers");
   revalidatePath("/careers");
   return { success: true };
