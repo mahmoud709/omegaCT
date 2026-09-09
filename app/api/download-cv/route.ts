@@ -29,10 +29,13 @@ export async function GET(req: NextRequest) {
     const safeArabicName = name.trim().replace(/[/\\?%*:|"<>]/g, "_") || "CV";
     const utf8FileName = `${safeArabicName}_CV.${extension}`;
 
+    const isDownload = searchParams.get("download") === "true" || searchParams.has("download");
+    const dispositionType = isDownload ? "attachment" : "inline";
+
     return new NextResponse(arrayBuffer, {
       headers: {
         "Content-Type": contentType || "application/pdf",
-        "Content-Disposition": `inline; filename="${fallbackFileName}"; filename*=UTF-8''${encodeURIComponent(utf8FileName)}`,
+        "Content-Disposition": `${dispositionType}; filename="${fallbackFileName}"; filename*=UTF-8''${encodeURIComponent(utf8FileName)}`,
       },
     });
   } catch (error) {

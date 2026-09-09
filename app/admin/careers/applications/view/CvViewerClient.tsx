@@ -15,7 +15,7 @@ export default function CvViewerClient({
   googleDocsViewerUrl,
 }: CvViewerClientProps) {
   const handlePrint = () => {
-    const pdfUrl = `/api/cv-preview?url=${encodeURIComponent(rawUrl)}&name=${encodeURIComponent(name)}`;
+    const pdfUrl = `/api/download-cv?url=${encodeURIComponent(rawUrl)}&name=${encodeURIComponent(name)}`;
     const oldFrame = document.getElementById("native-pdf-print-frame");
     if (oldFrame) oldFrame.remove();
 
@@ -61,14 +61,22 @@ export default function CvViewerClient({
           </h1>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Direct Download Button */}
+          <a
+            href={`/api/download-cv?url=${encodeURIComponent(rawUrl)}&name=${encodeURIComponent(name)}&download=true`}
+            className="inline-flex items-center gap-2 text-xs font-bold text-white bg-emerald-700 hover:bg-emerald-800 px-4 py-2 rounded-xl transition shadow-sm cursor-pointer"
+          >
+            <span>تحميل الملف PDF</span>
+          </a>
+
           {/* Print Button */}
           <button
             onClick={handlePrint}
             className="inline-flex items-center gap-2 text-xs font-bold text-white bg-[var(--navy)] hover:bg-slate-800 px-4 py-2 rounded-xl transition shadow-sm cursor-pointer"
           >
             <Printer size={16} className="text-amber-300" />
-            <span>طباعة السيرة الذاتية / Print CV</span>
+            <span>طباعة / Print</span>
           </button>
 
           <a

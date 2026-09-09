@@ -175,23 +175,27 @@ export function JobCard({ job, isAr }: { job: Job; isAr: boolean }) {
           )}
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-3 border-t border-[var(--line)] mt-auto">
+          <div className="flex items-center justify-between pt-4 border-t border-[var(--line)] mt-auto gap-2">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 text-[11px] text-[var(--muted)] hover:text-[var(--gold)] transition-colors"
+              className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-2 rounded-xl transition-all cursor-pointer border ${
+                copied
+                  ? "bg-emerald-50 text-emerald-700 border-emerald-300"
+                  : "bg-gray-50 text-gray-600 border-gray-200 hover:bg-amber-50 hover:text-[var(--gold-dark)] hover:border-amber-300"
+              }`}
             >
-              <Link2 size={12} />
+              <Link2 size={13} />
               {copied
-                ? (isAr ? "تم النسخ ✓" : "Copied ✓")
+                ? (isAr ? "تم النسخ ✓" : "Copied! ✓")
                 : (isAr ? "نسخ الرابط" : "Copy Link")}
             </button>
 
             <button
               onClick={(e) => { e.stopPropagation(); setOpen(true); }}
-              className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-[var(--navy)] group-hover:text-[var(--gold)] transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-2 rounded-xl bg-[var(--navy)] text-white hover:bg-[var(--gold)] transition-all shadow-sm cursor-pointer"
             >
               {isAr ? "التفاصيل" : "Details"}
-              <ChevronRight size={14} />
+              <ChevronRight size={14} className={isAr ? "rotate-180" : ""} />
             </button>
           </div>
         </div>

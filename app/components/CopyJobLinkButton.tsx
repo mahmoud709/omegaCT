@@ -65,21 +65,21 @@ export function CopyJobLinkButton({
     <button
       type="button"
       onClick={handleCopy}
-      className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg border transition-all ${
+      className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 h-11 text-xs font-bold uppercase tracking-wider rounded-lg border transition-all shrink-0 whitespace-nowrap ${
         copied
-          ? "border-green-500 text-green-600 bg-green-50"
-          : "border-[var(--line)] bg-white text-[var(--dark-text)] hover:border-[var(--gold)] hover:text-[var(--gold)]"
+          ? "border-emerald-500 text-emerald-600 bg-emerald-50/90 shadow-sm"
+          : "border-gray-200/90 bg-white text-gray-700 hover:border-[#8c6d31] hover:text-[#8c6d31] shadow-xs"
       } ${className}`}
     >
       {copied ? (
         <>
-          <Check size={16} className="text-green-600" />
-          <span>{isAr ? "تم نسخ الرابط!" : "Link Copied!"}</span>
+          <Check size={16} className="text-emerald-600 shrink-0 stroke-[2.5]" />
+          <span className="whitespace-nowrap">{isAr ? "تم نسخ الرابط!" : "Link Copied!"}</span>
         </>
       ) : (
         <>
-          <Link2 size={16} />
-          <span>{isAr ? "نسخ رابط الوظيفة" : "Copy Job Link"}</span>
+          <Link2 size={15} className="shrink-0 text-gray-500" />
+          <span className="whitespace-nowrap">{isAr ? "نسخ رابط الوظيفة" : "Copy Job Link"}</span>
         </>
       )}
     </button>
