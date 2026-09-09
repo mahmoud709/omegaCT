@@ -7,6 +7,9 @@ import { images } from "@/app/data/site";
 import { getOptimizedImageUrl } from "@/app/utils/image";
 import { JobCard } from "./JobModal";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata = {
   title: "Careers | Omega Contracting & Trading",
   description: "Join the Omega team. Explore open positions and build a career in Egypt's leading construction group.",
