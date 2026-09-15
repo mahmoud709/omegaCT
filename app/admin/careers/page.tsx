@@ -37,6 +37,7 @@ export default async function CareersManager() {
           <thead className="bg-gray-50 border-b border-gray-200 text-gray-900 font-semibold">
             <tr>
               <th className="px-6 py-4">Job Title</th>
+              <th className="px-6 py-4">Job Code</th>
               <th className="px-6 py-4">Department</th>
               <th className="px-6 py-4">Location</th>
               <th className="px-6 py-4">Type</th>
@@ -47,7 +48,7 @@ export default async function CareersManager() {
           <tbody className="divide-y divide-gray-100">
             {jobs.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-10 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-10 text-center text-gray-500">
                   No job postings yet. Create your first one!
                 </td>
               </tr>
@@ -56,10 +57,16 @@ export default async function CareersManager() {
                 <tr key={job.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 font-medium text-gray-900">
                     <div>{job.title}</div>
+                    {job.isFeatured && (
+                      <span className="inline-block mt-1 px-2 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded text-[11px] font-bold">
+                        Urgent Hiring
+                      </span>
+                    )}
                     {job.titleAr && (
                       <div className="text-xs text-gray-400 mt-0.5" dir="rtl">{job.titleAr}</div>
                     )}
                   </td>
+                  <td className="px-6 py-4 font-mono text-xs text-gray-500">{job.jobCode || "-"}</td>
                   <td className="px-6 py-4">{job.department}</td>
                   <td className="px-6 py-4">{job.location}</td>
                   <td className="px-6 py-4">

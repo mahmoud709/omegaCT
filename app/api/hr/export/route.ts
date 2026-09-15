@@ -12,19 +12,28 @@ export async function GET(req: NextRequest) {
   const apps = await prisma.jobApplication.findMany({
     where: jobId ? { jobId } : {},
     orderBy: { createdAt: "desc" },
+    include: { job: true },
   });
 
-  const headers = ["Name", "Email", "Phone", "Job", "Status", "Applied On", "CV URL", "Cover Letter"];
-  const rows = apps.map(a => [
+  const headers = ["Name", "Email", "Phone", "Job", "Job Code", "Job Location", "Experience Requirement", "Current Salary", "Expected Salary", "Status", "Applied On", "CV URL", "Cover Letter"];
+  const rows = apps.map((a) => {
+    const app = a as typeof a & { currentSalary?: string };
+    return [
     `"${a.name}"`,
     `"${a.email}"`,
     `"${a.phone}"`,
     `"${a.jobTitle}"`,
+    `"${a.jobCode || a.job?.jobCode || ""}"`,
+    `"${a.job?.location || ""}"`,
+    `"${a.job?.experience || ""}"`,
+    `"${app.currentSalary || ""}"`,
+    `"${a.lastSalary || ""}"`,
     `"${a.status}"`,
     `"${new Date(a.createdAt).toLocaleDateString()}"`,
     `"${a.cvUrl}"`,
     `"${a.coverLetter.replace(/"/g, "'")}"`,
-  ]);
+  ];
+  });
 
   const csv = [headers.join(","), ...rows.map(r => r.join(","))].join("\n");
   const filename = jobId ? `applications-${jobId}.csv` : "all-applications.csv";

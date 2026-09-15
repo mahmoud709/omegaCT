@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { X, MapPin, CheckCircle2, ArrowRight, Link2, Briefcase, ChevronRight } from "lucide-react";
+import { X, MapPin, CheckCircle2, ArrowRight, Link2, Briefcase, ChevronRight, Clock, CalendarDays, Hash } from "lucide-react";
 import Link from "next/link";
 
 interface Job {
@@ -14,10 +14,21 @@ interface Job {
   locationAr?: string | null;
   type: string;
   typeAr?: string | null;
+  experience?: string | null;
+  experienceAr?: string | null;
   description: string;
   descriptionAr?: string | null;
+  responsibilities: string[];
+  responsibilitiesAr?: string[];
   requirements: string[];
   requirementsAr?: string[];
+  education?: string | null;
+  educationAr?: string | null;
+  preferredExperience?: string[];
+  preferredExperienceAr?: string[];
+  applicationDeadline?: Date | string | null;
+  jobCode?: string | null;
+  isFeatured?: boolean | null;
 }
 
 /* ─── Modal ─────────────────────────────────────────── */
@@ -25,10 +36,20 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
   const title       = isAr && job.titleAr       ? job.titleAr       : job.title;
   const department  = isAr && job.departmentAr  ? job.departmentAr  : job.department;
   const location    = isAr && job.locationAr    ? job.locationAr    : job.location;
+  const type        = isAr && job.typeAr        ? job.typeAr        : job.type;
+  const experience  = isAr && job.experienceAr  ? job.experienceAr  : job.experience;
   const description = isAr && job.descriptionAr ? job.descriptionAr : job.description;
+  const responsibilities = isAr && job.responsibilitiesAr?.length
+    ? job.responsibilitiesAr
+    : job.responsibilities;
   const requirements = isAr && job.requirementsAr?.length
     ? job.requirementsAr
     : job.requirements;
+  const education = isAr && job.educationAr ? job.educationAr : job.education;
+  const preferredExperience = isAr && job.preferredExperienceAr?.length
+    ? job.preferredExperienceAr
+    : (job.preferredExperience || []);
+  const deadline = job.applicationDeadline ? new Date(job.applicationDeadline) : null;
 
   return (
     <div
@@ -53,9 +74,11 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
             {department}
           </p>
           <h2 className="font-serif text-2xl font-semibold mb-3">{title}</h2>
-          <div className="flex items-center gap-2 text-sm text-white/70">
-            <MapPin size={13} />
-            <span>{location}</span>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-white/70">
+            {job.jobCode && <span className="flex items-center gap-1.5"><Hash size={13} />{job.jobCode}</span>}
+            <span className="flex items-center gap-1.5"><MapPin size={13} />{location}</span>
+            <span className="flex items-center gap-1.5"><Briefcase size={13} />{type}</span>
+            {experience && <span className="flex items-center gap-1.5"><Clock size={13} />{experience}</span>}
           </div>
         </div>
 
@@ -72,6 +95,24 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
               <p className="text-[var(--muted)] leading-7 text-sm whitespace-pre-line">{description}</p>
             </div>
 
+            {/* Responsibilities */}
+            {responsibilities.length > 0 && (
+              <div>
+                <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--gold-dark)] mb-3">
+                  <span className="w-5 h-px bg-[var(--gold)]" />
+                  {isAr ? "Ø§Ù„Ù…Ø³Ø¤ÙˆÙ„ÙŠØ§Øª Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Key Responsibilities"}
+                </h3>
+                <ul className="grid sm:grid-cols-2 gap-2">
+                  {responsibilities.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)] bg-[var(--off-white)] rounded-lg px-3 py-2.5">
+                      <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-[var(--gold)]" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {/* Requirements */}
             {requirements.length > 0 && (
               <div>
@@ -87,6 +128,40 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {education && (
+              <div>
+                <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--gold-dark)] mb-3">
+                  <span className="w-5 h-px bg-[var(--gold)]" />
+                  {isAr ? "Ø§Ù„Ù…Ø¤Ù‡Ù„ Ø§Ù„Ø¯Ø±Ø§Ø³ÙŠ" : "Education / Qualification"}
+                </h3>
+                <p className="text-[var(--muted)] leading-7 text-sm">{education}</p>
+              </div>
+            )}
+
+            {preferredExperience.length > 0 && (
+              <div>
+                <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--gold-dark)] mb-3">
+                  <span className="w-5 h-px bg-[var(--gold)]" />
+                  {isAr ? "Ø§Ù„Ø®Ø¨Ø±Ø§Øª Ø§Ù„Ù…ÙØ¶Ù„Ø©" : "Preferred Experience"}
+                </h3>
+                <ul className="space-y-2">
+                  {preferredExperience.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
+                      <CheckCircle2 size={14} className="mt-1 shrink-0 text-[var(--gold)]" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {deadline && !Number.isNaN(deadline.getTime()) && (
+              <div className="flex items-center gap-2 text-sm text-[var(--muted)] bg-[var(--off-white)] rounded-lg px-3 py-2.5">
+                <CalendarDays size={15} className="text-[var(--gold)]" />
+                <span>{isAr ? "Ø¢Ø®Ø± Ù…ÙˆØ¹Ø¯ Ù„Ù„ØªÙ‚Ø¯ÙŠÙ…:" : "Application Deadline:"} {deadline.toLocaleDateString(isAr ? "ar-EG" : "en-US")}</span>
               </div>
             )}
           </div>
@@ -122,6 +197,8 @@ export function JobCard({ job, isAr }: { job: Job; isAr: boolean }) {
   const title      = isAr && job.titleAr      ? job.titleAr      : job.title;
   const department = isAr && job.departmentAr ? job.departmentAr : job.department;
   const location   = isAr && job.locationAr   ? job.locationAr   : job.location;
+  const type       = isAr && job.typeAr       ? job.typeAr       : job.type;
+  const experience = isAr && job.experienceAr ? job.experienceAr : job.experience;
   const reqs       = (isAr && job.requirementsAr?.length ? job.requirementsAr : job.requirements).slice(0, 3);
   const totalReqs  = (isAr && job.requirementsAr?.length ? job.requirementsAr : job.requirements).length;
 
@@ -155,6 +232,11 @@ export function JobCard({ job, isAr }: { job: Job; isAr: boolean }) {
               <MapPin size={12} className="text-[var(--gold)] shrink-0" />
               {location}
             </p>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
+              <span className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 border border-gray-100 px-2.5 py-1"><Briefcase size={12} className="text-[var(--gold)]" />{type}</span>
+              {experience && <span className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 border border-gray-100 px-2.5 py-1"><Clock size={12} className="text-[var(--gold)]" />{experience}</span>}
+              {job.isFeatured && <span className="inline-flex items-center rounded-md bg-amber-50 border border-amber-200 px-2.5 py-1 font-bold text-amber-700">{isAr ? "Ù…Ø·Ù„ÙˆØ¨ Ø¨Ø´ÙƒÙ„ Ø¹Ø§Ø¬Ù„" : "Urgent Hiring"}</span>}
+            </div>
           </div>
 
           {/* Requirements chips */}

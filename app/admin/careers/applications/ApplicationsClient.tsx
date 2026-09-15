@@ -161,7 +161,9 @@ export default function ApplicationsClient({ applications: initialApps }: Applic
       app.name?.toLowerCase().includes(q) ||
       app.email?.toLowerCase().includes(q) ||
       app.phone?.includes(q) ||
-      app.jobTitle?.toLowerCase().includes(q);
+      app.jobTitle?.toLowerCase().includes(q) ||
+      app.jobCode?.toLowerCase().includes(q) ||
+      app.job?.jobCode?.toLowerCase().includes(q);
 
     return matchesStatus && matchesQuery;
   });
@@ -574,6 +576,12 @@ export default function ApplicationsClient({ applications: initialApps }: Applic
                         </span>
                       </div>
 
+                      {(app.jobCode || app.job?.jobCode) && (
+                        <span className="inline-flex items-center px-3 py-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold rounded-full font-mono">
+                          {app.jobCode || app.job?.jobCode}
+                        </span>
+                      )}
+
                       {/* Contacts Row */}
                       <div className="flex flex-wrap items-center gap-3 text-xs text-gray-600 pt-0.5">
                         <a
@@ -664,7 +672,27 @@ export default function ApplicationsClient({ applications: initialApps }: Applic
                       بيانات التقييم والخبرة الميدانية
                     </h3>
 
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div className="grid grid-cols-2 lg:grid-cols-7 gap-3">
+                      <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl space-y-1">
+                        <span className="text-[11px] font-semibold text-gray-400 block">
+                          Job Location
+                        </span>
+                        <div className="font-bold text-xs text-gray-800 flex items-center gap-1.5" dir="auto">
+                          <MapPin size={14} className="text-[var(--gold)] shrink-0" />
+                          <span>{app.job?.location || "-"}</span>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl space-y-1">
+                        <span className="text-[11px] font-semibold text-gray-400 block">
+                          Required Experience
+                        </span>
+                        <div className="font-bold text-xs text-gray-800 flex items-center gap-1.5" dir="auto">
+                          <Award size={14} className="text-[var(--gold)] shrink-0" />
+                          <span>{app.job?.experience || "-"}</span>
+                        </div>
+                      </div>
+
                       <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl space-y-1">
                         <span className="text-[11px] font-semibold text-gray-400 block">
                           الوضع الوظيفي الحالي
@@ -705,13 +733,23 @@ export default function ApplicationsClient({ applications: initialApps }: Applic
 
                       <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl space-y-1">
                         <span className="text-[11px] font-semibold text-gray-400 block">
-                          آخر راتب / الراتب المتوقع
+                          الراتب المتوقع
                         </span>
                         <div className="font-bold text-xs text-gray-800 flex items-center gap-1.5" dir="auto">
                           <DollarSign size={14} className="text-[var(--gold)] shrink-0" />
                           <span>{app.lastSalary || "غير محدد"}</span>
                         </div>
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-50 border border-slate-100 p-3.5 rounded-xl space-y-1">
+                    <span className="text-[11px] font-semibold text-gray-400 block">
+                      الراتب الحالي
+                    </span>
+                    <div className="font-bold text-xs text-gray-800 flex items-center gap-1.5" dir="auto">
+                      <DollarSign size={14} className="text-[var(--gold)] shrink-0" />
+                      <span>{app.currentSalary || "غير محدد"}</span>
                     </div>
                   </div>
 

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { CopyJobLinkButton } from "@/app/components/CopyJobLinkButton";
 import { getLocale } from "next-intl/server";
+import { isJobAcceptingApplications } from "@/lib/jobs";
 
 export default async function ApplyPage({ params }: { params: Promise<{ jobId: string }> }) {
   const { jobId } = await params;
@@ -13,7 +14,7 @@ export default async function ApplyPage({ params }: { params: Promise<{ jobId: s
   const isAr = locale === "ar";
   const job = await prisma.jobPosting.findUnique({ where: { id: jobId } });
 
-  if (!job || !job.isOpen) notFound();
+  if (!job || !isJobAcceptingApplications(job)) notFound();
 
   return (
     <div className="min-h-screen bg-[var(--off-white)]">
@@ -39,7 +40,9 @@ export default async function ApplyPage({ params }: { params: Promise<{ jobId: s
           <div className="flex flex-wrap gap-4 text-sm text-white/75">
             <span className="flex items-center gap-1.5"><MapPin size={14} />{isAr && job.locationAr ? job.locationAr : job.location}</span>
             <span className="flex items-center gap-1.5"><Briefcase size={14} />{isAr && job.typeAr ? job.typeAr : job.type}</span>
+            {job.experience && <span className="flex items-center gap-1.5">{isAr && job.experienceAr ? job.experienceAr : job.experience}</span>}
           </div>
+          {job.jobCode && <p className="mt-4 text-xs text-white/50 font-mono">{job.jobCode}</p>}
         </div>
 
         {/* Form */}

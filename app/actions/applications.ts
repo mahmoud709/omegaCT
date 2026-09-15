@@ -7,6 +7,7 @@ export async function getApplication(id: string) {
   try {
     return await prisma.jobApplication.findUnique({
       where: { id },
+      include: { job: true },
     });
   } catch (err) {
     console.error("Failed to get application:", err);

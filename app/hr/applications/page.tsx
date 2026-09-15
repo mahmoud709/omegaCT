@@ -39,6 +39,7 @@ export default async function ApplicationsPage({
       ...(jobFilter ? { jobId: jobFilter } : {}),
     },
     orderBy: { createdAt: "desc" },
+    include: { job: true },
   });
 
   const jobs = await prisma.jobPosting.findMany({ select: { id: true, title: true }, orderBy: { title: "asc" } });
@@ -103,7 +104,10 @@ export default async function ApplicationsPage({
                       {app.name}
                     </Link>
                   </td>
-                  <td className="px-6 py-4 text-gray-500" dir="auto">{app.jobTitle}</td>
+                  <td className="px-6 py-4 text-gray-500" dir="auto">
+                    <div>{app.jobTitle}</div>
+                    {(app.jobCode || app.job?.jobCode) && <div className="font-mono text-xs text-gray-400 mt-0.5">{app.jobCode || app.job?.jobCode}</div>}
+                  </td>
                   <td className="px-6 py-4 text-gray-500">{app.email}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${color}`}>{app.status}</span>

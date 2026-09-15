@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import cloudinary from "@/lib/cloudinary";
+import { isJobAcceptingApplications } from "@/lib/jobs";
 
 export async function POST(req: NextRequest) {
   try {
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
     const employmentStatus = (formData.get("employmentStatus") as string) || "";
     const noticePeriod = (formData.get("noticePeriod") as string) || "";
     const yearsOfExperience = (formData.get("yearsOfExperience") as string) || "";
+    const currentSalary = (formData.get("currentSalary") as string) || "";
     const lastSalary = (formData.get("lastSalary") as string) || "";
     
     // CV Submission (File vs Link)
@@ -27,7 +29,7 @@ export async function POST(req: NextRequest) {
     }
 
     const job = await prisma.jobPosting.findUnique({ where: { id: jobId } });
-    if (!job || !job.isOpen) {
+    if (!job || !isJobAcceptingApplications(job)) {
       return NextResponse.json({ error: "This position is no longer open" }, { status: 404 });
     }
 
@@ -66,6 +68,7 @@ export async function POST(req: NextRequest) {
       data: {
         jobId,
         jobTitle: job.title,
+        jobCode: job.jobCode || "",
         name,
         email,
         phone,
@@ -74,6 +77,7 @@ export async function POST(req: NextRequest) {
         employmentStatus,
         noticePeriod,
         yearsOfExperience,
+        currentSalary,
         lastSalary,
         coverLetter,
         status: "NEW",

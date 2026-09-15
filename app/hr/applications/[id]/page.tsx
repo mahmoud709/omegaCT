@@ -1,7 +1,7 @@
 import { getApplication, checkDuplicates, updateStatus, saveHRNotes, markRead } from "@/app/actions/applications";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, AlertTriangle, FileText, Mail, Phone, Calendar } from "lucide-react";
+import { ArrowLeft, AlertTriangle, FileText, Mail, Phone, Calendar, MapPin, Award, DollarSign } from "lucide-react";
 
 const PIPELINE = ["NEW", "REVIEWED", "SHORTLISTED", "INTERVIEW", "HIRED", "REJECTED"] as const;
 const STATUS_COLORS: Record<string, string> = {
@@ -35,6 +35,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
   const { id } = await params;
   const app = await getApplication(id);
   if (!app) notFound();
+  const application = app as typeof app & { currentSalary?: string };
 
   await markRead(id);
 
@@ -81,14 +82,34 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
               <span className={`px-3 py-1 rounded-full text-sm font-semibold ${STATUS_COLORS[app.status]}`}>{app.status}</span>
             </div>
             <p className="text-[var(--gold)] font-medium text-sm" dir="auto">{app.jobTitle}</p>
+            {(app.jobCode || app.job?.jobCode) && <p className="font-mono text-xs text-gray-400 mt-1">{app.jobCode || app.job?.jobCode}</p>}
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-4 text-sm">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
             <a href={`mailto:${app.email}`} className="flex items-center gap-2 text-gray-600 hover:text-[var(--gold)]">
               <Mail size={15} className="text-[var(--gold)]" />{app.email}
             </a>
             {app.phone && <span className="flex items-center gap-2 text-gray-600"><Phone size={15} className="text-[var(--gold)]" />{app.phone}</span>}
             <span className="flex items-center gap-2 text-gray-500"><Calendar size={15} className="text-[var(--gold)]" />{new Date(app.createdAt).toLocaleDateString()}</span>
+          </div>
+
+          <div className="grid sm:grid-cols-3 gap-4 text-sm">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Job Location</p>
+              <p className="flex items-center gap-2 text-gray-700"><MapPin size={15} className="text-[var(--gold)]" />{app.job?.location || "-"}</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Experience Requirement</p>
+              <p className="flex items-center gap-2 text-gray-700"><Award size={15} className="text-[var(--gold)]" />{app.job?.experience || "-"}</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Current Salary</p>
+              <p className="flex items-center gap-2 text-gray-700"><DollarSign size={15} className="text-[var(--gold)]" />{application.currentSalary || "-"}</p>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Expected Salary</p>
+              <p className="flex items-center gap-2 text-gray-700"><DollarSign size={15} className="text-[var(--gold)]" />{app.lastSalary || "-"}</p>
+            </div>
           </div>
 
           {app.coverLetter && (

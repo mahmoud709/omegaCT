@@ -26,6 +26,14 @@ export default async function CareersPage() {
       .split("\n").map((r) => r.trim()).filter(Boolean),
     requirementsAr: (j.requirementsAr ?? "")
       .split("\n").map((r) => r.trim()).filter(Boolean),
+    responsibilities: (j.responsibilities ?? "")
+      .split("\n").map((r) => r.trim()).filter(Boolean),
+    responsibilitiesAr: (j.responsibilitiesAr ?? "")
+      .split("\n").map((r) => r.trim()).filter(Boolean),
+    preferredExperience: (j.preferredExperience ?? "")
+      .split("\n").map((r) => r.trim()).filter(Boolean),
+    preferredExperienceAr: (j.preferredExperienceAr ?? "")
+      .split("\n").map((r) => r.trim()).filter(Boolean),
   }));
 
   return (

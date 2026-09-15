@@ -14,6 +14,7 @@ export function ApplicationForm({ jobId, jobTitle, isAr = false }: { jobId: stri
   const [phone, setPhone] = useState("");
   const [cvLink, setCvLink] = useState("");
   const [yearsExp, setYearsExp] = useState("");
+  const [currentSalary, setCurrentSalary] = useState("");
   const [lastSalary, setLastSalary] = useState("");
   const [noticePeriod, setNoticePeriod] = useState(isAr ? "فوري / جاهز فوراً" : "Immediate / فوراً");
 
@@ -45,8 +46,8 @@ export function ApplicationForm({ jobId, jobTitle, isAr = false }: { jobId: stri
 
   const getWhatsAppUrl = () => {
     const text = isAr
-      ? `السلام عليكم، أود التقديم على وظيفة: ${jobTitle}\n- الاسم: ${name || "----"}\n- رقم الهاتف: ${phone || "----"}\n- الوضع الوظيفي: ${employmentStatus === "EMPLOYED" ? "على رأس عمل حالياً" : "متفرغ وجاهز فوراً"}\n- فترة الإخطار: ${noticePeriod}\n- سنوات الخبرة: ${yearsExp || "----"}\n- آخر راتب: ${lastSalary || "----"}\n- رابط الـ CV: ${cvLink || "مرفق بالرسالة"}`
-      : `Hello, I'd like to apply for: ${jobTitle}\n- Name: ${name || "----"}\n- Phone: ${phone || "----"}\n- Status: ${employmentStatus === "EMPLOYED" ? "Currently Employed" : "Available Immediately"}\n- Notice Period: ${noticePeriod}\n- Experience: ${yearsExp || "----"}\n- Last Salary: ${lastSalary || "----"}\n- CV Link: ${cvLink || "Attached"}`;
+      ? `السلام عليكم، أود التقديم على وظيفة: ${jobTitle}\n- الاسم: ${name || "----"}\n- رقم الهاتف: ${phone || "----"}\n- الوضع الوظيفي: ${employmentStatus === "EMPLOYED" ? "على رأس عمل حالياً" : "متفرغ وجاهز فوراً"}\n- فترة الإخطار: ${noticePeriod}\n- سنوات الخبرة: ${yearsExp || "----"}\n- الراتب الحالي: ${currentSalary || "----"}\n- الراتب المتوقع: ${lastSalary || "----"}\n- رابط الـ CV: ${cvLink || "مرفق بالرسالة"}`
+      : `Hello, I'd like to apply for: ${jobTitle}\n- Name: ${name || "----"}\n- Phone: ${phone || "----"}\n- Status: ${employmentStatus === "EMPLOYED" ? "Currently Employed" : "Available Immediately"}\n- Notice Period: ${noticePeriod}\n- Experience: ${yearsExp || "----"}\n- Current Salary: ${currentSalary || "----"}\n- Expected Salary: ${lastSalary || "----"}\n- CV Link: ${cvLink || "Attached"}`;
     return `https://wa.me/201069771773?text=${encodeURIComponent(text)}`;
   };
 
@@ -168,7 +169,7 @@ export function ApplicationForm({ jobId, jobTitle, isAr = false }: { jobId: stri
         </div>
 
         {/* Experience & Salary */}
-        <div className="grid sm:grid-cols-2 gap-5">
+        <div className="grid sm:grid-cols-3 gap-5">
           <div>
             <label className={lbl}>
               {isAr ? "سنوات الخبرة في هذه الوظيفة" : "Years of Experience in this role"} <span className="text-red-500">*</span>
@@ -179,10 +180,18 @@ export function ApplicationForm({ jobId, jobTitle, isAr = false }: { jobId: stri
           </div>
           <div>
             <label className={lbl}>
-              {isAr ? "آخر راتب (بالجنيه)" : "Current / Last Salary (EGP)"} <span className="text-red-500">*</span>
+              {isAr ? "الراتب الحالي" : "Current Salary"} <span className="text-red-500">*</span>
+            </label>
+            <input name="currentSalary" required type="text" className={inp}
+              placeholder={isAr ? "مثال: 20,000" : "e.g. 20,000"}
+              value={currentSalary} onChange={(e) => setCurrentSalary(e.target.value)} />
+          </div>
+          <div>
+            <label className={lbl}>
+              {isAr ? "الراتب المتوقع" : "Expected Salary"} <span className="text-red-500">*</span>
             </label>
             <input name="lastSalary" required type="text" className={inp}
-              placeholder={isAr ? "مثال: 25,000 جنيه" : "e.g. 25,000 EGP"}
+              placeholder={isAr ? "مثال: 25,000" : "e.g. 25,000"}
               value={lastSalary} onChange={(e) => setLastSalary(e.target.value)} />
           </div>
         </div>
@@ -276,7 +285,7 @@ export function ApplicationForm({ jobId, jobTitle, isAr = false }: { jobId: stri
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
             <MessageSquare size={16} /> {isAr ? "إرسال عبر واتساب" : "Send via WhatsApp"}
           </a>
-          <a href={`mailto:hr@omega-tc.com?subject=${encodeURIComponent(`Application for ${jobTitle} - ${name || "Candidate"}`)}&body=${encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nStatus: ${employmentStatus}\nNotice: ${noticePeriod}\nExperience: ${yearsExp}\nLast Salary: ${lastSalary}\nCV Link: ${cvLink}`)}`}
+          <a href={`mailto:hr@omega-tc.com?subject=${encodeURIComponent(`Application for ${jobTitle} - ${name || "Candidate"}`)}&body=${encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nStatus: ${employmentStatus}\nNotice: ${noticePeriod}\nExperience: ${yearsExp}\nCurrent Salary: ${currentSalary}\nExpected Salary: ${lastSalary}\nCV Link: ${cvLink}`)}`}
             className="flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--navy)] hover:bg-blue-900 text-white text-sm font-semibold rounded-lg transition-colors shadow-sm">
             <Mail size={16} /> {isAr ? "إرسال عبر الإيميل" : "Send via Email"}
           </a>
