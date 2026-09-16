@@ -100,7 +100,7 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
               <div>
                 <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--gold-dark)] mb-3">
                   <span className="w-5 h-px bg-[var(--gold)]" />
-                  {isAr ? "Ø§Ù„Ù…Ø³Ø¤ÙˆÙ„ÙŠØ§Øª Ø§Ù„Ø±Ø¦ÙŠØ³ÙŠØ©" : "Key Responsibilities"}
+                  {isAr ? "المسؤوليات الرئيسية" : "Key Responsibilities"}
                 </h3>
                 <ul className="grid sm:grid-cols-2 gap-2">
                   {responsibilities.map((item, i) => (
@@ -135,7 +135,7 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
               <div>
                 <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--gold-dark)] mb-3">
                   <span className="w-5 h-px bg-[var(--gold)]" />
-                  {isAr ? "Ø§Ù„Ù…Ø¤Ù‡Ù„ Ø§Ù„Ø¯Ø±Ø§Ø³ÙŠ" : "Education / Qualification"}
+                  {isAr ? "المؤهل الدراسي" : "Education / Qualification"}
                 </h3>
                 <p className="text-[var(--muted)] leading-7 text-sm">{education}</p>
               </div>
@@ -145,7 +145,7 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
               <div>
                 <h3 className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[var(--gold-dark)] mb-3">
                   <span className="w-5 h-px bg-[var(--gold)]" />
-                  {isAr ? "Ø§Ù„Ø®Ø¨Ø±Ø§Øª Ø§Ù„Ù…ÙØ¶Ù„Ø©" : "Preferred Experience"}
+                  {isAr ? "الخبرات المفضلة" : "Preferred Experience"}
                 </h3>
                 <ul className="space-y-2">
                   {preferredExperience.map((item, i) => (
@@ -161,7 +161,7 @@ function JobModal({ job, isAr, onClose }: { job: Job; isAr: boolean; onClose: ()
             {deadline && !Number.isNaN(deadline.getTime()) && (
               <div className="flex items-center gap-2 text-sm text-[var(--muted)] bg-[var(--off-white)] rounded-lg px-3 py-2.5">
                 <CalendarDays size={15} className="text-[var(--gold)]" />
-                <span>{isAr ? "Ø¢Ø®Ø± Ù…ÙˆØ¹Ø¯ Ù„Ù„ØªÙ‚Ø¯ÙŠÙ…:" : "Application Deadline:"} {deadline.toLocaleDateString(isAr ? "ar-EG" : "en-US")}</span>
+                <span>{isAr ? "آخر موعد للتقديم:" : "Application Deadline:"} {deadline.toLocaleDateString(isAr ? "ar-EG" : "en-US")}</span>
               </div>
             )}
           </div>
@@ -235,7 +235,7 @@ export function JobCard({ job, isAr }: { job: Job; isAr: boolean }) {
             <div className="mt-3 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
               <span className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 border border-gray-100 px-2.5 py-1"><Briefcase size={12} className="text-[var(--gold)]" />{type}</span>
               {experience && <span className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 border border-gray-100 px-2.5 py-1"><Clock size={12} className="text-[var(--gold)]" />{experience}</span>}
-              {job.isFeatured && <span className="inline-flex items-center rounded-md bg-amber-50 border border-amber-200 px-2.5 py-1 font-bold text-amber-700">{isAr ? "Ù…Ø·Ù„ÙˆØ¨ Ø¨Ø´ÙƒÙ„ Ø¹Ø§Ø¬Ù„" : "Urgent Hiring"}</span>}
+              {job.isFeatured && <span className="inline-flex items-center rounded-md bg-amber-50 border border-amber-200 px-2.5 py-1 font-bold text-amber-700">{isAr ? "مطلوب بشكل عاجل" : "Urgent Hiring"}</span>}
             </div>
           </div>
 
