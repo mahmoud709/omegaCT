@@ -48,7 +48,7 @@ export function ApplicationForm({ jobId, jobTitle, isAr = false }: { jobId: stri
     const text = isAr
       ? `السلام عليكم، أود التقديم على وظيفة: ${jobTitle}\n- الاسم: ${name || "----"}\n- رقم الهاتف: ${phone || "----"}\n- الوضع الوظيفي: ${employmentStatus === "EMPLOYED" ? "على رأس عمل حالياً" : "متفرغ وجاهز فوراً"}\n- فترة الإخطار: ${noticePeriod}\n- سنوات الخبرة: ${yearsExp || "----"}\n- الراتب الحالي: ${currentSalary || "----"}\n- الراتب المتوقع: ${lastSalary || "----"}\n- رابط الـ CV: ${cvLink || "مرفق بالرسالة"}`
       : `Hello, I'd like to apply for: ${jobTitle}\n- Name: ${name || "----"}\n- Phone: ${phone || "----"}\n- Status: ${employmentStatus === "EMPLOYED" ? "Currently Employed" : "Available Immediately"}\n- Notice Period: ${noticePeriod}\n- Experience: ${yearsExp || "----"}\n- Current Salary: ${currentSalary || "----"}\n- Expected Salary: ${lastSalary || "----"}\n- CV Link: ${cvLink || "Attached"}`;
-    return `https://wa.me/201069771773?text=${encodeURIComponent(text)}`;
+    return `https://wa.me/201103144103?text=${encodeURIComponent(text)}`;
   };
 
   if (state === "success") {
