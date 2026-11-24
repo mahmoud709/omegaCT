@@ -14,17 +14,6 @@ const STATUS_COLORS: Record<string, string> = {
 };
 const STATUSES = ["ALL", "NEW", "REVIEWED", "SHORTLISTED", "INTERVIEW", "HIRED", "REJECTED"];
 
-function formatCvUrl(url: string, name: string) {
-  if (!url) return "#";
-  if (url.includes("res.cloudinary.com") && url.includes("/raw/upload/")) {
-    if (!/\.(pdf|doc|docx)$/i.test(url)) {
-      const safeName = name ? name.replace(/[^a-zA-Z0-9_-]/g, "_") : "CV";
-      return `${url}/${safeName}_CV.pdf`;
-    }
-  }
-  return url;
-}
-
 export default async function ApplicationsPage({
   searchParams,
 }: {
@@ -98,7 +87,7 @@ export default async function ApplicationsPage({
               <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">{ar ? "لا توجد طلبات." : "No applications found."}</td></tr>
             ) : apps.map(app => {
               const color = STATUS_COLORS[app.status] || STATUS_COLORS.NEW;
-              const cvDownloadUrl = formatCvUrl(app.cvUrl, app.name);
+              const cvDownloadUrl = app.cvType === "LINK" ? app.cvUrl : `/api/download-cv?url=${encodeURIComponent(app.cvUrl)}`;
               return (
                 <tr key={app.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">

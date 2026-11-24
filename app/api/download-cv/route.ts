@@ -1,10 +1,16 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 import { prisma } from "@/lib/prisma";
+import { verifySessionToken } from "@/lib/hr-auth";
 
 export async function GET(req: NextRequest) {
-  if (req.cookies.get("admin_session")?.value !== "authenticated") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const isAdmin = req.cookies.get("admin_session")?.value === "authenticated";
+  const hrToken = req.cookies.get("hr_session")?.value;
+  const hrSession = hrToken ? verifySessionToken(hrToken) : null;
+  if (!isAdmin) {
+    if (!hrSession) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const user = await prisma.hrUser.findUnique({ where: { id: hrSession.userId }, select: { isActive: true } });
+    if (!user?.isActive) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const cvUrl = req.nextUrl.searchParams.get("url");

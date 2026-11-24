@@ -21,17 +21,6 @@ async function handleUpdateStatus(id: string, status: string) {
   await updateStatus(id, status);
 }
 
-function formatCvUrl(url: string, name: string) {
-  if (!url) return "#";
-  if (url.includes("res.cloudinary.com") && url.includes("/raw/upload/")) {
-    if (!/\.(pdf|doc|docx)$/i.test(url)) {
-      const safeName = name ? name.replace(/[^a-zA-Z0-9_-]/g, "_") : "CV";
-      return `${url}/${safeName}_CV.pdf`;
-    }
-  }
-  return url;
-}
-
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const ar = await hrArabic();
   const { id } = await params;
@@ -43,7 +32,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
 
   const duplicates = await checkDuplicates(app.email, id);
   const saveNotesAction = handleSaveHRNotes.bind(null, id);
-  const cvDownloadUrl = formatCvUrl(app.cvUrl, app.name);
+  const cvDownloadUrl = app.cvType === "LINK" ? app.cvUrl : `/api/download-cv?url=${encodeURIComponent(app.cvUrl)}`;
 
   return (
     <div className="max-w-4xl mx-auto">
