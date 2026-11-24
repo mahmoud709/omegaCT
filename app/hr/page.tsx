@@ -1,9 +1,10 @@
+import { hrArabic, statusLabel } from "./language";
 import { getApplicationCounts } from "@/app/actions/applications";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Users, TrendingUp, CheckCircle, XCircle, Clock, Download } from "lucide-react";
+import { Users, TrendingUp, CheckCircle, XCircle, Clock, Download, type LucideIcon } from "lucide-react";
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; icon: any }> = {
+const STATUS_CONFIG: Record<string, { label: string; color: string; icon: LucideIcon }> = {
   NEW:         { label: "New",         color: "bg-blue-50 text-blue-700 border-blue-100",   icon: Clock },
   REVIEWED:    { label: "Reviewed",    color: "bg-yellow-50 text-yellow-700 border-yellow-100", icon: TrendingUp },
   SHORTLISTED: { label: "Shortlisted", color: "bg-purple-50 text-purple-700 border-purple-100", icon: Users },
@@ -13,6 +14,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; icon: any }>
 };
 
 export default async function HRDashboard() {
+  const ar = await hrArabic();
   const counts = await getApplicationCounts();
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
   const recent = await prisma.jobApplication.findMany({
@@ -24,19 +26,19 @@ export default async function HRDashboard() {
     <div className="max-w-6xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Overview of all job applications</p>
+          <h1 className="text-3xl font-bold text-gray-900">{ar ? "لوحة التحكم" : "Dashboard"}</h1>
+          <p className="text-gray-500 mt-1">{ar ? "نظرة عامة على طلبات التوظيف" : "Overview of all job applications"}</p>
         </div>
         <a href="/api/hr/export"
           className="flex items-center gap-2 border border-gray-200 hover:border-[var(--gold)] text-gray-600 hover:text-[var(--gold)] px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
-          <Download size={16} /> Export All CSV
+          <Download size={16} /> {ar ? "تصدير جميع الطلبات CSV" : "Export All CSV"}
         </a>
       </div>
 
       {/* Stats grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         <div className="col-span-2 lg:col-span-1 bg-[var(--navy)] rounded-xl p-6 text-white">
-          <p className="text-white/60 text-sm">Total Applications</p>
+          <p className="text-white/60 text-sm">{ar ? "إجمالي الطلبات" : "Total Applications"}</p>
           <p className="text-5xl font-bold mt-2">{total}</p>
         </div>
         {Object.entries(STATUS_CONFIG).map(([status, cfg]) => {
@@ -46,7 +48,7 @@ export default async function HRDashboard() {
             <Link key={status} href={`/hr/applications?status=${status}`}
               className={`rounded-xl p-5 border flex items-center justify-between hover:shadow-md transition-shadow ${cfg.color}`}>
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider opacity-70">{cfg.label}</p>
+                <p className="text-xs font-semibold uppercase tracking-wider opacity-70">{ar ? statusLabel(status, true) : cfg.label}</p>
                 <p className="text-3xl font-bold mt-1">{count}</p>
               </div>
               <Icon size={28} className="opacity-30" />
@@ -58,16 +60,16 @@ export default async function HRDashboard() {
       {/* Recent applications */}
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
-          <h2 className="font-semibold text-gray-900">Recent Applications</h2>
-          <Link href="/hr/applications" className="text-sm text-[var(--gold)] hover:underline">View all →</Link>
+          <h2 className="font-semibold text-gray-900">{ar ? "أحدث الطلبات" : "Recent Applications"}</h2>
+          <Link href="/hr/applications" className="text-sm text-[var(--gold)] hover:underline">{ar ? "عرض الكل ←" : "View all →"}</Link>
         </div>
-        <table className="w-full text-sm text-left">
+        <table className="w-full text-sm text-start">
           <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider">
             <tr>
-              <th className="px-6 py-3">Applicant</th>
-              <th className="px-6 py-3">Position</th>
-              <th className="px-6 py-3">Status</th>
-              <th className="px-6 py-3">Applied</th>
+              <th className="px-6 py-3">{ar ? "المتقدم" : "Applicant"}</th>
+              <th className="px-6 py-3">{ar ? "الوظيفة" : "Position"}</th>
+              <th className="px-6 py-3">{ar ? "الحالة" : "Status"}</th>
+              <th className="px-6 py-3">{ar ? "تاريخ التقديم" : "Applied"}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -83,9 +85,9 @@ export default async function HRDashboard() {
                   </td>
                   <td className="px-6 py-4 text-gray-500">{app.jobTitle}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${cfg.color}`}>{cfg.label}</span>
+                    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${cfg.color}`}>{ar ? statusLabel(app.status, true) : cfg.label}</span>
                   </td>
-                  <td className="px-6 py-4 text-gray-400">{new Date(app.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-gray-400">{new Date(app.createdAt).toLocaleDateString(ar ? "ar-EG" : "en-US")}</td>
                 </tr>
               );
             })}

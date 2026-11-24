@@ -1,3 +1,4 @@
+import { hrArabic, statusLabel } from "../../language";
 import { getApplication, checkDuplicates, updateStatus, saveHRNotes, markRead } from "@/app/actions/applications";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -32,6 +33,7 @@ function formatCvUrl(url: string, name: string) {
 }
 
 export default async function ApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const ar = await hrArabic();
   const { id } = await params;
   const app = await getApplication(id);
   if (!app) notFound();
@@ -47,7 +49,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
     <div className="max-w-4xl mx-auto">
       <div className="mb-6">
         <Link href="/hr/applications" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-900">
-          <ArrowLeft size={15} /> Back to Applications
+          <ArrowLeft size={15} /> {ar ? "العودة للطلبات" : "Back to Applications"}
         </Link>
       </div>
 
@@ -56,16 +58,16 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
         <div className="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3">
           <AlertTriangle size={20} className="text-amber-500 shrink-0 mt-0.5" />
           <div>
-            <p className="font-semibold text-amber-800 text-sm">Duplicate Applicant Detected</p>
+            <p className="font-semibold text-amber-800 text-sm">{ar ? "تم اكتشاف طلبات أخرى للمتقدم" : "Duplicate Applicant Detected"}</p>
             <p className="text-amber-700 text-sm mt-1">
-              <strong>{app.email}</strong> has applied {duplicates.length} other time{duplicates.length > 1 ? "s" : ""}:
+              <strong>{app.email}</strong> {ar ? `تقدم ${duplicates.length} مرة أخرى:` : `has applied ${duplicates.length} other time${duplicates.length > 1 ? "s" : ""}:`}
             </p>
             <ul className="mt-2 space-y-1">
               {duplicates.map(d => (
                 <li key={d.id} className="text-xs text-amber-700">
                   • <Link href={`/hr/applications/${d.id}`} className="underline hover:text-amber-900">{d.jobTitle}</Link>
-                  {" "}— <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${STATUS_COLORS[d.status]}`}>{d.status}</span>
-                  {" "}<span className="opacity-60">({new Date(d.createdAt).toLocaleDateString()})</span>
+                  {" "}— <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${STATUS_COLORS[d.status]}`}>{statusLabel(d.status, ar)}</span>
+                  {" "}<span className="opacity-60">({new Date(d.createdAt).toLocaleDateString(ar ? "ar-EG" : "en-US")})</span>
                 </li>
               ))}
             </ul>
@@ -79,7 +81,7 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           <div>
             <div className="flex items-start justify-between gap-4 mb-1">
               <h1 className="text-2xl font-bold text-gray-900" dir="auto">{app.name}</h1>
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${STATUS_COLORS[app.status]}`}>{app.status}</span>
+              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${STATUS_COLORS[app.status]}`}>{statusLabel(app.status, ar)}</span>
             </div>
             <p className="text-[var(--gold)] font-medium text-sm" dir="auto">{app.jobTitle}</p>
             {(app.jobCode || app.job?.jobCode) && <p className="font-mono text-xs text-gray-400 mt-1">{app.jobCode || app.job?.jobCode}</p>}
@@ -90,24 +92,24 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
               <Mail size={15} className="text-[var(--gold)]" />{app.email}
             </a>
             {app.phone && <span className="flex items-center gap-2 text-gray-600"><Phone size={15} className="text-[var(--gold)]" />{app.phone}</span>}
-            <span className="flex items-center gap-2 text-gray-500"><Calendar size={15} className="text-[var(--gold)]" />{new Date(app.createdAt).toLocaleDateString()}</span>
+            <span className="flex items-center gap-2 text-gray-500"><Calendar size={15} className="text-[var(--gold)]" />{new Date(app.createdAt).toLocaleDateString(ar ? "ar-EG" : "en-US")}</span>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4 text-sm">
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Job Location</p>
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">{ar ? "مكان العمل" : "Job Location"}</p>
               <p className="flex items-center gap-2 text-gray-700"><MapPin size={15} className="text-[var(--gold)]" />{app.job?.location || "-"}</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Experience Requirement</p>
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">{ar ? "الخبرة المطلوبة" : "Experience Requirement"}</p>
               <p className="flex items-center gap-2 text-gray-700"><Award size={15} className="text-[var(--gold)]" />{app.job?.experience || "-"}</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Current Salary</p>
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">{ar ? "الراتب الحالي" : "Current Salary"}</p>
               <p className="flex items-center gap-2 text-gray-700"><DollarSign size={15} className="text-[var(--gold)]" />{application.currentSalary || "-"}</p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
-              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">Expected Salary</p>
+              <p className="text-xs uppercase tracking-wider text-gray-400 font-semibold mb-1">{ar ? "الراتب المتوقع" : "Expected Salary"}</p>
               <p className="flex items-center gap-2 text-gray-700"><DollarSign size={15} className="text-[var(--gold)]" />{app.lastSalary || "-"}</p>
             </div>
           </div>
@@ -122,34 +124,34 @@ export default async function ApplicationDetailPage({ params }: { params: Promis
           <a href={cvDownloadUrl} target="_blank" rel="noopener noreferrer" download={`${app.name.replace(/\s+/g, '_')}_CV.pdf`}
             className="flex items-center gap-3 border-2 border-dashed border-[var(--gold)] rounded-xl p-5 text-[var(--gold)] hover:bg-[var(--off-white)] transition-colors">
             <FileText size={24} />
-            <div><p className="font-semibold">View / Download CV</p><p className="text-xs opacity-70 mt-0.5">Opens PDF in new tab</p></div>
+            <div><p className="font-semibold">{ar ? "عرض / تحميل السيرة الذاتية" : "View / Download CV"}</p><p className="text-xs opacity-70 mt-0.5">{ar ? "يفتح الملف في تبويب جديد" : "Opens PDF in new tab"}</p></div>
           </a>
 
           {/* HR Notes */}
           <form action={saveNotesAction}>
-            <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">Private HR Notes</h3>
+            <h3 className="font-semibold text-gray-900 mb-2 text-sm uppercase tracking-wider">{ar ? "ملاحظات الموارد البشرية الخاصة" : "Private HR Notes"}</h3>
             <textarea name="hrNotes" defaultValue={app.hrNotes} rows={4}
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[var(--gold)] focus:border-[var(--gold)] outline-none transition text-sm resize-none"
-              placeholder="Add notes visible only to HR team..." />
-            <button type="submit" className="mt-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">Save Notes</button>
+              placeholder={ar ? "أضف ملاحظات تظهر لفريق الموارد البشرية فقط..." : "Add notes visible only to HR team..."} />
+            <button type="submit" className="mt-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg transition-colors">{ar ? "حفظ الملاحظات" : "Save Notes"}</button>
           </form>
         </div>
 
         {/* Status sidebar */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 h-fit">
-          <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">Update Status</h3>
+          <h3 className="font-semibold text-gray-900 mb-4 text-sm uppercase tracking-wider">{ar ? "تحديث الحالة" : "Update Status"}</h3>
           <div className="space-y-2">
             {PIPELINE.map(status => {
               const statusAction = handleUpdateStatus.bind(null, id, status);
               return (
                 <form key={status} action={statusAction}>
                   <button type="submit"
-                    className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
+                    className={`w-full text-start px-4 py-3 rounded-lg text-sm font-medium border transition-all ${
                       app.status === status
                         ? `${STATUS_COLORS[status]} border-current shadow-sm`
                         : "text-gray-600 border-gray-100 hover:border-gray-200 hover:bg-gray-50"
                     }`}>
-                    {app.status === status && "✓ "}{status}
+                    {app.status === status && "✓ "}{statusLabel(status, ar)}
                   </button>
                 </form>
               );

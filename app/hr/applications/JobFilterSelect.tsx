@@ -3,9 +3,11 @@ import { useRouter } from "next/navigation";
 
 export function JobFilterSelect({
   jobs,
+  ar,
   defaultValue,
   statusFilter,
 }: {
+  ar: boolean;
   jobs: { id: string; title: string }[];
   defaultValue: string;
   statusFilter?: string;
@@ -23,7 +25,7 @@ export function JobFilterSelect({
       }}
       className="px-3 py-1.5 border border-gray-200 rounded-lg text-xs text-gray-600 outline-none focus:border-[var(--gold)]"
     >
-      <option value="">All Jobs</option>
+      <option value="">{ar ? "كل الوظائف" : "All Jobs"}</option>
       {jobs.map((j) => (
         <option key={j.id} value={j.id}>
           {j.title}

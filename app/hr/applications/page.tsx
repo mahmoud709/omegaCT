@@ -1,3 +1,4 @@
+import { hrArabic, statusLabel } from "../language";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Download, Filter } from "lucide-react";
@@ -29,6 +30,7 @@ export default async function ApplicationsPage({
 }: {
   searchParams: Promise<{ status?: string; jobId?: string }>;
 }) {
+  const ar = await hrArabic();
   const sp = await searchParams;
   const statusFilter = sp.status && sp.status !== "ALL" ? sp.status : undefined;
   const jobFilter = sp.jobId;
@@ -49,8 +51,8 @@ export default async function ApplicationsPage({
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Applications</h1>
-          <p className="text-gray-500 mt-1">{apps.length} result{apps.length !== 1 ? "s" : ""}</p>
+          <h1 className="text-3xl font-bold text-gray-900">{ar ? "طلبات التوظيف" : "Applications"}</h1>
+          <p className="text-gray-500 mt-1">{ar ? `${apps.length} طلب` : `${apps.length} result${apps.length !== 1 ? "s" : ""}`}</p>
         </div>
         <a href={exportUrl}
           className="flex items-center gap-2 bg-[var(--gold)] hover:bg-yellow-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-colors">
@@ -68,10 +70,11 @@ export default async function ApplicationsPage({
                 (s === "ALL" && !statusFilter) || s === (statusFilter || "") 
                   ? "bg-[var(--navy)] text-white border-[var(--navy)]" 
                   : "bg-white text-gray-600 border-gray-200 hover:border-gray-300"
-              }`}>{s}</Link>
+              }`}>{statusLabel(s, ar)}</Link>
           ))}
         </div>
         <JobFilterSelect
+          ar={ar}
           jobs={jobs}
           defaultValue={jobFilter || ""}
           statusFilter={statusFilter}
@@ -79,20 +82,20 @@ export default async function ApplicationsPage({
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-        <table className="w-full text-sm text-left">
+        <table className="w-full text-sm text-start">
           <thead className="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-200">
             <tr>
-              <th className="px-6 py-4">Applicant</th>
-              <th className="px-6 py-4">Position</th>
-              <th className="px-6 py-4">Contact</th>
-              <th className="px-6 py-4">Status</th>
-              <th className="px-6 py-4">Applied</th>
-              <th className="px-6 py-4">CV</th>
+              <th className="px-6 py-4">{ar ? "المتقدم" : "Applicant"}</th>
+              <th className="px-6 py-4">{ar ? "الوظيفة" : "Position"}</th>
+              <th className="px-6 py-4">{ar ? "التواصل" : "Contact"}</th>
+              <th className="px-6 py-4">{ar ? "الحالة" : "Status"}</th>
+              <th className="px-6 py-4">{ar ? "تاريخ التقديم" : "Applied"}</th>
+              <th className="px-6 py-4">{ar ? "السيرة الذاتية" : "CV"}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {apps.length === 0 ? (
-              <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">No applications found.</td></tr>
+              <tr><td colSpan={6} className="px-6 py-12 text-center text-gray-400">{ar ? "لا توجد طلبات." : "No applications found."}</td></tr>
             ) : apps.map(app => {
               const color = STATUS_COLORS[app.status] || STATUS_COLORS.NEW;
               const cvDownloadUrl = formatCvUrl(app.cvUrl, app.name);
@@ -100,7 +103,7 @@ export default async function ApplicationsPage({
                 <tr key={app.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
                     <Link href={`/hr/applications/${app.id}`} className="font-medium text-gray-900 hover:text-[var(--gold)] flex items-center gap-2" dir="auto">
-                      {!app.isRead && <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" title="Unread" />}
+                      {!app.isRead && <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" title={ar ? "غير مقروء" : "Unread"} />}
                       {app.name}
                     </Link>
                   </td>
@@ -110,11 +113,11 @@ export default async function ApplicationsPage({
                   </td>
                   <td className="px-6 py-4 text-gray-500">{app.email}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${color}`}>{app.status}</span>
+                    <span className={`px-2.5 py-1 rounded-md text-xs font-semibold border ${color}`}>{statusLabel(app.status, ar)}</span>
                   </td>
-                  <td className="px-6 py-4 text-gray-400">{new Date(app.createdAt).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 text-gray-400">{new Date(app.createdAt).toLocaleDateString(ar ? "ar-EG" : "en-US")}</td>
                   <td className="px-6 py-4">
-                    <a href={cvDownloadUrl} target="_blank" rel="noopener noreferrer" download={`${app.name.replace(/\s+/g, '_')}_CV.pdf`} className="text-[var(--gold)] hover:underline text-xs font-medium">View / Download CV</a>
+                    <a href={cvDownloadUrl} target="_blank" rel="noopener noreferrer" download={`${app.name.replace(/\s+/g, '_')}_CV.pdf`} className="text-[var(--gold)] hover:underline text-xs font-medium">{ar ? "عرض / تحميل السيرة الذاتية" : "View / Download CV"}</a>
                   </td>
                 </tr>
               );
