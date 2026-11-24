@@ -14,8 +14,8 @@ export default function CvViewerClient({
   name,
   googleDocsViewerUrl,
 }: CvViewerClientProps) {
-  const isPdf = /\.pdf(?:[?#]|$)/i.test(rawUrl);
-  const previewUrl = isPdf
+  const isWordDocument = /\.(?:doc|docx)(?:[?#]|$)/i.test(rawUrl);
+  const previewUrl = !isWordDocument
     ? `/api/download-cv?url=${encodeURIComponent(rawUrl)}&name=${encodeURIComponent(name)}`
     : googleDocsViewerUrl;
 
@@ -85,7 +85,7 @@ export default function CvViewerClient({
           </button>
 
           <a
-            href={rawUrl}
+            href={`/api/download-cv?url=${encodeURIComponent(rawUrl)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-200 px-4 py-2 rounded-xl transition"
