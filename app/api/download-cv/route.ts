@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 
     return new NextResponse(arrayBuffer, {
       headers: {
-        "Content-Type": contentType || "application/pdf",
+        "Content-Type": extension === "pdf" ? "application/pdf" : (contentType || "application/octet-stream"),
         "Content-Disposition": `${dispositionType}; filename="${fallbackFileName}"; filename*=UTF-8''${encodeURIComponent(utf8FileName)}`,
       },
     });

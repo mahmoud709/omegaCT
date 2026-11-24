@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState } from "react";
 import { loginAdmin } from "../actions/admin-auth";
 import { Lock, User, ArrowRight, ShieldCheck } from "lucide-react";
 import Link from "next/link";
@@ -28,15 +28,7 @@ function SubmitButton() {
 }
 
 export default function AdminLoginPage() {
-  // @ts-ignore
-  const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
-    try {
-      await loginAdmin(formData);
-      return { error: null };
-    } catch (e: any) {
-      return { error: e.message };
-    }
-  }, { error: null });
+  const [state, formAction] = useActionState(loginAdmin, { error: null });
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden" dir="ltr">

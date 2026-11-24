@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export async function loginAdmin(formData: FormData) {
+export async function loginAdmin(_previousState: { error: string | null }, formData: FormData): Promise<{ error: string | null }> {
   const username = formData.get("username");
   const password = formData.get("password");
 
@@ -20,7 +20,7 @@ export async function loginAdmin(formData: FormData) {
     });
     redirect("/admin");
   } else {
-    throw new Error("Invalid credentials");
+    return { error: "Invalid username or password." };
   }
 }
 

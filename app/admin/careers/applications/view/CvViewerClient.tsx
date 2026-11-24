@@ -14,6 +14,11 @@ export default function CvViewerClient({
   name,
   googleDocsViewerUrl,
 }: CvViewerClientProps) {
+  const isPdf = /\.pdf(?:[?#]|$)/i.test(rawUrl);
+  const previewUrl = isPdf
+    ? `/api/download-cv?url=${encodeURIComponent(rawUrl)}&name=${encodeURIComponent(name)}`
+    : googleDocsViewerUrl;
+
   const handlePrint = () => {
     const pdfUrl = `/api/download-cv?url=${encodeURIComponent(rawUrl)}&name=${encodeURIComponent(name)}`;
     const oldFrame = document.getElementById("native-pdf-print-frame");
@@ -94,7 +99,7 @@ export default function CvViewerClient({
       <div className="flex-1 bg-slate-900 border border-gray-300 rounded-2xl overflow-hidden shadow-lg relative min-h-[550px]">
         <iframe
           id="cv-iframe"
-          src={googleDocsViewerUrl}
+          src={previewUrl}
           className="w-full h-full border-0 min-h-[550px]"
           title={`CV Preview - ${name}`}
         />
